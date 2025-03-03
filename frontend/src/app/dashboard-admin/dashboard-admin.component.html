@@ -1,0 +1,55 @@
+<div class="container">
+    <h1>Admin Dashboard</h1>
+  
+    <button (click)="openCreateUserForm()">Create User</button>
+  
+    <div *ngIf="users && users.length">
+      <h2>User List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Telephone</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.nom }} {{ user.prenom }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.telephone}}</td>
+            <td>{{ user.roles }}</td>
+            <td>
+              <button (click)="openEditUserForm(user)">Edit</button>
+              <button (click)="deleteUser(user.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Create/Edit User Form -->
+    <div *ngIf="isFormVisible">
+      <h2>{{ isEditing ? 'Edit' : 'Create' }} User</h2>
+      <form (ngSubmit)="onSubmit()">
+        <input type="text" [(ngModel)]="userForm.nom" name="nom" placeholder="First Name" required />
+        <input type="text" [(ngModel)]="userForm.prenom" name="prenom" placeholder="Last Name" required />
+        <input type="number" [(ngModel)]="userForm.telephone" name="telephone" placeholder="telephone" required />
+        <input type="email" [(ngModel)]="userForm.email" name="email" placeholder="Email" required />
+        <input type="password" [(ngModel)]="userForm.password" name="password" placeholder="Password" required />
+        <select [(ngModel)]="userForm.roles" name="roles" required>
+          <option value="Admin">Admin</option>
+          <option value="Chef de direction technique">Chef de direction technique</option>
+          <option value="Chef service maintenance">Chef service maintenance</option>
+          <option value="Responsable maintenance">Responsable maintenance</option>
+          <option value="Chef d’agence">Chef d’agence</option>
+          <option value="Chef service maîtrise de l’énergie">Chef service maîtrise de l’énergie</option>
+          <option value="Agent de saisie maîtrise de l’énergie">Agent de saisie maîtrise de l’énergie</option>
+        </select>
+        <button type="submit">{{ isEditing ? 'Update' : 'Create' }} User</button>
+      </form>
+    </div>
+  </div>
+  

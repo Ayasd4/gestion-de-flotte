@@ -1,0 +1,96 @@
+<div class="card">
+  <div class="buton-container">
+    <button (click)="openDialog()">Ajouter</button><!--(click)="openDialog()"--><!-- mat-flat-button-->
+  </div>
+  <div class="card-head">
+    <div class="title"> Liste des Vehicules</div>
+    <div class="search-container">
+      <mat-form-field style="width: 180px;margin-left: 15px;">
+        <input (input)="searchVehicule(filter.value)" matInput placeholder="search account" type="text" style="width: 190px;" #filter>
+        <mat-icon fontIcon="search" matSuffix></mat-icon>
+      </mat-form-field>
+    </div>
+    
+  </div>
+  
+  <div class="card-body">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+      <ng-container matColumnDef="idvehicule">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Vehicule ID </th>
+        <td mat-cell *matCellDef="let Vehicule"> {{Vehicule.idvehicule}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="numparc">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> N° Parc </th>
+        <td mat-cell *matCellDef="let Vehicule"> {{Vehicule.numparc}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="immatricule">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Immatricule </th>
+        <td mat-cell *matCellDef="let Vehicule"> {{Vehicule.immatricule}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="modele">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Modèle </th>
+        <td mat-cell *matCellDef="let Vehicule"> {{Vehicule.modele}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="annee">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Année </th>
+          <td mat-cell *matCellDef="let Vehicule"> {{Vehicule.annee}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="etat">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Etat </th>
+          <td mat-cell *matCellDef="let vehicule"> {{vehicule.etat | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+        <td mat-cell *matCellDef="let vehicule">
+          <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editVehicule(vehicule)" color="primary" matTooltip="edit" aria-label="Button that displays a tooltip when focused or hovered over">
+            <mat-icon>edit</mat-icon></button>
+          <button style="height: 27px;margin-right: 20px;" mat-icon-button (click)="deleteVehicule(vehicule.idvehicule)" color="warn" matTooltip="delete" aria-label="Button that displays a tooltip when focused or hovered over"><mat-icon>delete</mat-icon></button>
+
+          <!--<button mat-icon-button color="primary">//(click)="openDialog(vehicule)" mat-flat-button
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn">//(click)="deleteVehicule(vehicule.idvehicule)"
+            <mat-icon>delete</mat-icon>
+          </button>-->
+          
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let vehicules; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>
+</div>
+
+
+
+
+
+<!--<p>vehicule works!</p>
+<div class="card">
+    <div class="card-head">Lorem ipsum - dashboard</div>
+    <div class="card-body">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+    </div>
+</div>
+<div class="card">
+    <div class="card-head">Lorem ipsum - dashboard</div>
+    <div class="card-body">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit
+    </div>
+</div>-->

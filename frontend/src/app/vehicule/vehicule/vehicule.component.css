@@ -1,0 +1,131 @@
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white; 
+    padding: 15px 20px;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Conteneur du bouton (en haut) */
+.buton-container {
+    display: flex;
+    justify-content: flex-end;
+    
+    margin-bottom: 10px;
+}
+
+/* Style du bouton "Ajouter" */
+.buton-container button {
+    background-color: #000; /*007bff*/
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin-top: 30px;
+    margin-right: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.buton-container button:hover {
+    background-color: #02534d;/*0056b3*/
+}
+
+/* Conteneur du titre et de la recherche */
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Style du titre */
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding-top: 10px; /* Ajoute un espace interne sans affecter la position globale */
+}
+
+/* Style de la recherche */
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+mat-form-field {
+    width: 250px !important;
+}
+
+
+
+
+
+/*.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa; 
+    color: #333;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+mat-form-field {
+    width: 250px !important;
+}
+
+.buton-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.buton-container button:hover {
+    background-color: #0056b3;
+}
+*/
+  
+
+
+
+
+
+/*.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white; 
+    color: #000;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px 8px 0 0;
+
+    .search-container{
+        align-items: center;
+        margin-left: 400px;
+    }
+
+    .buton-container{
+        background-color: blue;
+        margin-right: 0;
+    }
+  }*/
+  

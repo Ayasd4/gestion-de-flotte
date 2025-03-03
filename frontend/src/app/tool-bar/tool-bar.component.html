@@ -1,0 +1,39 @@
+<div class="toolbar">
+  <span class="spacer"></span>
+  <button *ngIf="isLoggedIn" [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  <mat-menu #profile="matMenu" class="mymegamenu">
+    <button mat-menu-item (click)="changePassword()">
+      <mat-icon>password</mat-icon> change Password
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon> Sign Out
+    </button>
+  </mat-menu>
+</div>
+
+
+
+
+
+
+<!--<mat-toolbar>
+    <mat-toolbar-row>
+      <span>Custom Toolbar</span>
+    </mat-toolbar-row>
+  
+    <mat-toolbar-row>
+      <span>Second Line</span>
+      <span class="example-spacer"></span>
+      <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user</mat-icon>
+    </mat-toolbar-row>
+  
+    <mat-toolbar-row>
+      <span>Third Line</span>
+      <span class="example-spacer"></span>
+      <mat-icon class="example-icon" aria-hidden="false" aria-label="Example heart icon">favorite</mat-icon>
+      <mat-icon class="example-icon" aria-hidden="false" aria-label="Example delete icon">delete</mat-icon>
+    </mat-toolbar-row>
+  </mat-toolbar>-->

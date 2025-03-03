@@ -1,0 +1,47 @@
+<div class="container">
+  <h2 mat-dialog-title>{{ vehicule.idvehicule ? 'Modifier' : 'Ajouter' }} un véhicule</h2>
+  <mat-dialog-content>
+    <form #vehiculeForm="ngForm"> <!-- Ajoutez le formulaire ici -->
+      <mat-form-field>
+        <mat-label>Numéro de parc</mat-label>
+        <input matInput [(ngModel)]="vehicule.numparc" name="numparc" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Immatricule</mat-label>
+        <input matInput [(ngModel)]="vehicule.immatricule" name="immatricule" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Modèle</mat-label>
+        <input matInput [(ngModel)]="vehicule.modele" name="modele" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Année</mat-label>
+        <input matInput type="number" [(ngModel)]="vehicule.annee" name="annee" required>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>État</mat-label>
+        <mat-select [(ngModel)]="vehicule.etat" name="etat" required>
+          <mat-option value="en_service">En service</mat-option>
+          <mat-option value="en_panne">En panne</mat-option>
+          <mat-option value="en_maintenance">En maintenance</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="vehiculeForm.invalid && (vehiculeForm.dirty || vehiculeForm.touched)" class="error-message">
+        Tous les champs doivent être remplis.
+      </div>
+    </form> <!-- Fermez le formulaire ici -->
+  </mat-dialog-content>
+
+  <div class="buton">
+    <mat-dialog-actions>
+      <button mat-button (click)="dialogRef.close()">Annuler</button>
+      <button mat-button color="primary" (click)="saveVehicule(vehiculeForm)">Enregistrer</button>
+    </mat-dialog-actions>
+  </div>
+</div>
