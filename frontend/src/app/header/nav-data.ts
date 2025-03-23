@@ -8,8 +8,14 @@ export const navbarData= [
 
     {
         routeLink: 'vehicule',
-        icon: 'fal fa-bus', //fal fa-box-open
+        icon: 'fal fa-bus', //fal fa-box-open/ 
         label: 'vehicule'
+    },
+    
+    {
+        routeLink: 'chauffeur',
+        icon: 'fal fa-user-tie',
+        label: 'chauffeur'
     },
 
     {
@@ -17,13 +23,25 @@ export const navbarData= [
         icon: 'fal fa-tools', //tools//fal fa-chart-bar: stat
         label: 'maintenance'
     },
-    
 
-    /*{
-        routeLink: 'maintenance',
-        icon: 'fal fa-tools', //tools//fal fa-chart-bar: stat
-        label: 'maintenance préventive'
-    },*/
+    {
+        routeLink: 'diagnostic',
+        icon: 'fal fa-clipboard-list-check', //-stethoscope
+        label: 'diagnostic'
+    },
+
+
+    {
+        routeLink: 'atelier',
+        icon: 'fal fa-hammer', //tools//fal fa-chart-bar: stat
+        label: 'atelier'
+    },
+
+    {
+        routeLink: 'demande',
+        icon: 'fal fa-file-alt', // fal fa-file-alt //fal fa-exclamation-triangle
+        label: 'demande d’avarie'
+    },
 
     {
         routeLink: 'consommation',

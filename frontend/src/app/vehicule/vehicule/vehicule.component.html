@@ -51,7 +51,8 @@
         <td mat-cell *matCellDef="let vehicule">
           <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editVehicule(vehicule)" color="primary" matTooltip="edit" aria-label="Button that displays a tooltip when focused or hovered over">
             <mat-icon>edit</mat-icon></button>
-          <button style="height: 27px;margin-right: 20px;" mat-icon-button (click)="deleteVehicule(vehicule.idvehicule)" color="warn" matTooltip="delete" aria-label="Button that displays a tooltip when focused or hovered over"><mat-icon>delete</mat-icon></button>
+          <button style="height: 27px;margin-right: 20px;" mat-icon-button (click)="deleteVehicule(vehicule.idvehicule)" color="warn" matTooltip="delete" aria-label="Button that displays a tooltip when focused or hovered over">
+            <mat-icon>delete</mat-icon></button>
 
           <!--<button mat-icon-button color="primary">//(click)="openDialog(vehicule)" mat-flat-button
             <mat-icon>edit</mat-icon>

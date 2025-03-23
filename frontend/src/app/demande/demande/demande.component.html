@@ -1,0 +1,123 @@
+<div class="card">
+    <div class="buton-container">
+        <button (click)="openDialog()">Ajouter</button>
+    </div>
+    <div class="card-head">
+        <div class="title"> Demande Avarie</div>
+        <div class="search-container">
+            <mat-form-field style="width: 180px;margin-left: 15px;">
+                <input (input)="searchDemandes(filter.value)" matInput placeholder="search demand" type="text"
+                    style="width: 190px;" #filter>
+                <mat-icon fontIcon="search" matSuffix></mat-icon>
+            </mat-form-field>
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
+
+            <ng-container matColumnDef="id_demande">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Demand ID </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.id_demande}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_demande">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Demande </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.date_demande}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="type_avarie">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type Avarie</th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.type_avarie}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> description </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.description}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_avarie">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Avarie </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.date_avarie}} {{Demande.heure_avarie}}</td>
+            </ng-container>
+
+            <!--<ng-container matColumnDef="heure_avarie">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> heure avarie </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.heure_avarie}} </td>
+            </ng-container>-->
+
+            <ng-container matColumnDef="statut">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> statut </th>
+                <td mat-cell *matCellDef="let Demande" [ngClass]="getStatutClass(Demande.statut)"> {{Demande.statut}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="vehicule">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Vehicule </th>
+                <td mat-cell *matCellDef="let Demande">{{Demande.numparc}} _ {{Demande.immatricule}} _ {{Demande.modele}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="nom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> nom </th>
+                <td mat-cell *matCellDef="let Demande">{{Demande.matricule_chauf}}: {{Demande.nom}} {{Demande.prenom}} </td>
+            </ng-container>
+
+            <!--<ng-container matColumnDef="nom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> nom </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.nom}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="prenom">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> prenom </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.prenom}} </td>
+            </ng-container>-->
+
+            <!--<ng-container matColumnDef="matricule_chauf">
+                <th mat-header-cell *matHeaderCellDef> matricule_chauf </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.matricule_chauf}} </td>
+            </ng-container>-->
+
+            <ng-container matColumnDef="cin">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> cin </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.cin}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="telephone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> telephone </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.telephone}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> email </th>
+                <td mat-cell *matCellDef="let Demande"> {{Demande.email}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let demande">
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editDemande(demande)"
+                        color="primary" matTooltip="edit"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>edit</mat-icon> 
+                    </button>
+                    
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="deleteDemande(demande.id_demande)"
+                        color="warn" matTooltip="delete"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let demandes; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+    </div>
+</div>

@@ -23,6 +23,10 @@
         <button type="submit" ngxUiLoaderBtn="loginLoader" class="btn btn-success" [disabled]="loginForm.invalid">Login</button>
       </div><br>
       <div class="forgot">
+        <!--<li *ngIf="!isLoggedIn">
+          <a routerLink="/forgot-password">Forgot Password?</a>
+        </li>-->
+        
         <a href="forgot-password" routerLink="/forgot-password" routerLinkActive="active">Forgot Password?</a>
       </div>
     </form>

@@ -1,0 +1,158 @@
+<div class="container">
+    <h2 mat-dialog-title>{{ demande.id_demande  ? 'Update' : 'Add' }} Request</h2>
+    <mat-dialog-content>
+        <form #demandeForm="ngForm">
+            <br>
+            <!--<fieldset>-->
+            <!--<legend>General Information</legend>-->
+            <mat-stepper [linear]="true" #stepper>
+                <mat-step label="Informations Générales"><!--[stepControl]="firstFormGroup"-->
+                    <ng-template matStepLabel>General Information of Damage</ng-template>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Date Demand</mat-label>
+                        <input matInput [matDatepicker]="picker1" [(ngModel)]="demande.date_demande" name="date_demande"
+                            required><!--(dateChange)="getValidDate(demande.date_demande)" -->
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Type Damage</mat-label>
+                        <input matInput [(ngModel)]="demande.type_avarie" name="type_avarie" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>description</mat-label>
+                        <input matInput [(ngModel)]="demande.description" name="description" required>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Date Domage</mat-label>
+                        <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="demande.date_avarie"
+                            name="date_avarie" required><!--(dateChange)="getValidDate(demande.date_avarie)"-->
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+
+                    <!--<mat-form-field appearance="outline">
+                    <mat-label>Hour Demand</mat-label>
+                    <input matInput [matTimepicker]="picker" [(ngModel)]="demande.heure_avarie"
+                        name="heure_avarie" required>
+                    <mat-timepicker-toggle matIconSuffix [for]="picker" />
+                    <mat-timepicker #picker />
+                </mat-form-field>-->
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Heure Dommage</mat-label>
+                        <input type="time" matInput [(ngModel)]="demande.heure_avarie" name="heure_avarie" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>status</mat-label>
+                        <mat-select matInput [(ngModel)]="demande.statut" name="statut" [(value)]="selected"><!---->
+                            <mat-option value="En attente">En attente</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!--</fieldset><br>-->
+                    <button mat-button matStepperNext>Suivant</button>
+                </mat-step>
+
+                <mat-step label="vehicle Information">
+                    <ng-template matStepLabel>vehicle Information</ng-template>
+                    <!--<fieldset>-->
+                    <!--<legend>Vehicle Information</legend>-->
+                    <mat-form-field>
+                        <mat-label>Park Number</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getVehiculeInfo()"
+                            [(ngModel)]="demande.vehicule.numparc" name="numparc" required>
+                            <mat-option *ngFor="let num of numparcList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Vehicle Number</mat-label>
+                        <input matInput [(ngModel)]="demande.vehicule.immatricule" name="immatricule" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Model</mat-label>
+                        <input matInput [(ngModel)]="demande.vehicule.modele" name="modele" required>
+                    </mat-form-field>
+                   
+
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+
+                <!--</fieldset>-->
+                <!--<fieldset>-->
+
+                <mat-step label="Declarant Information">
+                    <ng-template matStepLabel>Declarant Information</ng-template>
+                    <!--<legend>Declarant Information</legend>-->
+                    <mat-form-field>
+                        <mat-label>Last Name</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getChauffeurInfo()"
+                            [(ngModel)]="demande.chauffeur.nom" name="nom" required>
+                            <mat-option *ngFor="let num of nameList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>First Name</mat-label>
+                        <input matInput [(ngModel)]="demande.chauffeur.prenom" name="prenom" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Driver Number</mat-label>
+                        <input matInput [(ngModel)]="demande.chauffeur.matricule_chauf" name="matricule_chauf" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Identity card</mat-label>
+                        <input matInput [(ngModel)]="demande.chauffeur.cin" name="cin" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput [(ngModel)]="demande.chauffeur.telephone" name="telephone" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>E-Mail</mat-label>
+                        <input matInput [(ngModel)]="demande.chauffeur.email" name="email" required>
+                    </mat-form-field>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                    <!--</fieldset>-->
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    <p>Please verify all information before submitting.</p>
+                    <div>
+                      <button mat-button matStepperPrevious>Back</button>
+                      <button mat-button color="primary" (click)="saveDemande(demandeForm)">Submit</button>
+                      <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
+
+                    </div>
+                  </mat-step>
+            </mat-stepper>
+              
+        </form>
+    </mat-dialog-content>
+    <!--<div class="buton">
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close()">Annuler</button>
+        </mat-dialog-actions>
+    </div>-->
+</div>

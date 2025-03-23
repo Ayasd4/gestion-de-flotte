@@ -1,33 +1,90 @@
+/* Style de la toolbar */
 .toolbar {
-    background: #02534d; /* Même couleur que le header */
-    height: 2.9rem; /* Hauteur adaptée */
-    width: 100vw;
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 2;
+  background: #202020; /*02534d Même couleur que le header */
+  height: 3rem; /* Hauteur ajustée pour être plus moderne */
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Ombre plus nette pour un effet plus pro */
+  z-index: 2;
+  display: flex;
+  justify-content: flex-start; /* Aligne les éléments à gauche */
+  align-items: center; /* Centre verticalement */
+  padding: 0 20px; /* Espacement plus généreux pour un design aéré */
+  box-sizing: border-box; /* Prend en compte les bordures dans la largeur totale */
 }
 
+/* Espacement flexible entre les éléments */
 .spacer {
-    flex: 1;
-  }
-  
-  .m-r-5 {
-    margin-right: 5px;
-  }
+  flex-grow: 1; /* Éléments espacés correctement à gauche et à droite */
+}
 
-/*.spacer {
-    flex: 1 1 auto;
-  }
-  
-  .mymegamenu {
-    width: 200px;
-    background-color: #f4f4f4;
-  }
-  
-  .mymegamenu button {
-    font-size: 16px;
-    padding: 10px 15px;
-  }*/
-  
+/* Bouton du menu de profil */
+button[mat-menu-button] {
+  display: flex; /* Utilisation de flexbox pour aligner correctement l'icône et le texte */
+  align-items: center; /* Centre verticalement l'icône et le texte */
+  padding: 8px 12px; /* Espacement intérieur pour une meilleure lisibilité */
+  background-color: transparent; /* Arrière-plan transparent pour éviter un effet de bouton trop marqué */
+  border: none; /* Supprime les bordures pour un look plus propre */
+  cursor: pointer; /* Change le curseur pour indiquer que c'est cliquable */
+  transition: background-color 0.3s ease; /* Transition pour l'effet de survol */
+}
+
+/* Effet au survol du bouton */
+button[mat-menu-button]:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Ajoute un léger effet de survol */
+  border-radius: 50%; /* Donne un effet arrondi pour le bouton */
+}
+
+/* Icône du profil */
+.mat-icon {
+  font-size: 24px; /* Taille de l'icône */
+  color: white; /* Couleur de l'icône */
+}
+
+/* Espacement du texte (nom d'utilisateur) */
+button[mat-menu-button] span {
+  margin-left: 8px; /* Un petit espacement entre l'icône et le texte */
+  font-size: 14px; /* Taille du texte */
+  color: white; /* Assure que le texte est lisible */
+  font-weight: 500; /* Donne un poids de police moyen pour une meilleure lisibilité */
+}
+
+/* Style du menu déroulant */
+.mymegamenu {
+  background-color: #f4f4f4; /* Fond léger pour un contraste élégant */
+  width: 200px; /* Largeur fixe du menu */
+  border-radius: 4px; /* Coins arrondis pour un look moderne */
+  font-size: 14px; /* Taille du texte dans le menu */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Ombre discrète pour donner de la profondeur */
+  padding: 5px 0; /* Espacement interne du menu */
+}
+
+/* Style des éléments du menu */
+.mymegamenu button {
+  padding: 12px 16px; /* Plus de padding pour une meilleure lisibilité et un clic plus facile */
+  font-size: 14px;
+  color: #333; /* Texte plus sombre pour un contraste fort */
+  background-color: transparent; /* Aucun fond de bouton, l'effet de survol sera plus visible */
+  text-align: left; /* Aligne le texte à gauche */
+  border: none; /* Retirer les bordures pour un look plus moderne */
+  transition: background-color 0.3s ease; /* Transition pour l'effet de survol */
+}
+
+/* Effet au survol des éléments du menu */
+.mymegamenu button:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Effet de survol du fond */
+  color: #02534d; /* Changer la couleur du texte au survol */
+}
+
+/* Style des icônes dans le menu */
+.mymegamenu mat-icon {
+  margin-right: 8px; /* Espacement entre l'icône et le texte */
+  font-size: 20px; /* Taille des icônes dans le menu */
+}
+
+/* Animation des icônes */
+.mymegamenu mat-icon:hover {
+  color: #02534d; /* Changer la couleur des icônes au survol */
+}

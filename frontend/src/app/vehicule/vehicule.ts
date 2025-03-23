@@ -1,8 +1,8 @@
 export interface Vehicule {
-    idvehicule: Number,
-    numparc: Number, 
-    immatricule: String, 
-    modele: String, 
-    annee: Number, 
-    etat: String 
+    idvehicule: number,
+    numparc: number, 
+    immatricule: string, 
+    modele: string, 
+    annee: number, 
+    etat: string 
 }

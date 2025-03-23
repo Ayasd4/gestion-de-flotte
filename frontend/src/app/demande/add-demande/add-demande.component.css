@@ -1,0 +1,128 @@
+/* Styles généraux */
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+    text-align: center;
+    color: #222;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+}
+.dialog-title {
+    text-align: center; /* Centre le texte du titre */
+    margin: 20px 0; /* Espace autour du titre */
+}
+/* Mat-form-field styles */
+mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+mat-label {
+    font-weight: bold;
+    color: #444;
+}
+
+/* Stepper styles */
+mat-stepper {
+    background-color: transparent;
+}
+
+mat-step-header {
+    background-color: #e3e3e3;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+mat-step-label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Toggle display for step contents */
+mat-step {
+    display: none;
+}
+
+mat-step.active {
+    display: block;
+}
+
+/* Button styles */
+button {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+
+button[mat-button] {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #bbb;
+}
+
+button[mat-button]:hover {
+    background-color: #ddd;
+}
+
+button[mat-button][color="primary"] {
+    background-color: #1e88e5;
+    color: white;
+    border: 1px solid #1565c0;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+button[mat-button][color="primary"]:hover {
+    background-color: #1565c0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+button[mat-button][color="warn"] {
+    background-color: #d32f2f;
+    color: white;
+    border: 1px solid #b71c1c;
+}
+
+button[mat-button][color="warn"]:hover {
+    background-color: #b71c1c;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Layout tweaks */
+mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+    gap: 15px;
+}
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white; 
+    padding: 15px 20px;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

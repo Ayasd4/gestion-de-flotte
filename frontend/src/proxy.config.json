@@ -1,15 +1,22 @@
 {
-    "/vehicules":{
-        "target":"http://localhost:3100",
+    "/vehicules": {
+        "target": "http://localhost:3100",
         "secure": false,
         "changeOrigin": true
-    }, 
-    
-    "/authentification":{
-        "target":"http://localhost:3100",
+    },
+    "/authentification": {
+        "target": "http://localhost:3100",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/demandes": {
+        "target": "http://localhost:3100",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/getDemandes": {
+        "target": "http://localhost:3100",
         "secure": false,
         "changeOrigin": true
     }
 }
-
-

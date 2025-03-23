@@ -54,7 +54,7 @@
     border: 1px solid rgb(168, 162, 162);
   }
   button[type="submit"] {
-    background-color: #02534d;
+    background-color: #202020;
     color: #fff;
     border: none;
     margin: auto; 
@@ -66,7 +66,7 @@
   }
   
   button[type="submit"]:hover {
-    background-color: #033633;
+    background-color: #0a0505;
   }
 
   .is-invalid {
@@ -80,7 +80,7 @@
   }
 
   button[type="submit"]:disabled {
-    background-color: #02534d; /* Light grey background */
+    background-color: #1f1d1d; /* Light grey background */
     color: #a1a1a1; /* Grey text color */
     cursor: not-allowed; /* Show a not-allowed cursor */
 }

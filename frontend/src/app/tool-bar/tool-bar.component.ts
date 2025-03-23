@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -15,47 +18,47 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './tool-bar.component.html',
   styleUrls: ['./tool-bar.component.css'],
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, RouterModule, MatMenuModule, MatButtonModule, MatDialogModule],
+  imports: [CommonModule, MatToolbarModule, MatIconModule , RouterModule, MatMenuModule, MatButtonModule, MatDialogModule]
 })
 export class ToolBarComponent implements OnInit{
   //role: any;
   isLoggedIn: boolean = false;
-
+  user: any;
+  subscription!: Subscription;
 
   constructor(private router: Router, private dialog: MatDialog, 
-    private authService: AuthService
+    private authService: AuthService, private cdRef: ChangeDetectorRef,
+    private ngxService: NgxUiLoaderService
   ) { }
 
   ngOnInit() {
-    this.isLoggedIn = this.authService.isLoggedIn(); // Pas besoin de `.subscribe()`
-
-    //si l'utilisateur est connecté 
-    /*this.authService.isLoggedIn().subscribe(status=>{
+    this.subscription = this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
-    });*/
-    //this.isLoggedIn = !!localStorage.getItem('user'); // Vérifie si un utilisateur est connecté
+      console.log("isLoggedIn:", this.isLoggedIn);
+      if (this.isLoggedIn) {
+        this.user = this.authService.getUser(); // Récupère les données de l'utilisateur
+        console.log("Utilisateur connecté:", this.user); // Vérifiez que l'utilisateur est récupéré
+      }
+      this.cdRef.detectChanges(); //Force Angular à mettre à jour la vue
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   logout() {
+    this.ngxService.start();
     console.log('user logged out');
     this.authService.logout();
     this.isLoggedIn = false;
 
-    /*localStorage.clear();
-    this.isLoggedIn = false;
-    this.router.navigate(['/login']);*/
-
-    /*const dialogConfig = new MatDialogConfig();
-    dialogConfig: data= {
-      message: 'Logout'
-    };
- 
-    const dialogRef = this.dialog.open(dialogConfig);
-    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((user)=>{
-    dialogRef.close();
-    localStorage.clear();
-    this.router.navigate(['/])
-    })*/
+    setTimeout(() => {
+      this.ngxService.stop(); // Arrêter l'animation ou le chargement
+      this.router.navigate(['/login']);
+    }, 500);
   }
 
   changePassword() {

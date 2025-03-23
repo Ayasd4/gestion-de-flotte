@@ -17,9 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./change-password.component.css']
 })
 export class ChangePasswordComponent {
-  static dialogConfig(dialogConfig: any) {
-    throw new Error('Method not implemented.');
-  }
+
   changePasswordForm: FormGroup;
   errorMessage: string = '';
   message: string = '';
@@ -64,6 +62,8 @@ export class ChangePasswordComponent {
 
       this.authService.changePassword(oldPassword, newPassword).subscribe((response: any) => {
         this.ngxService.stop();
+
+        
         this.message = response.message;
         this.errorMessage = '';
 

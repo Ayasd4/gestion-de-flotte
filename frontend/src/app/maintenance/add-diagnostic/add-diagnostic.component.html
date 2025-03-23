@@ -1,0 +1,52 @@
+<div class="container">
+    <h2 style="text-align: center;" mat-dialog-title> {{diagnostic.id_diagnostic ? 'Update' : 'Add'}}  Diagnostic</h2>
+    <mat-dialog-content>
+        <form #diagnosticForm="ngForm">
+            <mat-form-field appearance="outline">
+                <mat-label>Request ID</mat-label>
+                    <input matInput [(ngModel)]="diagnostic.demande.id_demande" name="id_demande" required readonly>
+            </mat-form-field><!--(selectionChange)="getDemandeById()"-->
+
+            <mat-form-field appearance="outline">
+                <mat-label>Description breakdown</mat-label>
+                <input matInput [(ngModel)]="diagnostic.description_panne" name="description_panne" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Causes of breakdowns</mat-label>
+                <input matInput [(ngModel)]="diagnostic.causes_panne" name="causes_panne" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Action</mat-label>
+                <input matInput [(ngModel)]="diagnostic.actions" name="actions" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Date of Diagnostic</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="diagnostic.date_diagnostic" name="date_diagnostic"
+                    required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Hour of Diagnostic</mat-label>
+                <input matInput type="time"  [(ngModel)]="diagnostic.heure_diagnostic" name="heure_diagnostic" required>
+            </mat-form-field>
+
+            <!--<mat-form-field>
+                <mat-label>Hour of Diagnostic</mat-label>
+                <input [ngxTimepicker]="timePicker" [(ngModel)]="diagnostic.heure_diagnostic" name="heure_diagnostic" required>
+                <ngx-material-timepicker #timePicker></ngx-material-timepicker>
+              </mat-form-field>-->
+
+        </form>
+        <div class="buton">
+            <mat-dialog-actions>
+                <button mat-button (click)="dialogRef.close()">Close</button>
+                <button mat-button color="primary" (click)="saveDiagnostic(diagnosticForm)">Save</button>
+            </mat-dialog-actions>
+        </div>
+    </mat-dialog-content>
+</div>

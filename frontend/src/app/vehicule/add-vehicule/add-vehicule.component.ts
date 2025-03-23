@@ -63,19 +63,14 @@ export class AddVehiculeComponent implements OnInit{
       return;
     }
 
-    /*if (!this.vehicule.numparc || !this.vehicule.immatricule || !this.vehicule.modele || !this.vehicule.annee || !this.vehicule.etat) {
-      this.snackBar.open('All fields must be required!', 'Close', { duration: 9000 });
-      return;
-    }*/
-
     if (this.vehicule.idvehicule) {
       // Mettre à jour un véhicule existant
       this.vehiculeService.updateVehicule(this.vehicule).subscribe(() => {
-          console.log('Véhicule mis à jour avec succès !');
+          console.log('Vehicle updated successfully!');
           this.dialogRef.close(this.vehicule);
         },
         (error: any) => {
-          console.error('Erreur lors de la mise à jour :', error);
+          console.error('Error while updating vehicle:', error);
         }
       );
     } else {
@@ -91,7 +86,5 @@ export class AddVehiculeComponent implements OnInit{
       );
     }
   }
-
-  
 
 }

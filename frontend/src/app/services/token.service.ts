@@ -35,6 +35,19 @@ export class TokenService {
     return decodedToken?.role || null;  
   }
 
+  /*getAdminRole(): string | null{
+    const role = localStorage.getItem('admin_role');
+    if (role) return role;
+
+    const token = this.getToken();
+
+    const token = this.getToken();
+    if(!token) return null;
+
+    const decodedToken = this.jwtHelper.decodeToken(token);
+    return decodedToken?.role || null; 
+  }*/
+
   isTokenExpired(): boolean {
     const token = this.getToken();
     return this.jwtHelper.isTokenExpired(token);

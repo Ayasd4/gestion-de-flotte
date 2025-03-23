@@ -14,18 +14,27 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './pages/login/login.component';
-import { NgxUiLoaderConfig, NgxUiLoaderModule } from 'ngx-ui-loader';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ProfileUsersComponent } from './profile-users/profile-users.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { MatSelectModule } from '@angular/material/select';
-
+import { DemandeComponent } from './demande/demande/demande.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MY_DATE_FORMATS } from './demande/add-demande/add-demande.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { ChauffeurComponent } from './chauffeur/chauffeur/chauffeur.component';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -38,13 +47,11 @@ import { MatSelectModule } from '@angular/material/select';
     LoginComponent,
     ForgotPasswordComponent,
     ChangePasswordComponent,
-    ProfileUsersComponent,
     LoginAdminComponent,
-    DashboardAdminComponent
-    //LoginComponent,
-    //NotFoundComponent,
-    //VehiculeComponent,
-    //AddVehiculeComponent
+    DashboardAdminComponent,
+    DemandeComponent,
+    ChauffeurComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -60,11 +67,26 @@ import { MatSelectModule } from '@angular/material/select';
     MatMenuModule,
     MatIconModule,
     MatDialogModule,
-    MatSelectModule
-    //VehiculeModule
-    //RouterModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatStepperModule,
+    MatTooltipModule,
+    MatListModule,
+    MatCardModule,
+    //MatTimepickerModule,
+
   ],
-  providers: [{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: true }}],
+
+  providers: [//provideNativeDateAdapter(),
+  { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: true } },
+  { provide: DateAdapter, useClass: NativeDateAdapter }, // Fournir un adaptateur de date natif
+  { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

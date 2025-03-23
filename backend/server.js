@@ -14,7 +14,16 @@ const utilisateurRouter =  require('./routes/utilisateur');
 const authentificationRouter = require("./routes/authentification");
 const adminRouter = require('./routes/admin');
 const authRouter = require('./routes/auth'); 
-
+const chauffeurRouter = require('./routes/chauffeur');
+const demandesRouter = require('./routes/demandes');
+const numparcRouter = require('./routes/getAllNumparc');
+const nameRouter = require('./routes/getAllName');
+const statutRouter = require('./routes/updateStatus');
+const atelierRouter = require('./routes/atelier');
+const maintenanceRouter = require('./routes/maintenance');
+const diagnosticRouter = require('./routes/diagnostic');
+const getdemandeRouter = require('./routes/getDemandeById');
+const technicienRouter = require('./routes/technicien');
 
 // Créer le serveur Node.js
 app.use(bodyParser.json());
@@ -34,6 +43,16 @@ app.use('/utilisateur', utilisateurRouter);
 app.use('/authentification', authentificationRouter);
 app.use('/admins', adminRouter);
 app.use('/login', authRouter);
+app.use('/chauffeur',chauffeurRouter);
+app.use('/demandes', demandesRouter);
+app.use('/getAllNumparc', numparcRouter);
+app.use('/getAllName', nameRouter);
+app.use('/updateStatus', statutRouter);
+app.use('/atelier', atelierRouter);
+app.use('/getDemandes', maintenanceRouter);
+app.use('/diagnostic', diagnosticRouter);
+app.use('/getDemandeById', getdemandeRouter);
+app.use('/technicien', technicienRouter);
 
 app.listen(port, (err) => {
     if (err) throw err;

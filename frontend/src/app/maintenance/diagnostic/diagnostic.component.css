@@ -1,0 +1,22 @@
+.diagnostic-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.diagnostic-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.diagnostic-details {
+    margin-bottom: 10px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}

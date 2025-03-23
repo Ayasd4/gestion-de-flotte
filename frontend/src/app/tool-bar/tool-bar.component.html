@@ -1,8 +1,10 @@
 <div class="toolbar">
   <span class="spacer"></span>
-  <button *ngIf="isLoggedIn" [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+
+  <button *ngIf="isLoggedIn" [matMenuTriggerFor]="profile" mat-menu-button class="m-r-5">
     <mat-icon>account_circle</mat-icon>
-  </button>
+    <span *ngIf="user">{{ user.nom }}</span>
+  </button>  
 
   <mat-menu #profile="matMenu" class="mymegamenu">
     <button mat-menu-item (click)="changePassword()">
@@ -13,6 +15,7 @@
     </button>
   </mat-menu>
 </div>
+
 
 
 

@@ -1,11 +1,40 @@
 <ngx-ui-loader></ngx-ui-loader>
 
+<div class="header" [ngClass]="collapsed ? 'header-collapsed' : ''">
+  <div class="logo-container">
+    <img src="/assets/srtj.png" alt="Logo" class="logo" (click)="toggleCollapse()">
+    <div class="logo-text" @fadeInOut *ngIf="collapsed">
+      SRT Jendouba
+    </div>
+    <button class="btn-close" @rotate *ngIf="collapsed" (click)="closeHeader()">
+      <i class="fal fa-times close-icon"></i>
+    </button>
+  </div>
+
+  <ul class="header-nav">
+    <li class="header-nav-item" *ngFor="let data of navData">
+      <a href="" class="header-nav-link" [routerLink]="[data.routeLink]"
+          routerLinkActive="active" 
+          [routerLinkActiveOptions]="{exact: true}">
+        <i class="header-link-icon" [class]="data.icon"></i>
+        <span class="header-link-text" *ngIf="collapsed">
+          {{data.label}}
+        </span>
+      </a>
+    </li>
+  </ul>
+  
+</div>
+
+
+
+<!--<ngx-ui-loader></ngx-ui-loader>
 
 <div class="header" [ngClass]="collapsed ? 'header-collapsed' : ''">
   <div class="logo-container">
     <img src="/assets/srtj.png" alt="Logo" class="logo" (click)="toggleCollapse()">
     <div class="logo-text" @fadeInOut *ngIf="collapsed">
-      Société Régionale de Transport
+      SRT Jendouba
     </div>
     <button class="btn-close" @rotate *ngIf="collapsed" (click)="closeHeader()">
       <i class="fal fa-times close-icon"></i>
@@ -24,7 +53,8 @@
       </a>
     </li>
   </ul>
-</div>
+</div>-->
+
 
 
 
@@ -79,41 +109,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<header>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-sm-3 col-3">
-                <div class="logo-container">
-                    <img src="/assets/srtj.png" alt="" class="logo">
-                </div>
-            </div>
-            <div class="col-md-9 col-sm-9 col-9 text-end">
-                <div class="menu-icon" (click)="openMenu()">
-                  <i class="{{menu_icon}}"></i>
-                </div>
-                <div class="desktop-menu" [class.mobile_menu]="menuValue">
-                  <ul>
-                    <li (click)="closeMenu()">profile</li>
-                    <li (click)="closeMenu()">home</li>
-                    <li (click)="closeMenu()">connexion</li>
-                  </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>-->
 
 
 

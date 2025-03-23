@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output, SimpleChanges } from '@angular/core';
 import { navbarData } from './nav-data';
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
@@ -51,7 +51,8 @@ export class HeaderComponent implements OnInit {
 
   @Output() onToggleHeaderNav: EventEmitter<HeaderNavToggle> = new EventEmitter();
 
-  role: string | null = null;
+  //role: string | null = null;
+  role: any;
   collapsed = false;
   screenwidth = 0;
   navData = navbarData;
@@ -70,29 +71,112 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.screenwidth = window.innerWidth;
-    //ajouter le role
-    this.role = this.tokenService.getUserRole();
-    console.log('user role:', this.role);
 
+    // Écoute les changements de l'utilisateur pour mettre à jour le header dynamiquement
+   /* this.authService.user$.subscribe(user => {
+      if (user && user.roles) {
+        this.role = user.roles;
+        this.navData = this.getUserNavData();
+      } else {
+        this.role = null;
+        this.navData = [];
+      }
+    });*/
 
-    // Vérification de l'authentification
-    if (!this.authService.isLoggedIn()) {
+    const user = this.authService.getUser();
+    console.log('Utilisateur retourné par getUser():', user);
+
+    if (!user || !user.roles) {
       this.router.navigate(['/login']);
-    } else {
-
-      // Filtrer navData en fonction du rôle
-      //this.navData = this.getUserNavData();
-      //console.log('navData:', this.navData);
-      
-      this.navData = navbarData; // Afficher tous les liens pour tout le monde
-
-
+      return;
     }
 
-    //this.navData = this.role === 'admin' ? this.getAdminNavData() : navbarData;
+    this.role = user.roles; // Assigne les rôles
+    console.log('Rôle récupéré:', this.role);
+
+    // Filtrer le menu selon le rôle
+    this.navData = this.getUserNavData();
+    console.log('navData après filtrage:', this.navData);
   }
 
   getUserNavData() {
+    const navItems = [];
+
+
+    // Vérifie les rôles et ajoute les sections correspondantes
+    if (this.role.includes('admin')) {
+      return [
+        { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
+        { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
+        { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
+        { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
+        { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic'},
+        { routeLink: 'demande', icon: ' fal fa-file-alt', label: 'demande d’avarie' },
+        { routeLink: 'consommation', icon: 'fal fa-gas-pump', label: 'Consommation' },
+        { routeLink: 'kilometrage', icon: 'fal fa-tachometer-alt', label: 'Kilométrage' }
+      ];
+    }
+
+    if (this.role.includes('chef de direction technique')) {
+      //
+      return [
+        { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
+        { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
+        { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' }
+
+      ];
+    }
+
+    if (this.role.includes('chef service maintenance')) {
+      return [
+        { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
+        { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' }
+      ];
+    }
+
+    if (this.role.includes('chef d’agence')) {
+      return [{ routeLink: 'demande', icon: 'fal fa-file-alt', label: 'demandes d’avarie' }];
+    }
+
+
+    return [];
+  }
+
+
+
+  toggleCollapse(): void {
+    this.collapsed = !this.collapsed;
+    this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
+  }
+
+  closeHeader(): void {
+    this.collapsed = false;
+    this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
+  navigateToTask(task: string) {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+    } else {
+      // Rediriger vers la tâche spécifique
+      this.router.navigate([task]);
+      window.location.reload();
+    }
+  }
+
+}
+
+
+
+/* 
+derniere code: contenu de header accessible a touta les utilisateurs mais par connexion
+----------------------------------------------------------------------------------------
+getUserNavData() {
     const navItems = [];
 
     // Vérifie les rôles et ajoute les sections correspondantes
@@ -121,35 +205,17 @@ export class HeaderComponent implements OnInit {
     return navItems;
   }
 
-  toggleCollapse(): void {
-    this.collapsed = !this.collapsed;
-    this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
-  }
-
-  closeHeader(): void {
-    this.collapsed = false;
-    this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
-
-  navigateToTask(task: string) {
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-    } else {
-      // Rediriger vers la tâche spécifique
-      this.router.navigate([task]);
-    }
-  }
-
-}
 
 
 
-/* getUserNavData() {
+
+
+
+
+
+
+
+getUserNavData() {
     if (this.role === 'admin') {
       return [
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
