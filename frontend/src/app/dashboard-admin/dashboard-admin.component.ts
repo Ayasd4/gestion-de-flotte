@@ -62,6 +62,7 @@ export class DashboardAdminComponent implements OnInit{
   }*/
 
   openCreateUserForm() {
+    
     this.isFormVisible = true;
     this.isEditing = false;
     this.userForm = { nom: '', prenom: '', email: '', password: '', roles: '' };

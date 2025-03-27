@@ -50,7 +50,7 @@ import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 
 })
 export class MaintenanceComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id_demande', 'date_demande', 'type_avarie', 'description', 'date_avarie', 'statut', 'vehicule', 'nom', 'cin', 'telephone', 'email', 'actions'];
+  displayedColumns: string[] = ['id_demande', 'date_demande', 'type_avarie', 'description', 'date_avarie', 'statut', 'vehicule', 'driver', 'actions'];
 
   dataSource = new MatTableDataSource<Demande>();
   numparc: any = undefined;

@@ -6,7 +6,7 @@ exports.list = async (req, res) =>{
     db.query(sql, (err, result)=>{
         if(err) return res.status(500).json({error: err.message});
 
-        return res.status(200).json(result.rows[0]);
+        return res.status(200).json(result.rows);
     });
 }
 
@@ -26,29 +26,29 @@ exports.show = async (req, res) =>{
 }
 
 exports.create = async (req, res) =>{
-    const {nom, telephone, email, password, capacite, statut} = req.body;
+    const {nom_atelier, telephone, email, capacite, statut} = req.body;
 
-    sql = "INSERT INTO acc.atelier(nom, telephone, email, password, capacite, statut) VALUES ($1, $2, $3, $4, $5,$6) RETURNING *";
+    sql = "INSERT INTO acc.atelier(nom_atelier, telephone, email, capacite, statut) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 
-    db.query(sql,[nom, telephone, email, password, capacite, statut], (err, result)=>{
+    db.query(sql,[nom_atelier, telephone, email, capacite, statut], (err, result)=>{
         if(err) return res.status(500).json({error: err.message});
-
-        return res.status(200).json({message: "Garage created successfully!", atelier: result.rows[0]});
+        
+        return res.status(200).json({message: "Workshop created successfully!", atelier: result.rows[0]});
     });
 }
 
 exports.update = async (req, res) =>{
     const id_atelier = Number(req.params.id_atelier);
 
-    const {nom, telephone, email, password, capacite, statut} = req.body;
+    const {nom_atelier, telephone, email, capacite, statut} = req.body;
 
-    sql = "UPDATE acc.atelier SET nom=$1, telephone=$2, email=$3, password=$4, capacite=$5, statut=$6 WHERE id_atelier=$7"
+    sql = "UPDATE acc.atelier SET nom_atelier=$1, telephone=$2, email=$3, capacite=$4, statut=$5 WHERE id_atelier=$6"
 
-    db.query(sql,[nom, telephone, email, password, capacite, statut, id_atelier], (err, result)=>{
+    db.query(sql,[nom_atelier, telephone, email, capacite, statut, id_atelier], (err, result)=>{
         if(err) return res.status(500).json({error: err.message});
 
         if(id_atelier){
-            return res.status(200).json({message: "Garage updated successfully!", atelier: result.rows[0]});
+            return res.status(200).json({message: "Workshop updated successfully!", atelier: result.rows[0]});
         }else{
             return res.status(500).json({error: "id_atelier not found!"});
         }
@@ -63,6 +63,6 @@ exports.delete = async (req, res) =>{
     db.query(sql, [id_atelier], (err, result)=>{
         if(err) return res.status(500).json({error: err.message});
 
-        return res.status(200).json({message: "Garage deleted successfully!", atelier: result.rows[0]});
+        return res.status(200).json({message: "Workshop deleted successfully!", atelier: result.rows[0]});
     });
 }

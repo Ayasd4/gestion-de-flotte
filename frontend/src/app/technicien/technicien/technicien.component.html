@@ -1,0 +1,45 @@
+<div class="card">
+    <div class="buton-container">
+        <button (click)="openDialog()">Add</button>
+    </div>
+    <div class="card-head">
+        <div class="title">List Technician</div><br>
+        <div class="search-container">
+            <mat-form-field style="width: 180px;margin-left: 15px;">
+                <input (input)="searchTechnicien(filter.value)" matInput placeholder="search Technicians" type="text"
+                    style="width: 200px;" #filter>
+                <mat-icon fontIcon="search" matSuffix></mat-icon>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <!-- Vérification que dataSource.data est un tableau -->
+        <ul *ngIf="dataSource.data.length > 0" class="workshop-list">
+            <li *ngFor="let technicien of dataSource.data" class="workshop-item">
+                <div class="workshop-details">
+                    <strong>Technician ID:</strong> {{ technicien.id_technicien }}<br>
+                    <strong>First Name:</strong> {{ technicien.nom }}<br>
+                    <strong>Last Name:</strong> {{ technicien.prenom }}<br>
+                    <strong>Technician Number:</strong> {{ technicien.matricule_techn }}<br>
+                    <strong>Identity Card:</strong> {{ technicien.cin }}<br>
+                    <strong>Phone Number:</strong> {{ technicien.telephone_techn }}<br>
+                    <strong>E-mail:</strong> {{ technicien.email_techn }}<br>
+                    <strong>Speciality:</strong> {{ technicien.specialite }}<br>
+                    <strong>date of employment:</strong> {{ technicien.date_embauche }}<br>
+                    
+                </div>
+                <div class="actions">
+                    <button mat-icon-button (click)="updateTechnicien(technicien)" color="primary" matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteTechnicien(technicien.id_technicien)" color="warn" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </li>
+        </ul>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+</div>

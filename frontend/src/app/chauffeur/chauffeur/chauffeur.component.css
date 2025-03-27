@@ -31,7 +31,7 @@
 }
 
 .buton-container button:hover {
-    background-color: #02534d;/*0056b3*/
+    background-color: #0a0505;/*0056b3*/
 }
 
 /* Conteneur du titre et de la recherche */
@@ -59,73 +59,79 @@ mat-form-field {
     width: 250px !important;
 }
 
-
-
-
-
-/*.card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f8f9fa; 
-    color: #333;
-    padding: 15px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px 8px 0 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Conteneur de la carte */
+.card-body {
+    background-color: #f4f7fc; /* Fond légèrement bleu-gris pour un look plus moderne */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
 }
 
-.search-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
+/* Liste des ateliers */
+.chauffeur-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-mat-form-field {
-    width: 250px !important;
-}
-
-.buton-container button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.buton-container button:hover {
-    background-color: #0056b3;
-}
-*/
-  
-
-
-
-
-
-/*.card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: white; 
-    color: #000;
+/* Élément individuel dans la liste des ateliers */
+.chauffeur-item {
+    background-color: #ffffff; /* Fond blanc pour chaque élément */
+    margin-bottom: 15px;
     padding: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px 8px 0 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
 
-    .search-container{
-        align-items: center;
-        margin-left: 400px;
-    }
+/* Effet au survol de chaque élément */
+.chauffeur-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
 
-    .buton-container{
-        background-color: blue;
-        margin-right: 0;
-    }
-  }*/
-  
+/* Détails de chaque atelier */
+.chauffeur-details {
+    font-size: 15px;
+    color: #444;
+    flex: 1;
+}
+
+.chauffeur-details strong {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Actions de chaque atelier (édition et suppression) */
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Boutons des actions */
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Effet au survol des boutons */
+button:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+/* Pagination */
+mat-paginator {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+}

@@ -37,7 +37,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 })
 export class DemandeComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id_demande', 'date_demande', 'type_avarie', 'description', 'date_avarie', 'statut', 'vehicule', 'nom', 'cin', 'telephone', 'email', 'actions'];
+  displayedColumns: string[] = ['id_demande', 'date_demande', 'type_avarie', 'description', 'date_avarie', 'statut', 'vehicule', 'driver', 'actions'];
   dataSource = new MatTableDataSource<Demande>();
   numparc: any = undefined;
 
@@ -198,7 +198,7 @@ export class DemandeComponent implements AfterViewInit {
         this.snackBar.open('Request deleted successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       },(error)=>{
-        console.error("Error while deleted Request:", error);
+        console.error("Error while deleting Request:", error);
         
       }
     );

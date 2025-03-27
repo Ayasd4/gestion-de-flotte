@@ -109,8 +109,11 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
         { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
+        { routeLink: 'atelier', icon: 'fal fa-hammer', label: 'atelier'},
+        { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien'},
         { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
         { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic'},
+        { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
         { routeLink: 'demande', icon: ' fal fa-file-alt', label: 'demande d’avarie' },
         { routeLink: 'consommation', icon: 'fal fa-gas-pump', label: 'Consommation' },
         { routeLink: 'kilometrage', icon: 'fal fa-tachometer-alt', label: 'Kilométrage' }
@@ -118,11 +121,13 @@ export class HeaderComponent implements OnInit {
     }
 
     if (this.role.includes('chef de direction technique')) {
-      //
+      
       return [
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
-        { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' }
+        { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
+        {routeLink: 'atelier', icon: 'fal fa-hammer', label: 'atelier'},
+        { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien'},
 
       ];
     }
@@ -130,7 +135,8 @@ export class HeaderComponent implements OnInit {
     if (this.role.includes('chef service maintenance')) {
       return [
         { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
-        { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' }
+        { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' },
+        { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
       ];
     }
 

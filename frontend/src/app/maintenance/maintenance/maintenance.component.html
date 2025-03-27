@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-head">
-        <div class="title"> Demande Avarie</div>
+        <div class="title"> List of Requests sent </div>
         <div class="search-container">
             <mat-form-field style="width: 180px;margin-left: 15px;">
                 <input (input)="searchDemandes(filter.value)" matInput placeholder="search demand" type="text"
@@ -15,27 +15,27 @@
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
 
             <ng-container matColumnDef="id_demande">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Demand ID </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request ID </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.id_demande}} </td>
             </ng-container>
 
             <ng-container matColumnDef="date_demande">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Demande </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request Date</th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.date_demande}} </td>
             </ng-container>
 
             <ng-container matColumnDef="type_avarie">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type Avarie</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Breakdown Type</th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.type_avarie}} </td>
             </ng-container>
 
             <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> description </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.description}} </td>
             </ng-container>
 
             <ng-container matColumnDef="date_avarie">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Avarie </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Breakdown Date </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.date_avarie}} {{Demande.heure_avarie}}</td>
             </ng-container>
 
@@ -49,30 +49,28 @@
 
             <ng-container matColumnDef="vehicule">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Vehicule </th>
-                <td mat-cell *matCellDef="let Demande">{{Demande.numparc}} _ {{Demande.immatricule}} _
-                    {{Demande.modele}} </td>
-            </ng-container>
+                <td mat-cell *matCellDef="let Demande">
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Parc Number:</strong> {{Demande.numparc}}</span>
+                        <span><strong>Vehicle:</strong> {{Demande.immatricule}}</span>
+                        <span><strong>Model:</strong> {{Demande.modele}}</span>
 
-
-            <ng-container matColumnDef="nom">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> nom </th>
-                <td mat-cell *matCellDef="let Demande">{{Demande.matricule_chauf}}: {{Demande.nom}} {{Demande.prenom}}
+                    </div>
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="cin">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> cin </th>
-                <td mat-cell *matCellDef="let Demande"> {{Demande.cin}} </td>
-            </ng-container>
 
-            <ng-container matColumnDef="telephone">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> telephone </th>
-                <td mat-cell *matCellDef="let Demande"> {{Demande.telephone}} </td>
-            </ng-container>
+            <ng-container matColumnDef="driver">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Driver </th>
+                <td mat-cell *matCellDef="let Demande">
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Name:</strong> {{Demande.matricule_chauf}}: {{Demande.nom}}
+                            {{Demande.prenom}}</span>
+                        <span><strong>Information:</strong> {{Demande.email}} {{Demande.cin}} {{Demande.telephone}}</span>
 
-            <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> email </th>
-                <td mat-cell *matCellDef="let Demande"> {{Demande.email}} </td>
+
+                    </div>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="actions">

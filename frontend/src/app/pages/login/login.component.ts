@@ -77,6 +77,8 @@ export class LoginComponent {
 
             this.router.navigate(['/dashboard']);
             this.router.navigate(['/vehicule']);
+            this.router.navigate(['/chauffeur']);
+            this.router.navigate(['/atelier']);
 
           } else if (userRole === 'chef service maintenance') {
             this.router.navigate(['/maintenance']);

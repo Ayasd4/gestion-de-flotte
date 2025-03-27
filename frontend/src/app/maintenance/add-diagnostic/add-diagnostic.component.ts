@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Diagnostic } from '../diagnostic/diagnostic';
 import { DiagnosticService } from '../diagnostic/diagnostic.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 /*export const MY_TIME_FORMATS = {

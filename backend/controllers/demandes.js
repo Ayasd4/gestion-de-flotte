@@ -107,8 +107,6 @@ exports.update = async (req, res) => {
             return res.status(400).json({ error: "Missing ID of request " });
         }
 
-                
-
         // Vérification que les données du véhicule et du chauffeur sont présentes
         if (!vehicule || !chauffeur) {
             return res.status(400).json({ error: "Missing driver or vehicle" });
@@ -157,11 +155,11 @@ exports.update = async (req, res) => {
         
         // Vérifier si la mise à jour a bien eu lieu
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: "Demande non trouvée ou non mise à jour" });
+            return res.status(404).json({ error: "Request not found!" });
         }
 
         // 5. Retourner la demande mise à jour
-        return res.status(200).json({ message: "Demande mise à jour avec succès", demande: result.rows[0] });
+        return res.status(200).json({ message: "Request updated successfully", demande: result.rows[0] });
        //return res.status(200).json({ message: "Demande mise à jour avec succès", demandeInfo: { ...vehiculeInfo, ...chauffeurInfo } });
 
 

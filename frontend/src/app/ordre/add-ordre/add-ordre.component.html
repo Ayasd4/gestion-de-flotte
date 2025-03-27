@@ -1,0 +1,189 @@
+<div class="container">
+    <h2 mat-dialog-title>{{ ordre.id_ordre  ? 'Update' : 'Add' }} Order</h2>
+    <mat-dialog-content>
+        <form #ordreForm="ngForm">
+            <br>
+            <mat-stepper [linear]="true" #stepper>
+                <mat-step label="Informations Générales">
+                    <ng-template matStepLabel>General Information of Order</ng-template>
+
+                    <mat-form-field>
+                        <mat-label>Emergency Breakdown</mat-label>
+                        <input matInput [(ngModel)]="ordre.urgence_panne" name="urgence_panne" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Works</mat-label>
+                        <input matInput [(ngModel)]="ordre.travaux" name="travaux" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Equipment</mat-label>
+                        <input matInput [(ngModel)]="ordre.material_requis" name="material_requis" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Planning</mat-label>
+                        <input matInput [(ngModel)]="ordre.planning" name="planning" required>
+                    </mat-form-field>
+
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Order Date </mat-label>
+                        <input matInput matInput [matDatepicker]="picker" [(ngModel)]="ordre.date_ordre"
+                            name="date_ordre" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>status</mat-label>
+                        <mat-select matInput [(ngModel)]="ordre.status" name="status" [(value)]="selected"><!---->
+                          <mat-option value="En attente">En attente</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button mat-button matStepperNext>Suivant</button>
+                </mat-step>
+
+                <!--step 2-->
+                <mat-step label="Diagnostic Information">
+                    <ng-template matStepLabel>Diagnostic Information</ng-template>
+                    
+                    <mat-form-field>
+                        <mat-label>Breakdown</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getDiagnosticInfo()"
+                            [(ngModel)]="ordre.diagnostic.description_panne" name="description_panne" required>
+                            <mat-option *ngFor="let num of diagnosticList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Causes of Breakdown</mat-label>
+                        <input matInput [(ngModel)]="ordre.diagnostic.causes_panne" name="causes_panne" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Actions</mat-label>
+                        <input matInput [(ngModel)]="ordre.diagnostic.actions" name="actions" required>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Diagnostic Date </mat-label>
+                        <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="ordre.diagnostic.date_diagnostic"
+                            name="date_diagnostic" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Hour diagnostic</mat-label>
+                        <input type="heure" matInput [(ngModel)]="ordre.diagnostic.heure_diagnostic" name="heure_diagnostic" required>
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+
+                <!--step 3-->
+                <mat-step label="Workshop Information">
+                    <ng-template matStepLabel>Workshop Information</ng-template>
+                    <mat-form-field>
+                        <mat-label>Workshop Name</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getAtelierInfo()"
+                            [(ngModel)]="ordre.atelier.nom_atelier" name="nom_atelier" required>
+                            <mat-option *ngFor="let num of atelierList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput [(ngModel)]="ordre.atelier.telephone" name="telephone" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Email</mat-label>
+                        <input matInput [(ngModel)]="ordre.atelier.email" name="email" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Capacity</mat-label>
+                        <input matInput [(ngModel)]="ordre.atelier.capacite" name="capacite" required>
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+
+                <!--step 4-->
+                <mat-step label="Technician Information">
+                    <ng-template matStepLabel>Technician Information</ng-template>
+                    <mat-form-field>
+                        <mat-label>Technician Number</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getTechnicienInfo()"
+                            [(ngModel)]="ordre.technicien.matricule_techn" name="matricule_techn" required>
+                            <mat-option *ngFor="let num of technicienList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>First Name</mat-label>
+                        <input matInput [(ngModel)]="ordre.technicien.nom" name="nom" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Last Name</mat-label>
+                        <input matInput [(ngModel)]="ordre.technicien.prenom" name="prenom" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput [(ngModel)]="ordre.technicien.telephone_techn" name="telephone_techn" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Email</mat-label>
+                        <input matInput [(ngModel)]="ordre.technicien.email_techn" name="email_techn" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Speciality</mat-label>
+                        <input matInput [(ngModel)]="ordre.technicien.specialite" name="specialite" required>
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+
+                <mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    <p>Please verify all information before submitting.</p>
+                    <div>
+                      <button mat-button matStepperPrevious>Back</button>
+                      <button mat-button color="primary" (click)="saveOrder(ordreForm)">Submit</button>
+                      <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
+
+                    </div>
+                  </mat-step>
+            </mat-stepper>
+              
+        </form>
+    </mat-dialog-content>
+    <!--<div class="buton">
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close()">Annuler</button>
+        </mat-dialog-actions>
+    </div>-->
+</div>

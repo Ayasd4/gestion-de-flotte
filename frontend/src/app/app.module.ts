@@ -35,6 +35,12 @@ import { ChauffeurComponent } from './chauffeur/chauffeur/chauffeur.component';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { AddAtelierComponent } from './atelier/add-atelier/add-atelier.component';
+import { TechnicienComponent } from './technicien/technicien/technicien.component';
+import { AddTechnicienComponent } from './technicien/add-technicien/add-technicien.component';
+import { InterventionComponent } from './intervention/intervention/intervention.component';
+import { AddInterventionComponent } from './intervention/add-intervention/add-intervention.component';
+import { CreateComponent } from './dasboard-admin/create/create.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +56,13 @@ import { MatListModule } from '@angular/material/list';
     LoginAdminComponent,
     DashboardAdminComponent,
     DemandeComponent,
-    ChauffeurComponent
+    ChauffeurComponent,
+    AddAtelierComponent,
+    TechnicienComponent,
+    AddTechnicienComponent,
+    InterventionComponent,
+    AddInterventionComponent,
+    CreateComponent
     
   ],
   imports: [

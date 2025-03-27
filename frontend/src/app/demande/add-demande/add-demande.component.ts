@@ -119,12 +119,12 @@ export class AddDemandeComponent implements OnInit {
   getNumparc() {
     this.numparcService.fetchAllNumparc().subscribe({
       next: (data) => {
-        console.log('Liste des numparc reçue:', data);  // Vérifiez si les données sont bien récupérées
+        console.log('List of numparc received:', data);  // Vérifiez si les données sont bien récupérées
         //this.numparcList = data;
         this.numparcList = data.map((item: any) => item.numparc);
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des numparc', err);
+        console.error('Error loading numparcs', err);
       }
     });
   }
@@ -144,12 +144,12 @@ export class AddDemandeComponent implements OnInit {
 
   getVehiculeInfo() {
     const numparc = Number(this.demande.vehicule.numparc);
-    console.log("Numparc envoyé au backend :", numparc); // Vérification
+    console.log("Numparc sent to the backend :", numparc); // Vérification
 
     if (numparc) {
       this.demandeService.getVehiculeByNumparc(numparc.toString()).subscribe({
         next: (data) => {
-          console.log('Données du véhicule récupérées:', data);
+          console.log('Vehicle data retrieved:', data);
 
           if (data) {
 
@@ -159,7 +159,7 @@ export class AddDemandeComponent implements OnInit {
           }
         },
         error: (err) => {
-          console.error('Erreur lors de la récupération des informations du véhicule', err);
+          console.error('Error retrieving vehicle information', err);
         }
       });
     }
@@ -227,7 +227,7 @@ export class AddDemandeComponent implements OnInit {
     }
 
     if (!this.demande.vehicule.numparc || !this.demande.chauffeur.nom) {
-      this.snackBar.open('Véhicule et chauffeur sont obligatoires!', 'Close', { duration: 9000 });
+      this.snackBar.open('Vehicle and driver are required!', 'Close', { duration: 9000 });
       return;
     }
 

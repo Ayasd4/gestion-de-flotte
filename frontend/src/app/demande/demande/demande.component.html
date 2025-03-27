@@ -1,9 +1,9 @@
 <div class="card">
     <div class="buton-container">
-        <button (click)="openDialog()">Ajouter</button>
+        <button (click)="openDialog()">Add</button>
     </div>
     <div class="card-head">
-        <div class="title"> Demande Avarie</div>
+        <div class="title"> List Requests</div>
         <div class="search-container">
             <mat-form-field style="width: 180px;margin-left: 15px;">
                 <input (input)="searchDemandes(filter.value)" matInput placeholder="search demand" type="text"
@@ -24,7 +24,12 @@
 
             <ng-container matColumnDef="date_demande">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Demande </th>
-                <td mat-cell *matCellDef="let Demande"> {{Demande.date_demande}} </td>
+                <td mat-cell *matCellDef="let Demande">
+                    <div style="display: flex; flex-direction: column;">
+
+                        {{Demande.date_demande}}
+                    </div>
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="type_avarie">
@@ -48,20 +53,36 @@
             </ng-container>-->
 
             <ng-container matColumnDef="statut">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> statut </th>
-                <td mat-cell *matCellDef="let Demande" [ngClass]="getStatutClass(Demande.statut)"> {{Demande.statut}} </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> status </th>
+                <td mat-cell *matCellDef="let Demande" [ngClass]="getStatutClass(Demande.statut)"> {{Demande.statut}}
+                </td>
             </ng-container>
 
 
             <ng-container matColumnDef="vehicule">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Vehicule </th>
-                <td mat-cell *matCellDef="let Demande">{{Demande.numparc}} _ {{Demande.immatricule}} _ {{Demande.modele}} </td>
+                <td mat-cell *matCellDef="let Demande">
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Parc Number:</strong> {{Demande.numparc}}</span>
+                        <span><strong>Vehicle:</strong> {{Demande.immatricule}}</span>
+                        <span><strong>Model:</strong> {{Demande.modele}}</span>
+
+                    </div>
+                </td>
             </ng-container>
 
 
-            <ng-container matColumnDef="nom">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> nom </th>
-                <td mat-cell *matCellDef="let Demande">{{Demande.matricule_chauf}}: {{Demande.nom}} {{Demande.prenom}} </td>
+            <ng-container matColumnDef="driver">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Driver </th>
+                <td mat-cell *matCellDef="let Demande">
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Name:</strong> {{Demande.matricule_chauf}}: {{Demande.nom}}
+                            {{Demande.prenom}}</span>
+                        <span><strong>Information:</strong> {{Demande.email}} {{Demande.cin}} {{Demande.telephone}}</span>
+
+
+                    </div>
+                </td>
             </ng-container>
 
             <!--<ng-container matColumnDef="nom">
@@ -79,7 +100,7 @@
                 <td mat-cell *matCellDef="let Demande"> {{Demande.matricule_chauf}} </td>
             </ng-container>-->
 
-            <ng-container matColumnDef="cin">
+            <!--<ng-container matColumnDef="cin">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> cin </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.cin}} </td>
             </ng-container>
@@ -92,19 +113,20 @@
             <ng-container matColumnDef="email">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> email </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.email}} </td>
-            </ng-container>
+            </ng-container>-->
 
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
                 <td mat-cell *matCellDef="let demande">
+
                     <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editDemande(demande)"
                         color="primary" matTooltip="edit"
                         aria-label="Button that displays a tooltip when focused or hovered over">
-                        <mat-icon>edit</mat-icon> 
+                        <mat-icon>edit</mat-icon>
                     </button>
-                    
-                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="deleteDemande(demande.id_demande)"
-                        color="warn" matTooltip="delete"
+
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button
+                        (click)="deleteDemande(demande.id_demande)" color="warn" matTooltip="delete"
                         aria-label="Button that displays a tooltip when focused or hovered over">
                         <mat-icon>delete</mat-icon>
                     </button>

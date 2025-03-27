@@ -74,7 +74,7 @@ export class AddChauffeurComponent implements OnInit{
     }else{
       this.chauffeurService.createChauffeur(this.chauffeur).subscribe(
         () => {
-          this.snackBar.open('Driver added successfully!', 'Fermer', { duration: 9000 });
+          this.snackBar.open('Driver added successfully!', 'close', { duration: 9000 });
           this.dialogRef.close(this.chauffeur);
         },
         (error: any) => {

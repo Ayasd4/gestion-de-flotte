@@ -1,0 +1,133 @@
+<div class="card">
+    <div class="buton-container">
+        <button (click)="openDialog()">Add</button>
+    </div>
+    <div class="card-head">
+        <div class="title"> List Orders</div>
+        <div class="search-container">
+            <mat-form-field style="width: 180px;margin-left: 15px;">
+                <input (input)="searchOrder(filter.value)" matInput placeholder="search order" type="text"
+                    style="width: 190px;" #filter>
+                <mat-icon fontIcon="search" matSuffix></mat-icon>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="card-body">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
+
+            <ng-container matColumnDef="id_ordre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let Ordre"> {{Ordre.id_ordre}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="diagnostic">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    <!--<button mat-button color="primary" (click)="openDetailsDialog(Ordre.diagnostic, 'Diagnostic')">
+                        See
+                    </button>-->
+                    <!--{{Ordre.description_panne}} {{Ordre.causes_panne}} {{Ordre.actions}}-->
+
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Description:</strong> {{Ordre.description_panne}}</span>
+                        <span><strong>Causes:</strong> {{Ordre.causes_panne}}</span>
+                        <span><strong>Actions:</strong> {{Ordre.actions}}</span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="urgence_panne">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency Breakdown </th>
+                <td mat-cell *matCellDef="let Ordre" [ngClass]="getEmergencyClass(Ordre.urgence_panne)">
+                    <div style="display: flex; flex-direction: column;">
+                        {{Ordre.urgence_panne}}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="travaux">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Works </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    <div style="display: flex; flex-direction: column;">
+                        {{Ordre.travaux}}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="material_requis">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipment </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    <div style="display: flex; flex-direction: column;">
+                        {{Ordre.material_requis}}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="planning">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Planning </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    <div style="display: flex; flex-direction: column;">
+                        {{Ordre.planning}}
+                    </div>
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="date_ordre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Order Date </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    {{Ordre.date_ordre}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> status </th>
+                <td mat-cell *matCellDef="let Ordre" [ngClass]="getStatusClass(Ordre.status)">
+                    {{Ordre.status}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="atelier">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Workshop </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    <div style="display: flex; flex-direction: column;">
+                        {{Ordre.nom_atelier}}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="technicien">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Technician </th>
+                <td mat-cell *matCellDef="let Ordre">
+                    <div style="display: flex; flex-direction: column;">
+                        {{Ordre.matricule_techn}} {{Ordre.nom}} {{Ordre.prenom}} {{Ordre.specialite}}
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let ordre">
+
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editOrder(ordre)"
+                        color="primary" matTooltip="edit"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button
+                        (click)="deleteOrder(ordre.id_ordre)" color="warn" matTooltip="delete"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let ordres; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+    </div>
+</div>

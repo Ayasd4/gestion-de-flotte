@@ -1,0 +1,43 @@
+<div class="card">
+    <div class="buton-container">
+        <button (click)="openDialog()">Add</button>
+    </div>
+    <div class="card-head">
+        <div class="title">List Workshops</div><br>
+        <div class="search-container">
+            <mat-form-field style="width: 180px;margin-left: 15px;">
+                <input (input)="searchAtelier(filter.value)" matInput placeholder="search Workshops" type="text"
+                    style="width: 200px;" #filter>
+                <mat-icon fontIcon="search" matSuffix></mat-icon>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <!-- Vérification que dataSource.data est un tableau -->
+        <ul *ngIf="dataSource.data.length > 0" class="workshop-list">
+            <li *ngFor="let atelier of dataSource.data" class="workshop-item">
+                <div class="workshop-details">
+                    <strong>Workshop ID:</strong> {{ atelier.id_atelier }}<br>
+                    <strong>Name:</strong> {{ atelier.nom_atelier }}<br>
+                    <strong>Phone:</strong> {{ atelier.telephone }}<br>
+                    <strong>E-mail:</strong> {{ atelier.email }}<br>
+                    <strong>Capacity:</strong> {{ atelier.capacite }}<br>
+                    <div  [ngClass]="getStatutClass(atelier.statut)">
+                        <strong>Status:</strong> {{ atelier.statut }}<br>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button mat-icon-button (click)="updateAtelier(atelier)" color="primary" matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteAtelier(atelier.id_atelier)" color="warn" matTooltip="Delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </li>
+        </ul>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+</div>

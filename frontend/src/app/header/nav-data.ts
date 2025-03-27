@@ -30,11 +30,23 @@ export const navbarData= [
         label: 'diagnostic'
     },
 
+    {
+        routeLink: 'ordre',
+        icon: 'fal fa-clipboard-list',
+        label: 'ordre de travail'
+    },
 
     {
         routeLink: 'atelier',
         icon: 'fal fa-hammer', //tools//fal fa-chart-bar: stat
         label: 'atelier'
+    },
+    //fa-hard-hat ⛑️ 
+
+    {
+        routeLink: 'technicien',
+        icon: 'fal fa-user-hard-hat',
+        label: 'technicien'
     },
 
     {
