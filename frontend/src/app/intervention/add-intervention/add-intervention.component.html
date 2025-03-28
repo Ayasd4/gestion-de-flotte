@@ -1,1 +1,151 @@
-<p>add-intervention works!</p>
+<div class="container">
+    <h2 mat-dialog-title>{{ intervention.id_intervention ? 'Update' : 'Add' }} Intervention</h2>
+    <mat-dialog-content>
+        <form #interventionForm="ngForm">
+            <br>
+            <mat-stepper [linear]="true" #stepper>
+                <mat-step label="Informations Générales">
+                    <ng-template matStepLabel>General Information of Intervention</ng-template>
+
+                    <mat-form-field>
+                        <mat-label>Start Date of intervention</mat-label>
+                        <input matInput matInput [matDatepicker]="picker1" [(ngModel)]="intervention.date_debut"
+                            name="date_debut" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Start Hour of intervention</mat-label>
+                        <input type="time" matInput [(ngModel)]="intervention.heure_debut" name="heure_debut" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>End Date of intervention</mat-label>
+                        <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="intervention.date_fin"
+                            name="date_fin" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>End Hour of intervention</mat-label>
+                        <input type="time" matInput [(ngModel)]="intervention.heure_fin" name="heure_fin" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>status</mat-label>
+                        <mat-select matInput [(ngModel)]="intervention.status_intervention"
+                            name="status_intervention" required><!-- [(value)]="selected"-->
+                            <mat-option *ngFor="let statut of statutsDisponibles" [value]="statut">{{statut}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Comment</mat-label>
+                        <input type="text" matInput [(ngModel)]="intervention.commentaire" name="commentaire" required>
+                    </mat-form-field>
+
+                    <button mat-button matStepperNext>Next</button>
+                </mat-step>
+
+                <!--step 3-->
+                <mat-step label="Order Information">
+                    <ng-template matStepLabel>Order Information</ng-template>
+
+                    <mat-form-field>
+                        <mat-label>Works</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getOrdreInfo()"
+                            [(ngModel)]="intervention.ordre.travaux" name="travaux" required>
+                            <mat-option *ngFor="let num of ordreList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Emergency Breakdown</mat-label>
+                        <input matInput [(ngModel)]="intervention.ordre.urgence_panne" name="urgence_panne" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Equipment</mat-label>
+                        <input matInput [(ngModel)]="intervention.ordre.material_requis" name="material_requis" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Planning</mat-label>
+                        <input matInput [(ngModel)]="intervention.ordre.planning" name="planning" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Order Date</mat-label>
+                        <input matInput [(ngModel)]="intervention.ordre.date_ordre" name="date_ordre" required>
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+
+                <!--step 4-->
+                <mat-step label="Technician Information">
+                    <ng-template matStepLabel>Technician Information</ng-template>
+                    <mat-form-field>
+                        <mat-label>Technician Number</mat-label>
+                        <mat-select matNativeControl (selectionChange)="getTechnicienInfo()"
+                            [(ngModel)]="intervention.technicien.matricule_techn" name="matricule_techn" required>
+                            <mat-option *ngFor="let num of technicienList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>First Name</mat-label>
+                        <input matInput [(ngModel)]="intervention.technicien.nom" name="nom" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Last Name</mat-label>
+                        <input matInput [(ngModel)]="intervention.technicien.prenom" name="prenom" required>
+                    </mat-form-field>
+
+                    <!--<mat-form-field>
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput [(ngModel)]="intervention.technicien.telephone_techn" name="telephone_techn" required>
+                    </mat-form-field>-->
+
+                    <mat-form-field>
+                        <mat-label>Email</mat-label>
+                        <input matInput [(ngModel)]="intervention.technicien.email_techn" name="email_techn" required>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Speciality</mat-label>
+                        <input matInput [(ngModel)]="intervention.technicien.specialite" name="specialite" required>
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+
+                <mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    <p>Please verify all information before submitting.</p>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button color="primary" (click)="saveIntervention(interventionForm)">Submit</button>
+                        <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
+
+                    </div>
+                </mat-step>
+            </mat-stepper>
+
+        </form>
+    </mat-dialog-content>
+
+</div>

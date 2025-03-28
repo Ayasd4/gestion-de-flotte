@@ -109,11 +109,12 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
         { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
-        { routeLink: 'atelier', icon: 'fal fa-hammer', label: 'atelier'},
+        { routeLink: 'atelier', icon: 'fal fa-hard-hat', label: 'atelier'},
         { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien'},
         { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
         { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic'},
         { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
+        { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention'},
         { routeLink: 'demande', icon: ' fal fa-file-alt', label: 'demande d’avarie' },
         { routeLink: 'consommation', icon: 'fal fa-gas-pump', label: 'Consommation' },
         { routeLink: 'kilometrage', icon: 'fal fa-tachometer-alt', label: 'Kilométrage' }
@@ -126,7 +127,7 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
         { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
-        {routeLink: 'atelier', icon: 'fal fa-hammer', label: 'atelier'},
+        {routeLink: 'atelier', icon: 'fal fa-hard-hat', label: 'atelier'},
         { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien'},
 
       ];
@@ -137,6 +138,12 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
         { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' },
         { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
+      ];
+    }
+
+    if (this.role.includes('Responsable maintenance')) {
+      return [
+        { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention'},
       ];
     }
 

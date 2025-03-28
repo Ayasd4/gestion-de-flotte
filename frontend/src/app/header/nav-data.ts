@@ -36,9 +36,16 @@ export const navbarData= [
         label: 'ordre de travail'
     },
 
+    // 👨‍🔧
+    {
+        routeLink: 'intervention',
+        icon: 'fal fa-hammer',
+        label: 'intervention'
+    },
+
     {
         routeLink: 'atelier',
-        icon: 'fal fa-hammer', //tools//fal fa-chart-bar: stat
+        icon: 'fal fa-hard-hat', //tools//fal fa-chart-bar: stat
         label: 'atelier'
     },
     //fa-hard-hat ⛑️ 

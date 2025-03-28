@@ -173,7 +173,7 @@ export class AddOrdreComponent implements OnInit {
     if (nom_atelier) {
       this.ordreService.getAtelierByNom(nom_atelier).subscribe({
         next: (data) => {
-          console.log('Diagnostic data retrieved:', data);
+          console.log('Workshop data retrieved:', data);
 
           if (data) {
 

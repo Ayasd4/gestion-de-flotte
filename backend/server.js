@@ -26,7 +26,8 @@ const getdemandeRouter = require('./routes/getDemandeById');
 const technicienRouter = require('./routes/technicien');
 const ordreRouter = require('./routes/ordre');
 const infosRouter = require('./routes/getInfoOrdre');
-
+const interventionRouter = require('./routes/intervention');
+const infosIntervRouter = require('./routes/getInfoIntervention');
 
 // Créer le serveur Node.js
 app.use(bodyParser.json());
@@ -58,6 +59,8 @@ app.use('/getDemandeById', getdemandeRouter);
 app.use('/technicien', technicienRouter);
 app.use('/ordre', ordreRouter);
 app.use('/infos', infosRouter);
+app.use('/intervention', interventionRouter);
+app.use('/infosIntervention', infosIntervRouter);
 
 app.listen(port, (err) => {
     if (err) throw err;

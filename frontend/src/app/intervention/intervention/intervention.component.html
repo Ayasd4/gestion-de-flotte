@@ -1,1 +1,103 @@
-<p>intervention works!</p>
+<div class="card">
+    <div class="buton-container">
+        <button (click)="openDialog()">Add</button>
+    </div>
+    <div class="card-head">
+        <div class="title"> List Interventions</div>
+        <div class="search-container">
+            <mat-form-field style="width: 180px;margin-left: 15px;">
+                <input (input)="searchIntervention(filter.value)" matInput placeholder="search Intervention" type="text"
+                    style="width: 190px;" #filter>
+                <mat-icon fontIcon="search" matSuffix></mat-icon>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="card-body">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
+
+            <ng-container matColumnDef="id_intervention">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let Intervention"> {{Intervention.id_intervention}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ordre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Order </th>
+                <td mat-cell *matCellDef="let Intervention">
+
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Emergency Breakdown:</strong> {{Intervention.urgence_panne}}</span>
+                        <span><strong>Works:</strong> {{Intervention.travaux}}</span>
+                        <span><strong>Equipment:</strong> {{Intervention.material_requis}}</span>
+                        <span><strong>Planning:</strong> {{Intervention.planning}}</span>
+                        <span><strong>Order Date:</strong> {{Intervention.date_ordre}}</span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="technicien">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Technician </th>
+                <td mat-cell *matCellDef="let Intervention">
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Number:</strong> {{Intervention.matricule_techn}}</span>
+                        <span><strong>Name:</strong> {{Intervention.nom}} {{Intervention.prenom}} </span>
+                        <span><strong>Speciality:</strong> {{Intervention.specialite}}</span>
+
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_debut">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Start date of intervention</th>
+                <td mat-cell *matCellDef="let Intervention"> {{Intervention.date_debut}} {{Intervention.heure_debut}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_fin">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> End date of intervention</th>
+                <!--<td mat-cell *matCellDef="let Intervention"> {{Intervention.date_fin}} {{Intervention.heure_fin}} </td>-->
+                <td mat-cell *matCellDef="let Intervention">
+                    {{ Intervention.date_fin ? Intervention.date_fin + ' ' + Intervention.heure_fin : 'N/A' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let Intervention"
+                    [ngClass]="getStatusClass(Intervention.status_intervention)"> {{Intervention.status_intervention}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="commentaire">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Comment </th>
+                <td style="width: 50px; height: 30px;" mat-cell *matCellDef="let Intervention">
+                    {{Intervention.commentaire}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let intervention">
+
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button
+                        (click)="editIntervention(intervention)" color="primary" matTooltip="edit"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button
+                        (click)="deleteIntervantion(intervention.id_intervention)" color="warn" matTooltip="delete"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let Interventions; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+    </div>
+</div>

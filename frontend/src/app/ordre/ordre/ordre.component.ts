@@ -121,8 +121,7 @@ export class OrdreComponent implements AfterViewInit {
         return '';
     }
   }
-
-
+  
   ngAfterViewInit(): void {
     this.ordreService.fetchAllOrders().subscribe((data) => {
       console.log('Données récupérées : ', data);
@@ -202,7 +201,7 @@ export class OrdreComponent implements AfterViewInit {
         this.snackBar.open('Request deleted successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       }, (error) => {
-        console.error("Error while deleted Request:", error);
+        console.error("Error while deleting Request:", error);
 
       }
       );
