@@ -115,6 +115,7 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic'},
         { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
         { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention'},
+        //{ routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'orders'},
         { routeLink: 'demande', icon: ' fal fa-file-alt', label: 'demande d’avarie' },
         { routeLink: 'consommation', icon: 'fal fa-gas-pump', label: 'Consommation' },
         { routeLink: 'kilometrage', icon: 'fal fa-tachometer-alt', label: 'Kilométrage' }
@@ -143,6 +144,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.role.includes('Responsable maintenance')) {
       return [
+        { routeLink: 'ordres', icon: 'fal fa-clipboard-list', label: 'orders'},
         { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention'},
       ];
     }

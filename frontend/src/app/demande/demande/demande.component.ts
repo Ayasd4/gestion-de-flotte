@@ -15,7 +15,6 @@ import { MatSort, MatSortModule } from "@angular/material/sort";
 import { AddDemandeComponent } from "../add-demande/add-demande.component";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
-
 @Component({
   selector: 'app-demande',
   templateUrl: './demande.component.html',
@@ -72,7 +71,8 @@ export class DemandeComponent implements AfterViewInit {
       matricule_chauf: '',
       cin: '',
       telephone: '',
-      email: ''
+      email: '',
+      image: ''
     }
 
   }
@@ -111,7 +111,7 @@ export class DemandeComponent implements AfterViewInit {
 
 
   searchDemandes(input: any) {
-    input = input?.toString().trim().toLowerCase();
+  /*  input = input?.toString().trim().toLowerCase();
 
     this.filteredDemandes = this.demandes.filter(item => item.date_demande?.toLowerCase().includes(input)
       || item.type_avarie?.toLowerCase().includes(input)
@@ -131,8 +131,17 @@ export class DemandeComponent implements AfterViewInit {
     );
 
     this.dataSource = new MatTableDataSource<Demande>(this.filteredDemandes);
-  }
+  }*/
 
+    /*searchDemandes(): void{
+      const filteredDemandes = Object.fromEntries(
+        Object.entries(this.searchParams).filter(([__dirname, value]) => value !== null && value !== undefined && value!== '')
+      );
+      if(Object.keys(filteredDemandes).length === 0){
+        this.fetchAllDemandes();
+        return;
+      }*/
+    }
   
 
   openDialog(): void {

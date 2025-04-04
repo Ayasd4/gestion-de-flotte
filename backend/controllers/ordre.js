@@ -216,3 +216,14 @@ exports.getTechnicienByMatricule = async (req, res) => {
     });
 }
 
+exports.updateStatus = async (req, res)=>{
+    const id_ordre = Number(req.params.id_ordre);
+    const {status} = req.body;
+
+    sql= "UPDATE acc.ordre_travail SET status=$1 WHERE id_ordre=$2";
+
+    db.query(sql, [status, id_ordre], (err, result)=>{
+        if (err) res.status(500).json({error: err.message});
+        res.status(200).json({ message: "status updated successfully!", demande: result.rows});
+    });
+}

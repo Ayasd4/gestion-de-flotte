@@ -1,0 +1,23 @@
+<div class="container">
+    <h2 mat-dialog-title>{{ ordre.id_ordre ? 'Update' : 'Add' }} Order</h2>
+    <mat-dialog-content>
+        <form #ordreForm="ngForm">
+
+            <mat-form-field>
+                <mat-label>status</mat-label>
+                <mat-select matNativeControl [(ngModel)]="ordre.status" name="status" required>
+                    <mat-option *ngFor="let status of statutsDisponibles" [value]="status">
+                        {{ status }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <div class="buton">
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close()">Cancel</button>
+            <button mat-button color="primary" (click)="saveOrdre(ordreForm)">Edit</button>
+
+        </mat-dialog-actions>
+    </div>
+</div>

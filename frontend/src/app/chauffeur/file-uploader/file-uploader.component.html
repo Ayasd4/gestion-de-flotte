@@ -1,0 +1,13 @@
+<div *ngIf="image" class="preview">
+    <img [src]="image" />
+</div>
+<div class="upload-wrap" (click)="triggerClick()">
+    <input type="text" class="form-control" readonly [ngModel]="imageName" />
+    <button type="button" class="btn btn-default">Upload</button>
+</div>
+<input type="file" class="form-control d-none" (change)="selectFile($event)" #fileUploader />
+
+<!--<div class="container">
+    <input #fileInput type="file">
+    <button (click)="onFileUpload()"></button>
+</div>-->

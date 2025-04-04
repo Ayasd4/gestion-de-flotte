@@ -1,51 +1,72 @@
 <div class="container">
-    <h2 style="text-align: center;" mat-dialog-title> {{diagnostic.id_diagnostic ? 'Update' : 'Add'}}  Diagnostic</h2>
+    <h2 style="text-align: center;" mat-dialog-title> {{diagnostic.id_diagnostic ? 'Update' : 'Add'}} Diagnostic</h2>
     <mat-dialog-content>
         <form #diagnosticForm="ngForm">
-            <mat-form-field appearance="outline">
-                <mat-label>Request ID</mat-label>
-                    <input matInput [(ngModel)]="diagnostic.demande.id_demande" name="id_demande" required readonly>
-            </mat-form-field><!--(selectionChange)="getDemandeById()"-->
+            <fieldset>
+                <legend style="text-align: center;">General Information of Request</legend>
+                <br>
+                <mat-form-field appearance="outline">
+                    <mat-label>Vehicle Number</mat-label>
+                    <input type="number" matInput [(ngModel)]="diagnostic.demande.vehicule.numparc" name="numparc" disabled readonly>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Description breakdown</mat-label>
-                <input matInput [(ngModel)]="diagnostic.description_panne" name="description_panne" required>
-            </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Type of breakdown</mat-label>
+                    <input matInput [(ngModel)]="diagnostic.demande.type_avarie" name="type_avarie" disabled readonly>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Causes of breakdowns</mat-label>
-                <input matInput [(ngModel)]="diagnostic.causes_panne" name="causes_panne" required>
-            </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput [(ngModel)]="diagnostic.demande.description" name="description" disabled
+                        readonly></textarea>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Action</mat-label>
-                <input matInput [(ngModel)]="diagnostic.actions" name="actions" required>
-            </mat-form-field>
+            </fieldset>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Date of Diagnostic</mat-label>
-                <input matInput [matDatepicker]="picker" [(ngModel)]="diagnostic.date_diagnostic" name="date_diagnostic"
-                    required>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <fieldset>
+                <legend style="text-align: center;">Diagnostic information</legend><br>
+                <mat-form-field appearance="outline">
+                    <mat-label>Description breakdown</mat-label>
+                    <textarea matInput [(ngModel)]="diagnostic.description_panne" name="description_panne"
+                        required></textarea>
+                </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>Hour of Diagnostic</mat-label>
-                <input matInput type="time"  [(ngModel)]="diagnostic.heure_diagnostic" name="heure_diagnostic" required>
-            </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Causes of breakdowns</mat-label>
+                    <textarea matInput [(ngModel)]="diagnostic.causes_panne" name="causes_panne" required></textarea>
+                </mat-form-field>
 
-            <!--<mat-form-field>
-                <mat-label>Hour of Diagnostic</mat-label>
-                <input [ngxTimepicker]="timePicker" [(ngModel)]="diagnostic.heure_diagnostic" name="heure_diagnostic" required>
-                <ngx-material-timepicker #timePicker></ngx-material-timepicker>
-              </mat-form-field>-->
+                <mat-form-field appearance="outline">
+                    <mat-label>Action</mat-label>
+                    <textarea matInput [(ngModel)]="diagnostic.actions" name="actions" required></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Date of Diagnostic</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="diagnostic.date_diagnostic"
+                        name="date_diagnostic" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Hour of Diagnostic</mat-label>
+                    <input matInput type="time" [(ngModel)]="diagnostic.heure_diagnostic" name="heure_diagnostic"
+                        required>
+                </mat-form-field>
+
+                <!--<mat-form-field>
+                    <mat-label>Hour of Diagnostic</mat-label>
+                    <input [ngxTimepicker]="timePicker" [(ngModel)]="diagnostic.heure_diagnostic" name="heure_diagnostic" required>
+                    <ngx-material-timepicker #timePicker></ngx-material-timepicker>
+                </mat-form-field>-->
+            </fieldset>
 
         </form>
         <div class="buton">
             <mat-dialog-actions>
                 <button mat-button (click)="dialogRef.close()">Close</button>
-                <button mat-button color="primary" (click)="saveDiagnostic(diagnosticForm)">Save</button>
+                <button type="submit" mat-button color="primary" (click)="saveDiagnostic(diagnosticForm)">Save</button><!--routerLink="/diagnostic" routerLinkActive="active"-->
             </mat-dialog-actions>
         </div>
     </mat-dialog-content>

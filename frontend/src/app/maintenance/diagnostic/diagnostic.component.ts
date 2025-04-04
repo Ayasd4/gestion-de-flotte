@@ -55,7 +55,10 @@ export class DiagnosticComponent implements OnInit {
   diagnostic: Diagnostic = {
     id_diagnostic: 0,
     demande: {
-      id_demande: 0, 
+      id_demande: 0,
+      type_avarie: '',
+      description: '',
+      vehicule: { numparc: this.numparc }
     },
     description_panne: '',
     causes_panne: '',
@@ -75,59 +78,59 @@ export class DiagnosticComponent implements OnInit {
       this.dataSource = new MatTableDataSource<Diagnostic>(data);//this.filteredDemandes
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-    }, (error)=>{
+    }, (error) => {
       console.error('Error while retriving Diagnostic:', error);
-      
+
     });
   }
 
-  searchDiagnostic(input: any){
+  searchDiagnostic(input: any) {
     input = input?.toString().trim().toLowerCase();
 
     this.filtredDiagnostic = this.diagnostics.filter(item => item.description_panne?.toLowerCase().includes(input)
-    || item.causes_panne?.toLowerCase().includes(input)
-    || item.actions?.toLowerCase().includes(input)
-    || item.date_diagnostic?.toLowerCase().includes(input)
-    || item.heure_diagnostic?.toLowerCase().includes(input)
-  );
+      || item.causes_panne?.toLowerCase().includes(input)
+      || item.actions?.toLowerCase().includes(input)
+      || item.date_diagnostic?.toLowerCase().includes(input)
+      || item.heure_diagnostic?.toLowerCase().includes(input)
+    );
 
-  this.dataSource = new MatTableDataSource<Diagnostic>(this.filtredDiagnostic);
+    this.dataSource = new MatTableDataSource<Diagnostic>(this.filtredDiagnostic);
 
   }
 
-  editDiagnostic(diagnostic: Diagnostic){
+  editDiagnostic(diagnostic: Diagnostic) {
     const dialogRef = this.dialog.open(AddDiagnosticComponent, {
       width: "400px",
-      data: {...diagnostic}
+      data: { ...diagnostic }
     });
 
-    dialogRef.afterClosed().subscribe(result =>{
-      if(result) {
-        this.diagnosticService.updateDiagnostic(this.diagnostic).subscribe(()=>{
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.diagnosticService.updateDiagnostic(this.diagnostic).subscribe(() => {
           console.log("Diagnostic updated successfully!");
-            this.snackBar.open("Diagnostic updated successfully!", "close", { duration: 6000 });
-            window.location.reload();
+          this.snackBar.open("Diagnostic updated successfully!", "close", { duration: 6000 });
+          window.location.reload();
         }, (error) => {
           console.error("Error while updating Diagnostic", error);
           this.snackBar.open("Error while updating Diagnostic!", "close", { duration: 6000 });
 
         }
-      );
+        );
       }
     })
-  }  
+  }
 
-  deleteDiagnostic(id_diagnostic: Number){
+  deleteDiagnostic(id_diagnostic: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
-    if(isConfirmed){
-      this.diagnosticService.deleteDiagnostic(id_diagnostic).subscribe(()=>{
-        this.diagnostics = this.diagnostics.filter(item=> item.id_diagnostic !== id_diagnostic);
+    if (isConfirmed) {
+      this.diagnosticService.deleteDiagnostic(id_diagnostic).subscribe(() => {
+        this.diagnostics = this.diagnostics.filter(item => item.id_diagnostic !== id_diagnostic);
         this.snackBar.open('Diagnostic deleted successfully!', 'Close', { duration: 6000 });
         window.location.reload();
-      },(error)=>{
+      }, (error) => {
         console.error("Error while deleting Diagnostic:", error);
       }
-    );
+      );
     }
   }
 

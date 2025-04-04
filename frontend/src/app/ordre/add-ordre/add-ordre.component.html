@@ -62,25 +62,25 @@
 
                     <mat-form-field>
                         <mat-label>Causes of Breakdown</mat-label>
-                        <input matInput [(ngModel)]="ordre.diagnostic.causes_panne" name="causes_panne" required>
+                        <input matInput [(ngModel)]="ordre.diagnostic.causes_panne" name="causes_panne" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Actions</mat-label>
-                        <input matInput [(ngModel)]="ordre.diagnostic.actions" name="actions" required>
+                        <input matInput [(ngModel)]="ordre.diagnostic.actions" name="actions" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Diagnostic Date </mat-label>
                         <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="ordre.diagnostic.date_diagnostic"
-                            name="date_diagnostic" required>
+                            name="date_diagnostic" disabled readonly>
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Hour diagnostic</mat-label>
-                        <input type="heure" matInput [(ngModel)]="ordre.diagnostic.heure_diagnostic" name="heure_diagnostic" required>
+                        <input type="heure" matInput [(ngModel)]="ordre.diagnostic.heure_diagnostic" name="heure_diagnostic" disabled readonly>
                     </mat-form-field>
 
                     <div>
@@ -104,17 +104,17 @@
 
                     <mat-form-field>
                         <mat-label>Phone Number</mat-label>
-                        <input matInput [(ngModel)]="ordre.atelier.telephone" name="telephone" required>
+                        <input matInput [(ngModel)]="ordre.atelier.telephone" name="telephone" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Email</mat-label>
-                        <input matInput [(ngModel)]="ordre.atelier.email" name="email" required>
+                        <input matInput [(ngModel)]="ordre.atelier.email" name="email" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Capacity</mat-label>
-                        <input matInput [(ngModel)]="ordre.atelier.capacite" name="capacite" required>
+                        <input matInput [(ngModel)]="ordre.atelier.capacite" name="capacite" disabled readonly>
                     </mat-form-field>
 
                     <div>
@@ -138,27 +138,27 @@
 
                     <mat-form-field>
                         <mat-label>First Name</mat-label>
-                        <input matInput [(ngModel)]="ordre.technicien.nom" name="nom" required>
+                        <input matInput [(ngModel)]="ordre.technicien.nom" name="nom" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Last Name</mat-label>
-                        <input matInput [(ngModel)]="ordre.technicien.prenom" name="prenom" required>
+                        <input matInput [(ngModel)]="ordre.technicien.prenom" name="prenom" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Phone Number</mat-label>
-                        <input matInput [(ngModel)]="ordre.technicien.telephone_techn" name="telephone_techn" required>
+                        <input matInput [(ngModel)]="ordre.technicien.telephone_techn" name="telephone_techn" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Email</mat-label>
-                        <input matInput [(ngModel)]="ordre.technicien.email_techn" name="email_techn" required>
+                        <input matInput [(ngModel)]="ordre.technicien.email_techn" name="email_techn" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Speciality</mat-label>
-                        <input matInput [(ngModel)]="ordre.technicien.specialite" name="specialite" required>
+                        <input matInput [(ngModel)]="ordre.technicien.specialite" name="specialite" disabled readonly>
                     </mat-form-field>
 
                     <div>

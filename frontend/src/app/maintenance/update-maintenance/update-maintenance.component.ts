@@ -59,7 +59,8 @@ export class UpdateMaintenanceComponent implements OnInit {
       matricule_chauf: '',
       cin: '',
       telephone: '',
-      email: ''
+      email: '',
+      image: ''
     }
   }
 

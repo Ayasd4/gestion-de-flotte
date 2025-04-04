@@ -33,6 +33,24 @@
                 <input matInput [(ngModel)]="chauffeur.email" name="email" required>
             </mat-form-field>
 
+            <mat-form-field>
+                <mat-label>Photo</mat-label>
+                <input matInput [value]="selectedFileName" readonly />
+            </mat-form-field>
+
+            <button mat-button (click)="triggerClick()">Choisir un fichier</button>
+            <input type="file" #fileInput (change)="onFileSelect($event)" style="display: none;" />
+
+            <!--<mat-form-field>
+                <mat-label for="photo">Photo</mat-label>
+                <input matInput [(ngModel)]="chauffeur.image" name="image" required>
+                <file-uploader (onFileSelect)="onFileSelect($event)"></file-uploader>
+                <div class="invalid-feedback" *ngIf="submitted && userForm.controls.photo.invalid">
+                    <div *ngIf="chauffeurForm.controls.photo.errors.required">photo is required</div>
+                </div>
+                <div class="text-danger" *ngIf="uploadError">{{uploadError}}</div>
+            </mat-form-field>-->
+
             <div *ngIf="chauffeurForm.invalid && (chauffeurForm.dirty || chauffeurForm.touched)" class="error-message">
                 All fields must be completed.
             </div>

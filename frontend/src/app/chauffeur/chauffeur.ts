@@ -5,5 +5,6 @@ export interface Chauffeur {
     matricule_chauf: string,
     cin: string,
     telephone: string,
-    email: string
+    email: string,
+    image: string
 }

@@ -9,20 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Diagnostic } from '../diagnostic/diagnostic';
 import { DiagnosticService } from '../diagnostic/diagnostic.service';
-import * as moment from 'moment';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
-/*export const MY_TIME_FORMATS = {
-  parse: {
-    dateInput: 'HH:mm', // Le format pour l'entrée
-  },
-  display: {
-    dateInput: 'HH:mm', // Le format pour l'affichage
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};*/
+import { Router } from '@angular/router';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import * as moment from 'moment';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -70,6 +60,11 @@ export class AddDiagnosticComponent implements OnInit {
     id_diagnostic: 0,
     demande: {
       id_demande: 0,
+      type_avarie: '',
+      description: '',
+      vehicule: {
+        numparc: this.numparc
+      }
     },
     description_panne: '',
     causes_panne: '',
@@ -82,9 +77,13 @@ export class AddDiagnosticComponent implements OnInit {
     public dialogRef: MatDialogRef<AddDiagnosticComponent>,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private router: Router,
+    private ngxService: NgxUiLoaderService
   ) {
     if (data?.id_demande) {
       this.diagnostic.demande.id_demande = data.id_demande;
+      this.diagnostic.demande.vehicule.numparc = data.numparc;
+
     }
     /*if (data && data.id_demande) {
       this.diagnostic.demande.id_demande = data.id_demande;
@@ -106,6 +105,10 @@ export class AddDiagnosticComponent implements OnInit {
           //this.diagnostic.demande.id_demande = data.id_demande;
           this.diagnostic.demande = { ...this.diagnostic.demande, ...data };
 
+          // Vérifie et assigne numparc
+          if (data.vehicule?.numparc) {
+            this.diagnostic.demande.vehicule.numparc = data.vehicule.numparc;
+          }
         }
 
       }, error: (err) => {
@@ -121,6 +124,11 @@ export class AddDiagnosticComponent implements OnInit {
       // Pré-remplir le formulaire avec les données de diagnostic
       //this.diagnostic = { ...this.data };
       this.diagnostic = { ...this.diagnostic, ...this.data };
+
+      // Vérifie si vehicule est défini avant d'accéder à numparc
+      if (this.data.demande?.vehicule?.numparc) {
+        this.diagnostic.demande.vehicule.numparc = this.data.demande.vehicule.numparc;
+      }
 
       console.log('Diagnostic Object:', this.diagnostic);
 
@@ -155,6 +163,8 @@ export class AddDiagnosticComponent implements OnInit {
       return;
     }
 
+    this.ngxService.start();
+
     const diagnosticToSend = {
       ...this.diagnostic,
 
@@ -167,9 +177,11 @@ export class AddDiagnosticComponent implements OnInit {
 
     if (this.diagnostic.id_diagnostic) {
       this.diagnosticService.updateDiagnostic(diagnosticToSend).subscribe(() => {
+        this.ngxService.stop();
         console.log('Diagnostic updated successfully!');
-        window.location.reload();
+        //window.location.reload();
         this.dialogRef.close(this.diagnostic);
+        //this.router.navigate(['/diagnostic']);
       },
         (error: any) => {
           console.error('Error while updating Diagnostic:', error);
@@ -178,6 +190,8 @@ export class AddDiagnosticComponent implements OnInit {
     } else {
       this.diagnosticService.createDiagnostic(diagnosticToSend).subscribe({
         next: (response) => {
+          this.ngxService.stop();
+
           if (response.demande && response.demande.id_demande) {
             //this.diagnostic.demande.id_demande = response.demande.id_demande;
             console.log("Diagnostic created successfully!", response);
@@ -185,6 +199,7 @@ export class AddDiagnosticComponent implements OnInit {
             //window.location.reload();
           }
           this.dialogRef.close();
+          this.router.navigate(['/diagnostic']);
         },
         error: (error) => {
           console.error("error while creating diagnostic:", error);
@@ -193,4 +208,5 @@ export class AddDiagnosticComponent implements OnInit {
       });
     }
   }
+
 }

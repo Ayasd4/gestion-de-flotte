@@ -7,37 +7,51 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class InterventionService {
+  getAllOrdres() {
+    throw new Error('Method not implemented.');
+  }
+  getAllTechniciens() {
+    throw new Error('Method not implemented.');
+  }
+  addIntervention(interventionData: any) {
+    throw new Error('Method not implemented.');
+  }
 
   constructor(private httpClient: HttpClient) { }
 
   baseUrl: string = "http://localhost:3100/intervention";
+  Url = "http://localhost:3100/getOrdreById";
 
-   fetchAllInterventions(): Observable<Intervention[]>{
-      return this.httpClient.get<Intervention[]>(`${this.baseUrl}`);
-    }
-  
-    createIntervention(data: Intervention){
-      return this.httpClient.post<Intervention>(`${this.baseUrl}`, data);
-    }
-  
-    updateIntervention(data: Intervention){
-      return this.httpClient.put<Intervention>(`${this.baseUrl}/${data.id_intervention}`, data);
-    }
-  
-    deleteIntervention(id_intervention: Number){
-      return this.httpClient.delete<Intervention>(`${this.baseUrl}/${id_intervention}`);
-    }
-  
-  
-    getOrdreByTravaux(travaux: string){
-      return this.httpClient.get<any>(`${this.baseUrl}/ordre/${travaux}`);
-  
-    }
-    
-    getTechnicienByMatricule(matricule_techn: Number){
-      return this.httpClient.get<any>(`${this.baseUrl}/technicien/${matricule_techn}`);
-  
-    }
+  fetchAllInterventions(): Observable<Intervention[]> {
+    return this.httpClient.get<Intervention[]>(`${this.baseUrl}`);
+  }
+
+  createIntervention(data: Intervention) {
+    return this.httpClient.post<Intervention>(`${this.baseUrl}`, data);
+  }
+
+  updateIntervention(data: Intervention) {
+    return this.httpClient.put<Intervention>(`${this.baseUrl}/${data.id_intervention}`, data);
+  }
+
+  deleteIntervention(id_intervention: Number) {
+    return this.httpClient.delete<Intervention>(`${this.baseUrl}/${id_intervention}`);
+  }
+
+
+  getOrdreByTravaux(travaux: string) {
+    return this.httpClient.get<any>(`${this.baseUrl}/ordre/${travaux}`);
+
+  }
+
+  getTechnicienByMatricule(matricule_techn: Number) {
+    return this.httpClient.get<any>(`${this.baseUrl}/technicien/${matricule_techn}`);
+
+  }
+
+  getOrdreById(id_ordre: Number): Observable<any> {
+    return this.httpClient.get<any>(`${this.Url}/${id_ordre}`);
+  }
 
 
   ApiUrl: string = "http://localhost:3100/infosIntervention";

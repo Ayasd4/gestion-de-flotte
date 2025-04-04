@@ -40,7 +40,10 @@ import { TechnicienComponent } from './technicien/technicien/technicien.componen
 import { AddTechnicienComponent } from './technicien/add-technicien/add-technicien.component';
 import { InterventionComponent } from './intervention/intervention/intervention.component';
 import { AddInterventionComponent } from './intervention/add-intervention/add-intervention.component';
-import { CreateComponent } from './dasboard-admin/create/create.component';
+import { OrdersComponent } from './intervention/orders/orders.component';
+import { UpdateOrdersComponent } from './intervention/update-orders/update-orders.component';
+import { FileUploaderComponent } from './chauffeur/file-uploader/file-uploader.component';
+import { ChauffeurModule } from './chauffeur/chauffeur.module';
 
 @NgModule({
   declarations: [
@@ -62,7 +65,9 @@ import { CreateComponent } from './dasboard-admin/create/create.component';
     AddTechnicienComponent,
     InterventionComponent,
     AddInterventionComponent,
-    CreateComponent
+    OrdersComponent,
+    UpdateOrdersComponent,
+    FileUploaderComponent
     
   ],
   imports: [
@@ -90,6 +95,7 @@ import { CreateComponent } from './dasboard-admin/create/create.component';
     MatTooltipModule,
     MatListModule,
     MatCardModule,
+    ChauffeurModule
     //MatTimepickerModule,
 
   ],

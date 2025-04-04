@@ -44,10 +44,17 @@ export const navbarData= [
     },
 
     {
+        routeLink: 'ordres',
+        icon: 'fal fa-clipboard-list',
+        label: 'ordres'
+    },
+
+    {
         routeLink: 'atelier',
         icon: 'fal fa-hard-hat', //tools//fal fa-chart-bar: stat
         label: 'atelier'
     },
+    
     //fa-hard-hat ⛑️ 
 
     {

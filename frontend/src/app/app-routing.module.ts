@@ -16,6 +16,7 @@ import { AtelierComponent } from './atelier/atelier/atelier.component';
 import { OrdreComponent } from './ordre/ordre/ordre.component';
 import { TechnicienComponent } from './technicien/technicien/technicien.component';
 import { InterventionComponent } from './intervention/intervention/intervention.component';
+import { OrdersComponent } from './intervention/orders/orders.component';
 
 export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard], data: { roles: 'chef de direction technique' } },
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: 'diagnostic', component: DiagnosticComponent, canActivate: [authGuard], data: { roles: 'chef service maintenance' } },
   { path: 'ordre', component: OrdreComponent, canActivate: [authGuard], data: { roles: 'chef service maintenance' } },
   { path: 'intervention', component: InterventionComponent, canActivate: [authGuard], data: { roles: 'Responsable maintenance' } },
+  { path: 'ordres', component: OrdersComponent, canActivate: [authGuard], data: { roles: 'Responsable maintenance' } },
   { path: 'demande', component: DemandeComponent, canActivate: [authGuard], data: { roles: 'chef d’agence' } },
   //{path:'consommation', component: ConsommationComponent, canActivate: [authGuard], data: {roles: ['']}},
   //{path:'kilometrage', component: KilometrageComponent, canActivate: [authGuard], data: {roles: ['']}},

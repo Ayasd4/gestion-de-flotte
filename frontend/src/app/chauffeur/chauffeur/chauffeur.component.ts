@@ -51,7 +51,8 @@ export class ChauffeurComponent implements AfterViewInit {
     matricule_chauf: '',
     cin: '',
     telephone: '',
-    email: ''
+    email: '',
+    image: ''
   }
 
   chauffeurs: Chauffeur[] = [];

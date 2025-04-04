@@ -24,7 +24,11 @@
                     <strong>Identity Card:</strong> {{Chauffeur.cin}}<br>
                     <strong>Phone:</strong> {{Chauffeur.telephone}}<br>
                     <strong>email:</strong> {{Chauffeur.email}} <br>
-
+                </div>
+                <div class="chauffeur-image">
+                    <img [src]="chauffeur.image" alt="Driver Image" class="chauffeur-image-style">{{chauffeur.image}}
+                    <!-- Icone ajoutée ici -->
+                    <!--<mat-icon class="chauffeur-icon">camera_alt</mat-icon>-->
                 </div>
                 <div class="actions">
                     <button mat-icon-button (click)="editChauffeur(Chauffeur)" color="primary" matTooltip="Edit">

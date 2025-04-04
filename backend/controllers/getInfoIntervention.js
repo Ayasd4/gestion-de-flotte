@@ -2,7 +2,7 @@ const db = require("../db/db");
 
 exports.getAllOrdre = async (req, res) => {
     try {
-        const sql = "SELECT travaux FROM acc.ordre_travail";
+        const sql = "SELECT travaux,material_requis, planning, date_ordre FROM acc.ordre_travail";
 
         db.query(sql, (err, result) => {
             if (err) {
@@ -21,7 +21,7 @@ exports.getAllOrdre = async (req, res) => {
 }
 
 exports.getAllTechnicien = async (req, res) => {
-    const sql = "SELECT matricule_techn FROM acc.technicien";
+    const sql = "SELECT matricule_techn,nom, prenom, email_techn, specialite FROM acc.technicien";
 
     db.query(sql, (err, result) => {
         if (err) {

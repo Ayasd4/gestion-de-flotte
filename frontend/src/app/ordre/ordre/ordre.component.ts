@@ -42,6 +42,7 @@ export class OrdreComponent implements AfterViewInit {
   cout_estime: any = undefined;
   capacite: any = undefined;
   matricule_techn: any = undefined;
+  numparc: any = undefined;
 
   constructor(private ordreService: OrdreService,
     public dialog: MatDialog,
@@ -57,6 +58,9 @@ export class OrdreComponent implements AfterViewInit {
       id_diagnostic: 0,
       demande: {
         id_demande: 0,
+        type_avarie: '',
+        description: '',
+        vehicule: { numparc: this.numparc }
       },
       description_panne: '',
       causes_panne: '',
@@ -121,7 +125,7 @@ export class OrdreComponent implements AfterViewInit {
         return '';
     }
   }
-  
+
   ngAfterViewInit(): void {
     this.ordreService.fetchAllOrders().subscribe((data) => {
       console.log('Données récupérées : ', data);
@@ -131,8 +135,9 @@ export class OrdreComponent implements AfterViewInit {
       this.dataSource.paginator = this.paginator;
     }, (error) => {
       console.log('Error while retrieving Order: ', error);
-    }
-    );
+    });
+    //let numparc = this.ordre.diagnostic.demande.vehicule.numparc;
+
   }
 
   searchOrder(input: any) {

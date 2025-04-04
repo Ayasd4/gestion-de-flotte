@@ -8,73 +8,82 @@
                 <mat-icon fontIcon="search" matSuffix></mat-icon>
             </mat-form-field>
         </div>
-
-        <div class="card-body">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
-                *ngIf="dataSource.data.length > 0">
-
-                <ng-container matColumnDef="id_diagnostic">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic ID </th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.id_diagnostic}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="id_demande">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Demand ID </th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.id_demande}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="description_panne">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Description Panne </th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.description_panne}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="causes_panne">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Causes Panne</th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.causes_panne}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="actions_panne">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.actions}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="date_diagnostic">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic Date </th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.date_diagnostic}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="heure_diagnostic">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic Hour </th>
-                    <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.heure_diagnostic}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="Actions">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
-                    <td mat-cell *matCellDef="let diagnostic">
-                        <button style="height: 27px;margin-left: 20px;" mat-icon-button
-                            (click)="editDiagnostic(diagnostic)" color="primary" matTooltip="edit"
-                            aria-label="Button that displays a tooltip when focused or hovered over">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button style="height: 27px;margin-left: 20px;" mat-icon-button
-                            (click)="deleteDiagnostic(diagnostic.id_diagnostic)" color="warn" matTooltip="edit"
-                            aria-label="Button that displays a tooltip when focused or hovered over">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let diagnostics; columns: displayedColumns;"></tr>
-            </table>
-
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                aria-label="Select page of periodic elements">
-            </mat-paginator>
-        </div>
     </div>
+    <div class="card-body">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
 
+            <ng-container matColumnDef="id_diagnostic">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic ID </th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.id_diagnostic}} </td>
+            </ng-container>
+
+            <!--<ng-container matColumnDef="id_demande">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Demand ID </th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.id_demande}} </td>
+            </ng-container>-->
+
+            <ng-container matColumnDef="id_demande">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request </th>
+                <td mat-cell *matCellDef="let Diagnostic">
+                    <div style="display: flex; flex-direction: column;">
+                        <span><strong>Vehicle:</strong> {{Diagnostic.numparc}}</span>
+                        <span><strong>Breakdown Type:</strong> {{Diagnostic.type_avarie}}</span>
+                        <span><strong>Description:</strong> {{Diagnostic.description_panne}}</span>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description_panne">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Description Panne </th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.description_panne}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="causes_panne">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Causes Panne</th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.causes_panne}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions_panne">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.actions}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="date_diagnostic">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic Date </th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.date_diagnostic}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="heure_diagnostic">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic Hour </th>
+                <td mat-cell *matCellDef="let Diagnostic"> {{Diagnostic.heure_diagnostic}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                <td mat-cell *matCellDef="let diagnostic">
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editDiagnostic(diagnostic)"
+                        color="primary" matTooltip="edit"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button
+                        (click)="deleteDiagnostic(diagnostic.id_diagnostic)" color="warn" matTooltip="edit"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let diagnostics; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
 </div>
+
 
 
 

@@ -88,7 +88,8 @@ export class MaintenanceComponent implements AfterViewInit {
       matricule_chauf: '',
       cin: '',
       telephone: '',
-      email: ''
+      email: '',
+      image: ''
     }
 
   }
@@ -172,8 +173,9 @@ export class MaintenanceComponent implements AfterViewInit {
   diagnosticDemande(demande: any) {
     //this.ngxService.start();
     const dialogRef = this.dialog.open(AddDiagnosticComponent, {
-      width: '400px',
-      data: { id_demande: demande.id_demande}
+      width: '500px',
+      //data: { id_demande: demande.id_demande,}
+      data: { ...demande}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -186,7 +188,7 @@ export class MaintenanceComponent implements AfterViewInit {
         },
           (error) => {
             console.log(error);
-           // window.location.reload();
+            // window.location.reload();
           });
       }
     })

@@ -85,9 +85,8 @@ export class LoginComponent {
             this.router.navigate(['/diagnostic']);
 
           }else if (userRole === 'Responsable maintenance') {
+            this.router.navigate(['/orders']);
             this.router.navigate(['/intervention']);
-            //this.router.navigate(['/diagnostic']);
-
           } else if (userRole === 'chef d’agence') {
             this.router.navigate(['/demande']);
 

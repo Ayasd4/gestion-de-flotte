@@ -85,6 +85,8 @@ export class InterventionComponent implements AfterViewInit {
         return 'status-planifier';
       case 'Terminer':
         return 'status-terminer';
+      case 'En cours':
+        return 'status-en-cours';
       case 'Annuler':
         return 'status-annuler';
       default:
@@ -148,10 +150,10 @@ export class InterventionComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.interventionService.updateIntervention(result).subscribe(
+        this.interventionService.updateIntervention(this.intervention).subscribe(
           () => {
             console.log("Intervention updated!", result);
-            this.snackBar.open("Intervention updated successfully", 'close', { duration: 9000 });
+            this.snackBar.open("Intervention updated successfully", 'close', { duration: 6000 });
             window.location.reload(); // Rafraîchir après mise à jour
           }, (error) => {
             console.error('Error while updating Intervention', error);
@@ -161,7 +163,7 @@ export class InterventionComponent implements AfterViewInit {
     });
   }
 
-  deleteIntervantion(id_intervention: Number) {
+  deleteIntervention(id_intervention: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
       this.interventionService.deleteIntervention(id_intervention).subscribe(() => {

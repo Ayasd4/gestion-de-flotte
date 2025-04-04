@@ -25,6 +25,10 @@ export class OrdreService {
     return this.httpClient.put<Ordre>(`${this.baseUrl}/${data.id_ordre}`, data);
   }
 
+  updateStatus(data: Ordre){
+    return this.httpClient.put<Ordre>(`${this.baseUrl}/status/${data.id_ordre}`, data);
+  }
+
   deleteOrder(id_ordre: Number){
     return this.httpClient.delete<Ordre>(`${this.baseUrl}/${id_ordre}`);
   }

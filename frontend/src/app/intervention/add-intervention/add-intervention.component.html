@@ -5,7 +5,7 @@
             <br>
             <mat-stepper [linear]="true" #stepper>
                 <mat-step label="Informations Générales">
-                    <ng-template matStepLabel>General Information of Intervention</ng-template>
+                    <ng-template matStepLabel>Information of Intervention</ng-template>
 
                     <mat-form-field>
                         <mat-label>Start Date of intervention</mat-label>
@@ -43,44 +43,44 @@
 
                     <mat-form-field>
                         <mat-label>Comment</mat-label>
-                        <input type="text" matInput [(ngModel)]="intervention.commentaire" name="commentaire" required>
+                        <textarea style="width: 100%; height: 100%;" matInput [(ngModel)]="intervention.commentaire" name="commentaire" required></textarea>
                     </mat-form-field>
 
                     <button mat-button matStepperNext>Next</button>
                 </mat-step>
 
-                <!--step 3-->
+                <!--step 2-->
                 <mat-step label="Order Information">
                     <ng-template matStepLabel>Order Information</ng-template>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <mat-label>Works</mat-label>
                         <mat-select matNativeControl (selectionChange)="getOrdreInfo()"
-                            [(ngModel)]="intervention.ordre.travaux" name="travaux" required>
+                            [(ngModel)]="intervention.ordre.travaux" name="travaux" disabled readonly>
                             <mat-option *ngFor="let num of ordreList" [value]="num">
                                 {{ num }}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <mat-label>Emergency Breakdown</mat-label>
-                        <input matInput [(ngModel)]="intervention.ordre.urgence_panne" name="urgence_panne" required>
+                        <input matInput [(ngModel)]="intervention.ordre.urgence_panne" name="urgence_panne" disabled readonly>
                     </mat-form-field>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <mat-label>Equipment</mat-label>
-                        <input matInput [(ngModel)]="intervention.ordre.material_requis" name="material_requis" required>
+                        <input matInput [(ngModel)]="intervention.ordre.material_requis" name="material_requis" disabled readonly>
                     </mat-form-field>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <mat-label>Planning</mat-label>
-                        <input matInput [(ngModel)]="intervention.ordre.planning" name="planning" required>
+                        <input matInput [(ngModel)]="intervention.ordre.planning" name="planning" disabled readonly>
                     </mat-form-field>
 
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                         <mat-label>Order Date</mat-label>
-                        <input matInput [(ngModel)]="intervention.ordre.date_ordre" name="date_ordre" required>
+                        <input matInput [(ngModel)]="intervention.ordre.date_ordre" name="date_ordre" disabled readonly>
                     </mat-form-field>
 
                     <div>
@@ -89,7 +89,7 @@
                     </div>
                 </mat-step>
 
-                <!--step 4-->
+                <!--step 3-->
                 <mat-step label="Technician Information">
                     <ng-template matStepLabel>Technician Information</ng-template>
                     <mat-form-field>
@@ -104,27 +104,22 @@
 
                     <mat-form-field>
                         <mat-label>First Name</mat-label>
-                        <input matInput [(ngModel)]="intervention.technicien.nom" name="nom" required>
+                        <input matInput [(ngModel)]="intervention.technicien.nom" name="nom" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Last Name</mat-label>
-                        <input matInput [(ngModel)]="intervention.technicien.prenom" name="prenom" required>
+                        <input matInput [(ngModel)]="intervention.technicien.prenom" name="prenom" disabled readonly>
                     </mat-form-field>
-
-                    <!--<mat-form-field>
-                        <mat-label>Phone Number</mat-label>
-                        <input matInput [(ngModel)]="intervention.technicien.telephone_techn" name="telephone_techn" required>
-                    </mat-form-field>-->
 
                     <mat-form-field>
                         <mat-label>Email</mat-label>
-                        <input matInput [(ngModel)]="intervention.technicien.email_techn" name="email_techn" required>
+                        <input matInput [(ngModel)]="intervention.technicien.email_techn" name="email_techn" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Speciality</mat-label>
-                        <input matInput [(ngModel)]="intervention.technicien.specialite" name="specialite" required>
+                        <input matInput [(ngModel)]="intervention.technicien.specialite" name="specialite" disabled readonly>
                     </mat-form-field>
 
                     <div>
@@ -136,11 +131,10 @@
                 <mat-step>
                     <ng-template matStepLabel>Done</ng-template>
                     <p>Please verify all information before submitting.</p>
-                    <div>
+                    <div style="padding: auto;">
                         <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button color="primary" (click)="saveIntervention(interventionForm)">Submit</button>
+                        <button mat-button color="primary" (click)="saveIntervention(interventionForm)">Save</button>
                         <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
-
                     </div>
                 </mat-step>
             </mat-stepper>
