@@ -50,6 +50,7 @@ export class AddOrdreComponent implements OnInit {
   matricule_techn: any = undefined;
   selected = "En attente";
   numparc: any= undefined;
+  Disponibles: string[] = ['critique', 'moyenne', 'faible'];
 
   ordre: Ordre = {
     id_ordre: 0,
@@ -91,6 +92,7 @@ export class AddOrdreComponent implements OnInit {
       email_techn: '',
       specialite: '',
       date_embauche: '',
+      image: ''
     }
   }
   diagnosticList: any;

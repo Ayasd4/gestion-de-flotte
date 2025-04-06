@@ -3,16 +3,98 @@
         <div class="title" style="margin-right: 890px;margin-top: 20px;"> List Requests</div>
         <button (click)="openDialog()">Add</button>
     </div>
-    <div class="card-head">
-        <div class="search-container">
+    <!--<div class="card-head">-->
+    <!--<div class="search-container">
             <mat-form-field style="width: 180px;margin-left: 15px;">
                 <input (input)="searchDemandes(filter.value)" matInput placeholder="search demand" type="text"
                     style="width: 190px;" #filter>
                 <mat-icon fontIcon="search" matSuffix></mat-icon>
             </mat-form-field>
-        </div>
+        </div>-->
 
+    <div class="search-header">
+        Search Filters
     </div>
+    <!--search form-->
+    <div class="search-container">
+        <!--<div class="card-header bg-light">
+                <h5 class="mb-0">Search Filters</h5>
+            </div>-->
+
+        <form (ngSubmit)="searchDemandes()" #searchForm="ngForm" class="search-form">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="numparc">Parc Number</label>
+                        <input type="number" class="form-control" name="numparc" id="numparc"
+                            [(ngModel)]="searchParams.numparc">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="id_chauffeur">Driver</label>
+                        <select class="form-control" name="id_chauffeur" id="id_chauffeur"
+                            [(ngModel)]="searchParams.id_chauffeur">
+                            <option ngValue="">All Drivers</option>
+                            <option *ngFor="let chauffeur of chauffeurs" [ngValue]="chauffeur.id_chauf">
+                                {{chauffeur.matricule_chauf}} {{chauffeur.nom}} {{chauffeur.prenom}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_demande">Request Date</label>
+                        <input type="date" class="form-control" name="date_demande" id="date_demande"
+                            [(ngModel)]="searchParams.date_demande">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="type_avarie">Breakdown type</label>
+                        <select class="form-control" name="type_avarie" id="type_avarie"
+                            [(ngModel)]="searchParams.type_avarie">
+                            <option ngValue="">All Types</option>
+                            <option *ngFor="let demande of demandes" [ngValue]="demande.type_avarie">
+                                {{demande.type_avarie}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="description">description</label>
+                        <select class="form-control" name="description" id="description"
+                            [(ngModel)]="searchParams.description">
+                            <option ngValue="">All descriptions</option>
+                            <option *ngFor="let demande of demandes" [ngValue]="demande.description">
+                                {{demande.description}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_avarie">Breakdown Date</label>
+                        <input type="date" class="form-control" name="date_avarie" id="date_avarie"
+                            [(ngModel)]="searchParams.date_avarie">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="heure_avarie">Breakdown Hour</label>
+                        <input type="time" class="form-control" name="heure_avarie" id="heure_avarie"
+                            [(ngModel)]="searchParams.heure_avarie">
+                    </div>
+                </div>
+
+            </div>
+            <div class="buton">
+                <button mat-raised-button type="button" (click)="resetSearch()">Reset</button>
+                <button mat-raised-button color="primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+    <!--</div>-->
 
     <div class="card-body">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
@@ -78,7 +160,8 @@
                     <div style="display: flex; flex-direction: column;">
                         <span><strong>Name:</strong> {{Demande.matricule_chauf}}: {{Demande.nom}}
                             {{Demande.prenom}}</span>
-                        <span><strong>Information:</strong> {{Demande.email}} {{Demande.cin}} {{Demande.telephone}}</span>
+                        <span><strong>Information:</strong> {{Demande.email}} {{Demande.cin}}
+                            {{Demande.telephone}}</span>
 
 
                     </div>

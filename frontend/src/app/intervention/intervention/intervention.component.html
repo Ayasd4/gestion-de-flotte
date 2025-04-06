@@ -1,17 +1,96 @@
 <div class="card">
-    <!--<div class="buton-container">
+    <div class="buton-container">
         <button (click)="openDialog()">Add</button>
-    </div>-->
+    </div>
 
     <div class="card-head">
         <div class="title"> List Interventions</div>
-        <div class="search-container">
-            <mat-form-field style="width: 180px;margin-left: 15px;">
-                <input (input)="searchIntervention(filter.value)" matInput placeholder="search Intervention" type="text"
-                    style="width: 190px;" #filter>
-                <mat-icon fontIcon="search" matSuffix></mat-icon>
-            </mat-form-field>
-        </div>
+    </div>
+    <div class="search-container">
+        <!--<mat-form-field style="width: 180px;margin-left: 15px;">
+            <input (input)="searchIntervention(filter.value)" matInput placeholder="search Intervention" type="text"
+                style="width: 190px;" #filter>
+            <mat-icon fontIcon="search" matSuffix></mat-icon>
+        </mat-form-field>-->
+
+        <form (ngSubmit)="searchIntervention()" #searchForm="ngForm" class="search-form">
+            <div class="search-header">
+                Search Filters
+            </div>
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_ordre">Order Date</label>
+                        <input type="date" class="form-control" name="date_ordre" id="date_ordre"
+                            [(ngModel)]="searchParams.date_ordre">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="id_technicien">Technician</label>
+                        <select class="form-control" name="id_technicien" id="id_technicien"
+                            [(ngModel)]="searchParams.id_technicien">
+                            <option ngValue="">All Technician</option>
+                            <option *ngFor="let technicien of techniciens" [ngValue]="technicien.id_technicien">
+                                {{technicien.matricule_techn}} {{technicien.nom}} {{technicien.prenom}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_debut">Start Intervention Date</label>
+                        <input type="date" class="form-control" name="date_debut" id="date_debut"
+                            [(ngModel)]="searchParams.date_debut">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="heure_debut">Start Intervention Hour</label>
+                        <input type="time" class="form-control" name="heure_debut" id="heure_debut"
+                            [(ngModel)]="searchParams.heure_debut">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_fin">End Intervention Date</label>
+                        <input type="date" class="form-control" name="date_fin" id="date_fin"
+                            [(ngModel)]="searchParams.date_fin">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="heure_fin">End Intervention Hour</label>
+                        <input type="time" class="form-control" name="heure_fin" id="heure_fin"
+                            [(ngModel)]="searchParams.heure_fin">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="status_intervention">Status</label>
+                        <select class="form-control" name="status_intervention" id="status_intervention"
+                            [(ngModel)]="searchParams.status_intervention">
+                            <option ngValue="">All Status</option>
+                            <option *ngFor="let intervention of interventions" [ngValue]="intervention.status_intervention">
+                                {{intervention.status_intervention}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="buton">
+                <button mat-raised-button type="button" (click)="resetSearch()">Reset</button>
+                <button mat-raised-button color="primary" type="submit">Search</button>
+            </div>
+        </form>
     </div>
     <div class="card-body">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">

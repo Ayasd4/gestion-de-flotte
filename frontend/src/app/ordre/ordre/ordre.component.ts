@@ -15,6 +15,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DiagnosticComponent } from 'src/app/maintenance/diagnostic/diagnostic.component';
+import { Technicien } from 'src/app/technicien/technicien';
+import { Atelier } from 'src/app/atelier/atelier';
+import { Diagnostic } from 'src/app/maintenance/diagnostic/diagnostic';
+import { TechnicienService } from 'src/app/technicien/technicien.service';
+import { AtelierService } from 'src/app/atelier/atelier.service';
+import { DiagnosticService } from 'src/app/maintenance/diagnostic/diagnostic.service';
 
 @Component({
   selector: 'app-ordre',
@@ -46,7 +52,10 @@ export class OrdreComponent implements AfterViewInit {
 
   constructor(private ordreService: OrdreService,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private diagnosticService: DiagnosticService,
+    private technicienService: TechnicienService,
+    private atelierService: AtelierService
   ) { }
 
   @ViewChild(MatSort) sort: any;
@@ -92,9 +101,13 @@ export class OrdreComponent implements AfterViewInit {
       email_techn: '',
       specialite: '',
       date_embauche: '',
+      image: ''
     }
   }
 
+  diagnostics: Diagnostic[] = [];
+  techniciens: Technicien[] = [];
+  ateliers: Atelier[] = [];
   ordres: Ordre[] = [];
   filtredOrdres: Ordre[] = [];
 
@@ -137,10 +150,109 @@ export class OrdreComponent implements AfterViewInit {
       console.log('Error while retrieving Order: ', error);
     });
     //let numparc = this.ordre.diagnostic.demande.vehicule.numparc;
+    this.loadDiagnostic();
+    this.loadTechnicien();
+    this.loadAtelier();
+    this.loadOrdre();
 
   }
 
-  searchOrder(input: any) {
+  loadOrdre(): void {
+    this.ordreService.fetchAllOrders().subscribe(
+      (data) => {
+        this.ordres = data;
+        this.filtredOrdres = data;
+        this.dataSource.data = data;
+      },
+      (error) => {
+        console.error('Error fetching orders:', error);
+        this.snackBar.open('Error fetching orders, please try again later.', 'Close', { duration: 5000 });
+      }
+    );
+}
+
+
+  loadDiagnostic(): void {
+    this.diagnosticService.fetchAllDiagnostic().subscribe(
+      (data) => {
+        this.diagnostics = data;
+      },
+      (error) => {
+        console.error('Error fetching Diagnostic:', error);
+      }
+    );
+  }
+
+  loadTechnicien(): void {
+    this.technicienService.fetchAllTechnicien().subscribe(
+      (data) => {
+        this.techniciens = data;
+      },
+      (error) => {
+        console.error('Error fetching technician:', error);
+      }
+    );
+  }
+
+  loadAtelier(): void {
+    this.atelierService.fetchAllAtelier().subscribe(
+      (data) => {
+        this.ateliers = data;
+      },
+      (error) => {
+        console.error('Error fetching workshops:', error);
+      }
+    );
+  }
+
+  searchParams: any = {
+    date_diagnostic: '',
+    date_ordre: '',
+    status: '',
+    nom_atelier: '',
+    nom: '',
+    prenom: '',
+    matricule_techn: 0,
+
+  }
+
+  searchOrdre(): void {
+    const filteredParams = Object.fromEntries(
+      Object.entries(this.searchParams).filter(([__dirname, value]) => value !== null && value !== undefined && value !== '')
+    );
+
+    if (Object.keys(filteredParams).length === 0) {
+      this.loadOrdre();
+      return;
+    }
+
+    this.ordreService.searchOrdre(filteredParams).subscribe((data) => {
+      this.filtredOrdres = data;
+      this.dataSource.data = data;
+    },
+      (error) => {
+        console.error('Error searching Order:', error);
+      }
+    );
+  }
+
+  // Reset search form
+  resetSearch(): void {
+    this.searchParams = {};
+    this.loadOrdre();
+  }
+
+  // Apply quick filter to the table
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  /*searchOrder(input: any) {
     this.filtredOrdres = this.ordres.filter(item => item.urgence_panne?.toLowerCase().includes(input.toLowerCase())
       || item.travaux?.toLowerCase().includes(input.toLowerCase())
       || item.material_requis?.toLowerCase().includes(input.toLowerCase())
@@ -150,7 +262,7 @@ export class OrdreComponent implements AfterViewInit {
     )
     this.dataSource = new MatTableDataSource<Ordre>(this.filtredOrdres);
 
-  }
+  }*/
 
 
 

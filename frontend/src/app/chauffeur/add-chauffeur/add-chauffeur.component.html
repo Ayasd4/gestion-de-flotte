@@ -34,22 +34,16 @@
             </mat-form-field>
 
             <mat-form-field>
-                <mat-label>Photo</mat-label>
-                <input matInput [value]="selectedFileName" readonly />
-            </mat-form-field>
-
-            <button mat-button (click)="triggerClick()">Choisir un fichier</button>
-            <input type="file" #fileInput (change)="onFileSelect($event)" style="display: none;" />
-
-            <!--<mat-form-field>
-                <mat-label for="photo">Photo</mat-label>
-                <input matInput [(ngModel)]="chauffeur.image" name="image" required>
-                <file-uploader (onFileSelect)="onFileSelect($event)"></file-uploader>
-                <div class="invalid-feedback" *ngIf="submitted && userForm.controls.photo.invalid">
-                    <div *ngIf="chauffeurForm.controls.photo.errors.required">photo is required</div>
-                </div>
+                <mat-label for="image" class="col-sm-2 col-form-label">Photo</mat-label>
+                <input type="text" class="form-control" hidden matInput [(ngModel)]="chauffeur.image" name="image"
+                    required>
+                <app-file-uploader (onFileSelect)="onFileSelect($event)"></app-file-uploader>
+                <!--<app-file-uploader (onFileSelect)="onFileSelect($event)"></app-file-uploader>-->
+                <!--<div class="invalid-feedback" *ngIf="submitted && chauffeurForm.controls['image']?.invalid">
+                    <div *ngIf="chauffeurForm.controls['image']?.errors?.required">Photo is required</div>
+                </div>-->
                 <div class="text-danger" *ngIf="uploadError">{{uploadError}}</div>
-            </mat-form-field>-->
+            </mat-form-field>
 
             <div *ngIf="chauffeurForm.invalid && (chauffeurForm.dirty || chauffeurForm.touched)" class="error-message">
                 All fields must be completed.

@@ -16,9 +16,9 @@ import { FormsModule } from '@angular/forms';
   ]
 })
 export class FileUploaderComponent {//implements OnInit 
-
-  @Output() onFileSelect: EventEmitter<object> = new EventEmitter();
-  @ViewChild('fileUploader', { static: false }) fileUploader!: ElementRef<HTMLElement>;
+  @Output() onFileSelect = new EventEmitter<File>();
+ // @Output() onFileSelect: EventEmitter<object> = new EventEmitter();
+  @ViewChild('fileUpoader', { static: false }) fileUpoader!: ElementRef<HTMLElement>;
 
   public image: string = '';
   public imageName: string = '';
@@ -29,7 +29,7 @@ export class FileUploaderComponent {//implements OnInit
   }
 
   triggerClick() {
-    let fileElement: HTMLElement = this.fileUploader.nativeElement;
+    let fileElement: HTMLElement = this.fileUpoader.nativeElement;
     fileElement.click();
   }
 
@@ -50,18 +50,3 @@ export class FileUploaderComponent {//implements OnInit
   }
 }
 
-
-/**@ViewChild('fileInput', {static: false}) fileInput!: ElementRef;
-
-  constructor(private http: HttpClient,
-    private chauffeurService: ChauffeurService
-  ){}
-
-  onFileUpload(){
-    const imageBlob = this.fileInput.nativeElement.files[0];
-    const file = new FormData();
-    file.set('file', imageBlob);
-  }
-
-
-  /* */

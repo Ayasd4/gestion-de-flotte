@@ -16,6 +16,11 @@ import { DiagnosticService } from './diagnostic.service';
 import { AddDiagnosticComponent } from '../add-diagnostic/add-diagnostic.component';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
+import { Demande } from 'src/app/demande/demande';
+import { Vehicule } from 'src/app/vehicule/vehicule';
+import { DemandeService } from 'src/app/demande/demande.service';
+import { VehiculeService } from 'src/app/vehicule/vehicule.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-diagnostic',
@@ -46,7 +51,10 @@ export class DiagnosticComponent implements OnInit {
 
   constructor(private diagnosticService: DiagnosticService,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private demandeService: DemandeService,
+    private vehiculeService: VehiculeService,
+
   ) { }
 
   @ViewChild(MatSort) sort: any;
@@ -67,6 +75,8 @@ export class DiagnosticComponent implements OnInit {
     heure_diagnostic: ''
   }
 
+  vehicules: Vehicule[] = [];
+  demandes: Demande[] = [];
   diagnostics: Diagnostic[] = [];
   filtredDiagnostic: Diagnostic[] = [];
 
@@ -82,9 +92,93 @@ export class DiagnosticComponent implements OnInit {
       console.error('Error while retriving Diagnostic:', error);
 
     });
+
+    this.loadVehicules();
+    this.loadDemandes();
+
   }
 
-  searchDiagnostic(input: any) {
+  loadDiagnostic(): void {
+    this.diagnosticService.fetchAllDiagnostic().subscribe(
+      (data) => {
+        this.diagnostics = data;
+        this.filtredDiagnostic = data;
+        this.dataSource.data = data;
+      },
+      (error) => {
+        console.error('Error fetching Diagnostic:', error);
+      }
+    );
+  }
+
+  loadDemandes(): void {
+    this.demandeService.fetchAllDemandes().subscribe(
+      (data) => {
+        this.demandes = data;
+      },
+      (error) => {
+        console.error('Error fetching vehicles:', error);
+      }
+    );
+  }
+
+  loadVehicules(): void {
+    this.vehiculeService.fetchAllVehicules().subscribe(
+      (data) => {
+        this.vehicules = data;
+      },
+      (error) => {
+        console.error('Error fetching vehicles:', error);
+      }
+    );
+  }
+
+  searchParams: any = {
+    numparc: '',
+    type_avarie: '',
+    description: '',
+    date_diagnostic: '', // S'assurer que la date de diagnostic est bien dans le modèle
+    heure_diagnostic: ''
+  };
+
+  searchDiagnostic(): void {
+    const filteredParams = Object.fromEntries(
+      Object.entries(this.searchParams).filter(([__dirname, value]) => value !== null && value !== undefined && value !== '')
+    );
+
+    if (Object.keys(filteredParams).length === 0) {
+      this.loadDemandes();
+      return;
+    }
+    
+    this.diagnosticService.searchDiagnostic(filteredParams).subscribe((data) => {
+      this.filtredDiagnostic = data;
+      this.dataSource.data = data;
+    },
+      (error) => {
+        console.error('Error searching diagnostic:', error);
+      }
+    );
+  }
+
+  // Reset search form
+  resetSearch(): void {
+    this.searchParams = {};
+    this.loadDiagnostic();
+  }
+
+  // Apply quick filter to the table
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+ 
+  /*searchDiagnostic(input: any) {
     input = input?.toString().trim().toLowerCase();
 
     this.filtredDiagnostic = this.diagnostics.filter(item => item.description_panne?.toLowerCase().includes(input)
@@ -96,7 +190,7 @@ export class DiagnosticComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource<Diagnostic>(this.filtredDiagnostic);
 
-  }
+  }*/
 
   editDiagnostic(diagnostic: Diagnostic) {
     const dialogRef = this.dialog.open(AddDiagnosticComponent, {

@@ -92,6 +92,7 @@ export class UpdateOrdersComponent implements OnInit {
       email_techn: '',
       specialite: '',
       date_embauche: '',
+      image: ''
     }
   }
 

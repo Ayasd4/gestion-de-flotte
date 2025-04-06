@@ -23,28 +23,28 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './technicien.component.html',
   styleUrls: ['./technicien.component.css'],
   standalone: true,
-    imports: [
-      CommonModule,
-      CommonModule,
-      FormsModule,
-      MatDialogModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatButtonModule,
-      MatTableModule,
-      MatIconModule,
-      MatSortModule,
-      MatPaginatorModule,
-      MatSnackBarModule,
-      MatTooltipModule,
-      MatCardModule,
-      MatListModule
-    ],
+  imports: [
+    CommonModule,
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatCardModule,
+    MatListModule
+  ],
 })
-export class TechnicienComponent implements AfterViewInit{
+export class TechnicienComponent implements AfterViewInit {
   displayedColumns: string[] = ['id_technicien', 'nom', 'prenom', 'matricule_techn', 'cin', 'telephone_techn', 'email_techn', 'specialite', 'date_embauche', 'actions'];
   dataSource = new MatTableDataSource<Technicien>();
-  matricule_techn: any= undefined;
+  matricule_techn: any = undefined;
 
   constructor(private technicienService: TechnicienService,
     public dialog: MatDialog,
@@ -55,7 +55,7 @@ export class TechnicienComponent implements AfterViewInit{
   @ViewChild(MatSort) sort: any;
   @ViewChild(MatPaginator) paginator: any;
 
-  technicien: Technicien= {
+  technicien: Technicien = {
     id_technicien: 0,
     nom: '',
     prenom: '',
@@ -65,96 +65,112 @@ export class TechnicienComponent implements AfterViewInit{
     email_techn: '',
     specialite: '',
     date_embauche: '',
+    image: ''
   }
 
-  techniciens: Technicien[]= [];
-  filtredTechniciens: Technicien[]= [];
+  techniciens: Technicien[] = [];
+  filtredTechniciens: Technicien[] = [];
 
 
   ngAfterViewInit(): void {
-      this.technicienService.fetchAllTechnicien().subscribe((data) => {
-        //console.log('Données récupérées : ', data);
-        this.techniciens = data;
-        this.dataSource = new MatTableDataSource<Technicien>(data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      }, (error) => {
-        console.log('Error while retrieving Workshops: ', error);
-      });
-    }
-  
-    searchTechnicien(input: any) {
-      this.filtredTechniciens = this.techniciens.filter(item => item.nom?.toLowerCase().includes(input.toLowerCase())
-        || item.prenom?.toLowerCase().includes(input.toLowerCase())
-        || item.matricule_techn?.toString().includes(input)
-        || item.cin?.toLowerCase().includes(input.toLowerCase())
-        || item.telephone_techn?.toLowerCase().includes(input.toLowerCase())
-        || item.email_techn?.toLowerCase().includes(input.toLowerCase())
-        || item.specialite?.toLowerCase().includes(input.toLowerCase())
-        || item.date_embauche?.toLowerCase().includes(input.toLowerCase())
+    this.technicienService.fetchAllTechnicien().subscribe((data) => {
+      //console.log('Données récupérées : ', data);
+      this.techniciens = data;
+      this.dataSource = new MatTableDataSource<Technicien>(data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }, (error) => {
+      console.log('Error while retrieving Workshops: ', error);
+    });
+  }
 
-      )
-      this.dataSource = new MatTableDataSource<Technicien>(this.filtredTechniciens);
-  
-    }
-  
-    
-    openDialog() {
-      const dialogRef = this.dialog.open(AddTechnicienComponent, {
-        width: '400px',
-        data: {}
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.technicienService.createTechnicien(result).subscribe(
-            () => {
-              //this.ngxService.stop();
-              console.log("Technician added successfully!");
-              this.snackBar.open("Technician added successfully!", "Close", { duration: 5000 });
-              //window.location.reload();
-            },
-            (error) => {
-              console.log(error);
-              // window.location.reload();
-            });
-        }
-      })
-    }
-  
-    updateTechnicien(technicien: Technicien) {
-      const dialogRef = this.dialog.open(AddTechnicienComponent, {
-        width: '400px',
-        data: { ...technicien }
-      });
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.technicienService.updateTechnicien(result).subscribe(() => {
-            //this.ngxService.stop();
-            console.log("Technician updated successfully!");
-            this.snackBar.open("Technician updated successfully!", "Close", { duration: 5000 });
-            //window.location.reload();
+  searchTechnicien(input: any) {
+    this.filtredTechniciens = this.techniciens.filter(item => item.nom?.toLowerCase().includes(input.toLowerCase())
+      || item.prenom?.toLowerCase().includes(input.toLowerCase())
+      || item.matricule_techn?.toString().includes(input)
+      || item.cin?.toLowerCase().includes(input.toLowerCase())
+      || item.telephone_techn?.toLowerCase().includes(input.toLowerCase())
+      || item.email_techn?.toLowerCase().includes(input.toLowerCase())
+      || item.specialite?.toLowerCase().includes(input.toLowerCase())
+      || item.date_embauche?.toLowerCase().includes(input.toLowerCase())
+
+    )
+    this.dataSource = new MatTableDataSource<Technicien>(this.filtredTechniciens);
+
+  }
+
+  extractImageName(imagePath: string): string {
+    // Pour traiter les cas comme "uploads\\image.jpg" ou juste "image.jpg"
+    return imagePath.split('\\').pop() || imagePath;
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(AddTechnicienComponent, {
+      width: '600px',
+      height: '600px',
+      data: {}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.technicienService.createTechnicien(result).subscribe(
+          () => {
+            console.log("Technician added successfully!");
+            this.snackBar.open("Technician added successfully!", "Close", { duration: 5000 });
           },
-            (error) => {
-              console.log("Error while updated Technician :", error);
-              // window.location.reload();
-            });
-        }
-      })
-    }
-  
-    deleteTechnicien(id_technicien: Number) {
-      const isConfirmed = window.confirm("Are you sure you want to delete?");
-      if (isConfirmed) {
-        this.technicienService.deleteTechnicien(id_technicien).subscribe(() => {
-          this.techniciens = this.techniciens.filter(item => item.id_technicien !== id_technicien);
-          this.snackBar.open(' Technician successfully!', 'Close', { duration: 6000 });
-          window.location.reload();
-        }, (error) => {
-          console.error("Error while deleting Technician:", error);
-        }
-        );
+          (error) => {
+            console.log(error);
+            window.location.reload();
+          });
       }
+    })
+  }
+
+  updateTechnicien(technicien: Technicien) {
+    const dialogRef = this.dialog.open(AddTechnicienComponent, {
+      width: '600px',
+      height: '600px',
+      data: { ...technicien }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+        const formData = new FormData();
+        formData.append('nom', result.nom);
+        formData.append('prenom', result.prenom);
+        formData.append('matricule_techn', result.matricule_techn);
+        formData.append('cin', result.cin);
+        formData.append('telephone_techn', result.telephone_techn);
+        formData.append('email_techn', result.email_techn);
+        formData.append('specialite', result.specialite);
+        formData.append('date_embauche', result.date_embauche);
+        formData.append('image', result.image);
+
+        this.technicienService.updateTechnicien(this.technicien.id_technicien, formData).subscribe(() => {
+          console.log("Technician updated successfully!");
+          this.snackBar.open("Technician updated successfully!", "Close", { duration: 5000 });
+          window.location.reload();
+        },
+          (error) => {
+            console.log("Error while updated Technician :", error);
+            window.location.reload();
+          });
+      }
+    })
+  }
+
+  deleteTechnicien(id_technicien: Number) {
+    const isConfirmed = window.confirm("Are you sure you want to delete?");
+    if (isConfirmed) {
+      this.technicienService.deleteTechnicien(id_technicien).subscribe(() => {
+        this.techniciens = this.techniciens.filter(item => item.id_technicien !== id_technicien);
+        this.snackBar.open(' Technician successfully!', 'Close', { duration: 6000 });
+        window.location.reload();
+      }, (error) => {
+        console.error("Error while deleting Technician:", error);
+      }
+      );
     }
-  
-  
+  }
+
+
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule, MatOptionModule, NativeDateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -14,6 +14,7 @@ import { AddAtelierComponent } from 'src/app/atelier/add-atelier/add-atelier.com
 import { Technicien } from '../technicien';
 import * as moment from 'moment';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FileUploaderComponent } from 'src/app/chauffeur/file-uploader/file-uploader.component';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -48,6 +49,8 @@ export const MY_DATE_FORMATS = {
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    FileUploaderComponent
+
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
@@ -63,8 +66,13 @@ export class AddTechnicienComponent {
     private snackBar: MatSnackBar,
     private ngxService: NgxUiLoaderService,
     public dialogRef: MatDialogRef<AddAtelierComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
+  ) {
+    this.TechnicienForm = this.fb.group({
+      image: [null, Validators.required]
+    });
+  }
 
   matricule_techn: any = undefined;
 
@@ -78,7 +86,14 @@ export class AddTechnicienComponent {
     email_techn: '',
     specialite: '',
     date_embauche: '',
+    image: ''
   }
+
+  TechnicienForm: FormGroup;
+  imageFile: File | null = null;
+  submitted: boolean = false;
+  isPhotoError = false;
+  uploadError = '';
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -104,16 +119,37 @@ export class AddTechnicienComponent {
       return;
     }
 
-    const TechnicienToSend = {
+    if (this.TechnicienForm.get('image')?.invalid) {
+      this.isPhotoError = true;
+      return;
+    }
+
+    const image = this.TechnicienForm.get('image')?.value;
+    this.uploadError = '';
+
+    const formData = new FormData();
+    formData.append('nom', this.technicien.nom);
+    formData.append('prenom', this.technicien.prenom);
+    formData.append('matricule_techn', this.technicien.matricule_techn.toString());
+    formData.append('cin', this.technicien.cin);
+    formData.append('telephone_techn', this.technicien.telephone_techn);
+    formData.append('email_techn', this.technicien.email_techn);
+    formData.append('specialite', this.technicien.specialite);
+    formData.append('date_embauche', this.formatBackendDate(this.technicien.date_embauche));
+    formData.append('image', image);
+
+    this.technicien.image = image.name;
+
+    /*const TechnicienToSend = {
       ...this.technicien,
 
       date_embauche: this.formatBackendDate(this.technicien.date_embauche),
-    };
+    };*/
 
     this.ngxService.start();
 
     if (this.technicien.id_technicien) {
-      this.technicienService.updateTechnicien(TechnicienToSend).subscribe(() => {
+      this.technicienService.updateTechnicien(this.technicien.id_technicien, formData).subscribe(() => {
         console.log('Technician updated successfully!');
         this.ngxService.stop();
         window.location.reload();
@@ -124,7 +160,7 @@ export class AddTechnicienComponent {
         }
       );
     } else {
-      this.technicienService.createTechnicien(TechnicienToSend).subscribe(
+      this.technicienService.createTechnicien(formData).subscribe(
         () => {
           this.snackBar.open('Technician added successfully!', 'close', { duration: 9000 });
           this.ngxService.stop();
@@ -136,6 +172,12 @@ export class AddTechnicienComponent {
         }
       );
     }
+  }
+
+  onFileSelect(file: File) {
+    this.TechnicienForm.patchValue({ image: file });
+    this.TechnicienForm.get('image')?.updateValueAndValidity();
+    this.technicien.image = file.name;
   }
 
 }

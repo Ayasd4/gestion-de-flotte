@@ -34,8 +34,6 @@ import { RouterModule } from '@angular/router';
 })
 export class AddChauffeurComponent implements OnInit {
 
-  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
-
   chauffeur: Chauffeur = {
     id_chauf: 0,
     nom: '',
@@ -45,87 +43,52 @@ export class AddChauffeurComponent implements OnInit {
     telephone: '',
     email: '',
     image: ''
-  }
+  };
 
+  chauffeurForm: FormGroup;
   imageFile: File | null = null;
-  imagePreview: string | null = null;
-  uploadError: string | null = null;
-  submitted = false;
-  chauffeurForm!: FormGroup;
-  isPhotoError: boolean = false;
-  constructor(private chauffeurService: ChauffeurService, private snackBar: MatSnackBar,
+  submitted: boolean = false;
+  isPhotoError = false;
+  uploadError = '';
+
+  constructor(
+    private chauffeurService: ChauffeurService,
+    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AddChauffeurComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder
   ) {
     this.chauffeurForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
-      matricule_chauf: ['', Validators.required],
-      cin: ['', Validators.required],
-      telephone: ['', Validators.required],
-      email: ['', Validators.required],
-      image: ['', Validators.required],
-      // Ajoute d'autres champs ici si nécessaire
+      image: [null, Validators.required]
     });
+  }
+
+  ngOnInit(): void {
+    if (this.data) {
+      this.chauffeur = { ...this.data };
+    }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  @ViewChild('fileUploader', { static: false }) fileUploader!: ElementRef<HTMLElement>;
-
-
-  triggerClick() {
-    let fileElement: HTMLElement = this.fileUploader.nativeElement;
-    fileElement.click();
-  }
-
-  /*onFileSelect(event: any) {
-    const file = event.target.files[0]; // Récupère le fichier sélectionné
-    if (file) {
-      this.chauffeurForm.patchValue({ photo: file });
-      this.chauffeurForm.get('photo')?.updateValueAndValidity();
-    }
-  }*/
-  selectedFileName: string = 'Aucun fichier choisi';
-
-
-  onFileSelect(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.selectedFileName = file.name;
-    }
-  }
-
-    ngOnInit(): void {
-      if(this.data) {
-      this.chauffeur = { ...this.data }
-    }
-
-  }
-
   saveChauffeur(chauffeurForm: any) {
-    console.log('Données envoyées:', this.chauffeur);
-
-    this.submitted = true; // Ajout de cette ligne
+    this.submitted = true;
 
     if (chauffeurForm.invalid) {
       this.snackBar.open('All fields must be filled out!', 'Close', { duration: 9000 });
       return;
     }
 
-    /*if (!this.imageFile) {
-      this.uploadError = "Photo is required";
-      return;
-    }*/
-
     if (this.chauffeurForm.get('image')?.invalid) {
       this.isPhotoError = true;
+      return;
     }
 
+    const image = this.chauffeurForm.get('image')?.value;
     this.uploadError = '';
+
     const formData = new FormData();
     formData.append('nom', this.chauffeur.nom);
     formData.append('prenom', this.chauffeur.prenom);
@@ -133,32 +96,32 @@ export class AddChauffeurComponent implements OnInit {
     formData.append('cin', this.chauffeur.cin);
     formData.append('telephone', this.chauffeur.telephone);
     formData.append('email', this.chauffeur.email);
-    formData.append('image', this.chauffeurForm.get('image')?.value); // Ajout du fichier image
+    formData.append('image', image);
 
-    /*const imageBlob = this.fileInput.nativeElement.files[0];
-    const file = new FormData();
-    file.set('file', imageBlob)*/
+    // Si tu veux stocker le nom de l'image dans l'objet chauffeur
+    this.chauffeur.image = image.name;
 
     if (this.chauffeur.id_chauf) {
-      this.chauffeurService.updateChauffeur(this.chauffeur).subscribe(() => {
-        console.log('Driver updated successfully!');
+      this.chauffeurService.updateChauffeur(this.chauffeur.id_chauf, formData).subscribe(() => {
         this.dialogRef.close(this.chauffeur);
-      },
-        (error: any) => {
-          console.error('Error while updated Driver:', error);
-        }
-      );
+      }, error => {
+        console.error('Error while updating Driver:', error);
+      });
     } else {
-      this.chauffeurService.createChauffeur(this.chauffeur).subscribe(
-        () => {
-          this.snackBar.open('Driver added successfully!', 'close', { duration: 9000 });
-          this.dialogRef.close(this.chauffeur);
-        },
-        (error: any) => {
-          console.error('Error while creation Driver :', error);
-        }
-      );
+      this.chauffeurService.createChauffeur(formData).subscribe(() => {
+        this.snackBar.open('Driver added successfully!', 'close', { duration: 9000 });
+        this.dialogRef.close(this.chauffeur);
+      }, error => {
+        console.error('Error while creating Driver:', error);
+      });
     }
   }
+
+  onFileSelect(file: File) {
+    this.chauffeurForm.patchValue({ image: file });
+    this.chauffeurForm.get('image')?.updateValueAndValidity();
+    this.chauffeur.image = file.name;
+  }
+
 
 }

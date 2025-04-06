@@ -1,8 +1,123 @@
 const db = require("../db/db");
 const moment = require("moment");
 
+exports.search = async (req, res) => {
+    try {
+        let conditions = [];
+        let values = [];
+        let paramIndex = 1;
+
+        if (req.query.id_diagnostic) {
+            conditions.push(`diag.id_diagnostic = $${paramIndex}`);
+            values.push(req.query.id_diagnostic);
+            paramIndex++;
+        }
+
+        if (req.query.id_atelier) {
+            conditions.push(`a.id_atelier = $${paramIndex}`);
+            values.push(req.query.id_atelier);
+            paramIndex++;
+        }
+
+        if (req.query.id_technicien) {
+            conditions.push(`tech.id_technicien = $${paramIndex}`);
+            values.push(req.query.id_technicien);
+            paramIndex++;
+        }
+
+        //diag
+        if (req.query.date_diagnostic) {
+            conditions.push(`diag.date_diagnostic::text ILIKE $${paramIndex}`);
+            values.push(`%${req.query.date_diagnostic}%`);
+            paramIndex++;
+        }
+
+        //atelier
+        if (req.query.nom_atelier) {
+            conditions.push(`a.nom_atelier = $${paramIndex}`);
+            values.push(`%${req.query.nom_atelier}%`);
+            paramIndex++;
+        }
+
+        //technicien
+        if (req.query.matricule_techn) {
+            conditions.push(`(tech.matricule_techn || ' ' || tech.nom || ' ' || tech.prenom) ILIKE $${paramIndex}`);
+            values.push(`%${req.query.matricule_techn}%`);
+            paramIndex++;
+        }
+
+        //ordre
+        if (req.query.urgence_panne) {
+            conditions.push(`o.urgence_panne ILIKE $${paramIndex}`);
+            values.push(`%${req.query.urgence_panne}%`);
+            paramIndex++;
+        }
+
+        if (req.query.travaux) {
+            conditions.push(`o.travaux ILIKE $${paramIndex}`);
+            values.push(`%${req.query.travaux}%`);
+            paramIndex++;
+        }
+
+        if (req.query.material_requis) {
+            conditions.push(`o.material_requis ILIKE $${paramIndex}`);
+            values.push(`%${req.query.material_requis}%`);
+            paramIndex++;
+        }
+
+        if (req.query.planning) {
+            conditions.push(`o.planning ILIKE $${paramIndex}`);
+            values.push(`%${req.query.planning}%`);
+            paramIndex++;
+        }
+
+        if (req.query.date_ordre) {
+            conditions.push(`o.date_ordre::DATE = $${paramIndex}`);
+            values.push(`%${req.query.date_ordre}%`);
+            paramIndex++;
+        }
+
+        if (req.query.status) {
+            conditions.push(`o.status ILIKE $${paramIndex}`);
+            values.push(`%${req.query.status}%`);
+            paramIndex++;
+        }
+
+        let sql = `SELECT o.id_ordre,
+    diag.id_diagnostic,
+    diag.date_diagnostic,
+    o.urgence_panne,
+    o.travaux,
+    o.material_requis,
+    o.planning,
+    o.date_ordre,
+    o.status,
+    a.nom_atelier,
+    tech.nom,
+    tech.prenom,
+    tech.matricule_techn
+    FROM acc.ordre_travail AS o
+    JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
+    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien`;
+
+
+        if (conditions.length > 0) {
+            sql += " WHERE " + conditions.join(" AND ");
+        }
+
+        db.query(sql, values, (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+            return res.status(200).json(result.rows);
+        });
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+
+}
 exports.list = async (req, res) => {
-    sql = `SELECT o.id_ordre,
+    const sql = `SELECT o.id_ordre,
     diag.id_diagnostic,
     diag.description_panne,
     diag.causes_panne,
@@ -46,7 +161,7 @@ exports.show = async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Order not found!" });
         }
-        
+
         return res.status(200).json(result.rows);
     });
 }
@@ -216,14 +331,14 @@ exports.getTechnicienByMatricule = async (req, res) => {
     });
 }
 
-exports.updateStatus = async (req, res)=>{
+exports.updateStatus = async (req, res) => {
     const id_ordre = Number(req.params.id_ordre);
-    const {status} = req.body;
+    const { status } = req.body;
 
-    sql= "UPDATE acc.ordre_travail SET status=$1 WHERE id_ordre=$2";
+    sql = "UPDATE acc.ordre_travail SET status=$1 WHERE id_ordre=$2";
 
-    db.query(sql, [status, id_ordre], (err, result)=>{
-        if (err) res.status(500).json({error: err.message});
-        res.status(200).json({ message: "status updated successfully!", demande: result.rows});
+    db.query(sql, [status, id_ordre], (err, result) => {
+        if (err) res.status(500).json({ error: err.message });
+        res.status(200).json({ message: "status updated successfully!", demande: result.rows });
     });
 }

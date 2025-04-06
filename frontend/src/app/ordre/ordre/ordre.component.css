@@ -1,3 +1,88 @@
+.search-container {
+    margin: 20px auto;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  
+  .search-header {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .search-form {
+    background-color: white;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 50%;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  
+  .form-control {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: left; /* Centrer les boutons horizontalement */
+    margin-bottom: 10px;
+    gap: 20px; /* Ajouter de l'espace entre les boutons */
+  }
+
+  .buton{
+    display: flex;
+    justify-content: center; /* Centrer les boutons horizontalement */
+    margin-bottom: 100px;
+    gap: 20px; /* Ajouter de l'espace entre les boutons */
+  }
+
+  .buton button {
+    background-color: #007bff; /* Couleur de fond du bouton */
+    color: white; /* Couleur du texte */
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.buton button[type="button"] {
+    background-color: #9e9e9e; /* Couleur gris pour le bouton Reset */
+    color: white;
+}
+
+.buton button[type="button"]:hover {
+    background-color: #757575; /* Couleur gris foncé au survol */
+}
+
+
+.buton button:hover {
+    background-color: #0056b3; /* Couleur de fond au survol */
+}
+
+
+
+
 table {
     table-layout: fixed;
     width: 100%;

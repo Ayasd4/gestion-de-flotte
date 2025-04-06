@@ -23,15 +23,10 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatSnackBarModule,
-    RouterModule
+    FormsModule
   ],
+  exports: [
+    FileUploaderComponent
+  ]
 })
 export class ChauffeurModule { }

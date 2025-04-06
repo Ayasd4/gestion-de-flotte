@@ -36,7 +36,7 @@ import { AddChauffeurComponent } from '../add-chauffeur/add-chauffeur.component'
 })
 export class ChauffeurComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id_chauf', 'nom', 'prenom', 'matricule_chauf', 'cin', 'telephone', 'email', 'actions'];
+  displayedColumns: string[] = ['id_chauf', 'nom', 'prenom', 'matricule_chauf', 'cin', 'telephone', 'email', 'image', 'actions'];
   dataSource = new MatTableDataSource<Chauffeur>();
 
   constructor(private chauffeurService: ChauffeurService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
@@ -83,7 +83,8 @@ export class ChauffeurComponent implements AfterViewInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(AddChauffeurComponent, {
-      width: '400px',
+      width: '600px',
+      height: '600px',
       data: {}
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -101,14 +102,30 @@ export class ChauffeurComponent implements AfterViewInit {
     });
   }
 
+  extractImageName(imagePath: string): string {
+    // Pour traiter les cas comme "uploads\\image.jpg" ou juste "image.jpg"
+    return imagePath.split('\\').pop() || imagePath;
+  }
+  
   editChauffeur(Chauffeur: Chauffeur) {
     const dialogRef = this.dialog.open(AddChauffeurComponent, {
-      width: '400px',
+      width: '600px',
+      height: '600px',
       data: { ...Chauffeur }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.chauffeurService.updateChauffeur(result).subscribe(
+        
+        const formData = new FormData();
+        formData.append('nom', result.nom);
+        formData.append('prenom', result.prenom);
+        formData.append('matricule_chauf', result.matricule_chauf);
+        formData.append('cin', result.cin);
+        formData.append('telephone', result.telephone);
+        formData.append('email', result.email);
+        formData.append('image', result.image);
+
+        this.chauffeurService.updateChauffeur(this.chauffeur.id_chauf, formData).subscribe(
           () => {
             console.log('Driver updated successfully!');
             window.location.reload();
@@ -124,15 +141,15 @@ export class ChauffeurComponent implements AfterViewInit {
 
   deleteChauffeur(id_chauf: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
-    if(isConfirmed){
-      this.chauffeurService.deleteChauffeur(id_chauf).subscribe((data)=>{
+    if (isConfirmed) {
+      this.chauffeurService.deleteChauffeur(id_chauf).subscribe((data) => {
         this.chauffeurs = this.chauffeurs.filter(item => item.id_chauf !== id_chauf);
         this.snackBar.open('driver deleted successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       }, (error) => {
         console.error("Error while deleted driver :", error);
       }
-    );
+      );
     }
   }
 

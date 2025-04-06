@@ -14,6 +14,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Ordre } from 'src/app/ordre/ordre';
+import { OrdreService } from 'src/app/ordre/ordre.service';
+import { Technicien } from 'src/app/technicien/technicien';
+import { TechnicienService } from 'src/app/technicien/technicien.service';
 
 @Component({
   selector: 'app-intervention',
@@ -44,7 +48,10 @@ export class InterventionComponent implements AfterViewInit {
 
   constructor(private interventionService: InterventionService,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private ordreService: OrdreService,
+    private technicienService: TechnicienService,
+
   ) { }
 
   @ViewChild(MatSort) sort: any;
@@ -76,6 +83,8 @@ export class InterventionComponent implements AfterViewInit {
     commentaire: ''
   }
 
+  techniciens: Technicien[] = [];
+  ordres: Ordre[] = [];
   interventions: Intervention[] = [];
   filtredIntervention: Intervention[] = [];
 
@@ -105,9 +114,86 @@ export class InterventionComponent implements AfterViewInit {
       console.log('Error while retrieving Intervention: ', error);
     }
     );
+    this.loadTechnicien();
   }
 
-  searchIntervention(input: any) {
+  loadIntervention(): void {
+    this.interventionService.fetchAllInterventions().subscribe(
+      (data) => {
+        this.interventions = data;
+        this.filtredIntervention = data;
+        this.dataSource.data = data;
+      },
+      (error) => {
+        console.error('Error fetching orders:', error);
+        this.snackBar.open('Error fetching interventions, please try again later.', 'Close', { duration: 5000 });
+      }
+    );
+}
+
+  loadOrdre(): void {
+    this.ordreService.fetchAllOrders().subscribe(
+      (data) => {
+        this.ordres = data;
+      },
+      (error) => {
+        console.error('Error fetching orders:', error);
+        this.snackBar.open('Error fetching orders, please try again later.', 'Close', { duration: 5000 });
+      }
+    );
+  }
+
+  loadTechnicien(): void {
+    this.technicienService.fetchAllTechnicien().subscribe(
+      (data) => {
+        this.techniciens = data;
+      },
+      (error) => {
+        console.error('Error fetching technician:', error);
+      }
+    );
+  }
+
+  searchParams: any = {}
+
+  searchIntervention(): void {
+    const filteredParams = Object.fromEntries(
+      Object.entries(this.searchParams).filter(([__dirname, value]) => value !== null && value !== undefined && value !== '')
+    );
+
+    if (Object.keys(filteredParams).length === 0) {
+      this.loadIntervention();
+      return;
+    }
+
+    this.interventionService.searchIntervention(filteredParams).subscribe((data) => {
+      this.filtredIntervention = data;
+      this.dataSource.data = data;
+    },
+      (error) => {
+        console.error('Error searching Order:', error);
+      }
+    );
+  }
+
+  // Reset search form
+  resetSearch(): void {
+    this.searchParams = {};
+    this.loadIntervention();
+  }
+
+  // Apply quick filter to the table
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+
+  /*searchIntervention(input: any) {
     this.filtredIntervention = this.interventions.filter(item => item.date_debut?.toLowerCase().includes(input.toLowerCase())
       || item.heure_debut?.toLowerCase().includes(input.toLowerCase())
       || item.date_fin?.toLowerCase().includes(input.toLowerCase())
@@ -117,7 +203,7 @@ export class InterventionComponent implements AfterViewInit {
     )
     this.dataSource = new MatTableDataSource<Intervention>(this.filtredIntervention);
 
-  }
+  }*/
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddInterventionComponent, {

@@ -2,8 +2,20 @@ const express = require("express");
 const router = express.Router();
 const interventionController = require("../controllers/intervention");
 
+// Get all fuel consumption records
 router.get('/', async (req, res) => {
-    await interventionController.list(req, res);
+    // If search parameters are provided, use search function
+    if (Object.keys(req.query).length > 0) {
+        await interventionController.search(req, res);
+    } else {
+        await interventionController.list(req, res);
+    }
+});
+
+router.get('/search/numparc/:numparc', async (req, res)=>{
+    //req.query.numparc = req.params.numparc;
+    //req.query.matricule_chauf = req.params.matricule_chauf;
+    await demandesController.search(req, res);
 });
 
 router.get('/:id_intervention', async (req, res) => {

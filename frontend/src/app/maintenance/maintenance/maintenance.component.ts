@@ -21,6 +21,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AddDiagnosticComponent } from '../add-diagnostic/add-diagnostic.component';
 import { DiagnosticService } from '../diagnostic/diagnostic.service';
 import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
+import { ChauffeurService } from 'src/app/chauffeur/chauffeur.service';
+import { VehiculeService } from 'src/app/vehicule/vehicule.service';
+import { DemandeService } from 'src/app/demande/demande.service';
+import { Chauffeur } from 'src/app/chauffeur/chauffeur';
+import { Vehicule } from 'src/app/vehicule/vehicule';
 
 @Component({
   selector: 'app-maintenance',
@@ -56,6 +61,9 @@ export class MaintenanceComponent implements AfterViewInit {
   numparc: any = undefined;
 
   constructor(private maintenanceService: MaintenanceService,
+    private demandeService: DemandeService,
+    private vehiculeService: VehiculeService,
+    private chauffeurService: ChauffeurService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private diagnosticService: DiagnosticService,
@@ -94,6 +102,8 @@ export class MaintenanceComponent implements AfterViewInit {
 
   }
 
+  vehicules: Vehicule[] = [];
+  chauffeurs: Chauffeur[] = [];
   demandes: Demande[] = [];
   filteredDemandes: Demande[] = [];
 
@@ -124,29 +134,85 @@ export class MaintenanceComponent implements AfterViewInit {
     }, (error) => {
       console.log('Error while retrieving demand: ', error);
     });
+
+    this.loadVehicules();
+    this.loadChauffeurs();
   }
 
-  searchDemandes(input: any) {
-    input = input?.toString().trim().toLowerCase();
+  // Load all vehicles from the service
+  loadDemandes(): void {
+    this.demandeService.fetchAllDemandes().subscribe(
+      (data) => {
+        this.demandes = data;
+        this.filteredDemandes= data;
+        this.dataSource.data= data;
+      },
+      (error) => {
+        console.error('Error fetching vehicles:', error);
+      }
+    );
+  }
 
-    this.filteredDemandes = this.demandes.filter(item => item.date_demande?.toLowerCase().includes(input)
-      || item.type_avarie?.toLowerCase().includes(input)
-      || item.description?.toLowerCase().includes(input)
-      || item.date_avarie?.toLowerCase().includes(input)
-      || item.heure_avarie?.toLowerCase().includes(input)
-      || item.statut?.toLowerCase().includes(input)
-      || (item.vehicule?.numparc && item.vehicule.numparc.toString().includes(input))
-      || (item.vehicule?.immatricule && item.vehicule.immatricule.toLowerCase().includes(input))
-      || (item.vehicule?.modele && item.vehicule.modele.toLowerCase().includes(input))
-      || (item.chauffeur?.nom && item.chauffeur.nom.toLowerCase().includes(input))
-      || (item.chauffeur?.prenom && item.chauffeur.prenom.toLowerCase().includes(input))
-      || (item.chauffeur?.matricule_chauf && item.chauffeur.matricule_chauf.toLowerCase().includes(input))
-      || (item.chauffeur?.cin && item.chauffeur.cin.toLowerCase().includes(input))
-      || (item.chauffeur?.telephone && item.chauffeur.telephone.toLowerCase().includes(input))
-      || (item.chauffeur?.email && item.chauffeur.email.toLowerCase().includes(input))
+  // Load all vehicles from the service
+  loadVehicules(): void {
+    this.vehiculeService.fetchAllVehicules().subscribe(
+      (data) => {
+        this.vehicules = data;
+      },
+      (error) => {
+        console.error('Error fetching vehicles:', error);
+      }
+    );
+  }
+
+  // Load all drivers from the service
+  loadChauffeurs(): void {
+    this.chauffeurService.fetchAllChauffeurs().subscribe(
+      (data) => {
+        this.chauffeurs = data;
+      },
+      (error) => {
+        console.error('Error fetching drivers:', error);
+      }
+    );
+  }
+
+  searchParams: any = {};
+
+  searchDemandes(): void {
+    const filteredParams = Object.fromEntries(
+      Object.entries(this.searchParams).filter(([__dirname, value]) => value !== null && value !== undefined && value !== '')
     );
 
-    this.dataSource = new MatTableDataSource<Demande>(this.filteredDemandes);
+    if (Object.keys(filteredParams).length === 0) {
+      this.loadDemandes();
+      return;
+    }
+
+    this.demandeService.searchDemandes(filteredParams).subscribe((data) => {
+      this.filteredDemandes = data;
+      this.dataSource.data = data;
+    },
+      (error) => {
+        console.error('Error searching requests:', error);
+      }
+    );
+  }
+
+  // Reset search form
+  resetSearch(): void {
+    this.searchParams = {};
+    this.loadDemandes();
+  }
+
+  // Apply quick filter to the table
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   updateStatus(demande: Demande) {
@@ -175,7 +241,7 @@ export class MaintenanceComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(AddDiagnosticComponent, {
       width: '500px',
       //data: { id_demande: demande.id_demande,}
-      data: { ...demande}
+      data: { ...demande }
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -51,6 +51,14 @@
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
+            <mat-form-field>
+                <mat-label for="image" class="col-sm-2 col-form-label">Photo</mat-label>
+                <input type="text" class="form-control" hidden matInput [(ngModel)]="technicien.image" name="image"
+                    required>
+                <app-file-uploader (onFileSelect)="onFileSelect($event)"></app-file-uploader>
+                <div class="text-danger" *ngIf="uploadError">{{uploadError}}</div>
+            </mat-form-field>
+
         </form>
     </mat-dialog-content>
 

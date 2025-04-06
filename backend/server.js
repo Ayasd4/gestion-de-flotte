@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require('path');
 
 require("dotenv").config();
 
@@ -29,6 +30,7 @@ const infosRouter = require('./routes/getInfoOrdre');
 const interventionRouter = require('./routes/intervention');
 const infosIntervRouter = require('./routes/getInfoIntervention');
 const getordreRouter = require("./routes/getOrdreById");
+const uploadsRouter = require('./routes/uploads');
 
 // Créer le serveur Node.js
 app.use(bodyParser.json());
@@ -63,6 +65,8 @@ app.use('/infos', infosRouter);
 app.use('/intervention', interventionRouter);
 app.use('/infosIntervention', infosIntervRouter);
 app.use('/getOrdreById', getordreRouter);
+app.use('/list-uploads', uploadsRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(port, (err) => {
     if (err) throw err;

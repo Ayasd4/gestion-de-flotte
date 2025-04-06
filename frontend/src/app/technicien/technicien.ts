@@ -8,4 +8,5 @@ export interface Technicien {
     email_techn: string,
     specialite: string,
     date_embauche: string,
+    image: string
 }

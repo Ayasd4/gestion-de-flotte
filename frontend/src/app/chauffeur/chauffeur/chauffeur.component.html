@@ -24,20 +24,25 @@
                     <strong>Identity Card:</strong> {{Chauffeur.cin}}<br>
                     <strong>Phone:</strong> {{Chauffeur.telephone}}<br>
                     <strong>email:</strong> {{Chauffeur.email}} <br>
+
+                    <div class="actions">
+                        <button mat-icon-button (click)="editChauffeur(Chauffeur)" color="primary" matTooltip="Edit">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="deleteChauffeur(Chauffeur.id_chauf)" color="warn"
+                            matTooltip="Delete">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        
+                    </div>
                 </div>
+                
                 <div class="chauffeur-image">
-                    <img [src]="chauffeur.image" alt="Driver Image" class="chauffeur-image-style">{{chauffeur.image}}
-                    <!-- Icone ajoutée ici -->
-                    <!--<mat-icon class="chauffeur-icon">camera_alt</mat-icon>-->
-                </div>
-                <div class="actions">
-                    <button mat-icon-button (click)="editChauffeur(Chauffeur)" color="primary" matTooltip="Edit">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="deleteChauffeur(Chauffeur.id_chauf)" color="warn"
-                        matTooltip="Delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                    <!--<img *ngIf="Chauffeur.image" src="{{Chauffeur.image}}" alt="Driver photo"
+                        width="100" height="100">-->
+                    <img *ngIf="Chauffeur.image"
+                        [src]="'http://localhost:3100/uploads/' + extractImageName(Chauffeur.image)" alt="Driver photo"
+                        width="250" height="200">
                 </div>
             </li>
         </ul>

@@ -2,8 +2,18 @@ const express = require("express");
 const router = express.Router();
 const demandesController = require("../controllers/demandes");
 
-router.get('/', async (req, res) => {
+/*router.get('/', async (req, res) => {
     await demandesController.list(req, res);
+});*/
+
+// Get all fuel consumption records
+router.get('/', async (req, res) => {
+    // If search parameters are provided, use search function
+    if (Object.keys(req.query).length > 0) {
+        await demandesController.search(req, res);
+    } else {
+        await demandesController.list(req, res);
+    }
 });
 
 router.get('/:id_demande', async (req, res) => {
@@ -12,6 +22,12 @@ router.get('/:id_demande', async (req, res) => {
 
 router.get('/getDemande/:id_demande', async (req, res)=>{
     await demandesController.getDemande(req, res);
+});
+
+router.get('/search/numparc/:numparc', async (req, res)=>{
+    //req.query.numparc = req.params.numparc;
+    //req.query.matricule_chauf = req.params.matricule_chauf;
+    await demandesController.search(req, res);
 });
 
 router.post('/', async (req, res) => {

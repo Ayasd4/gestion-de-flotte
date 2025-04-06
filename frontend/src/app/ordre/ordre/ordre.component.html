@@ -1,9 +1,9 @@
 <div class="card">
     <div class="buton-container">
+        <div class="title" style="margin-right: 890px;margin-top: 20px;"> List Orders</div>
         <button (click)="openDialog()">Add</button>
     </div>
-    <div class="card-head">
-        <div class="title"> List Orders</div>
+    <!--<div class="card-head">
         <div class="search-container">
             <mat-form-field style="width: 180px;margin-left: 15px;">
                 <input (input)="searchOrder(filter.value)" matInput placeholder="search order" type="text"
@@ -11,7 +11,75 @@
                 <mat-icon fontIcon="search" matSuffix></mat-icon>
             </mat-form-field>
         </div>
+    </div>-->
+
+    <div class="search-container">
+        
+        <form (ngSubmit)="searchOrdre()" #searchForm="ngForm" class="search-form">
+            <div class="search-header">
+                Search Filters
+            </div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_diagnostic">Diagnostic Date</label>
+                        <input type="date" class="form-control" name="date_diagnostic" id="date_diagnostic"
+                            [(ngModel)]="searchParams.date_diagnostic">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="id_atelier">Workshops</label>
+                        <select class="form-control" name="id_atelier" id="id_atelier"
+                            [(ngModel)]="searchParams.id_atelier">
+                            <option ngValue="">All Workshops</option>
+                            <option *ngFor="let atelier of ateliers" [ngValue]="atelier.id_atelier">
+                                {{atelier.nom_atelier}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="id_technicien">Technician</label>
+                        <select class="form-control" name="id_technicien" id="id_technicien"
+                            [(ngModel)]="searchParams.id_technicien">
+                            <option ngValue="">All Technician</option>
+                            <option *ngFor="let technicien of techniciens" [ngValue]="technicien.id_technicien">
+                                {{technicien.matricule_techn}} {{technicien.nom}} {{technicien.prenom}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="date_ordre">Order Date</label>
+                        <input type="date" class="form-control" name="date_ordre" id="date_ordre"
+                            [(ngModel)]="searchParams.date_ordre">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" name="status" id="status" [(ngModel)]="searchParams.status">
+                            <option ngValue="">All Status</option>
+                            <option *ngFor="let ordre of ordres" [ngValue]="ordre.status">
+                                {{ordre.status}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="buton">
+                <button mat-raised-button type="button" (click)="resetSearch()">Reset</button>
+                <button mat-raised-button color="primary" type="submit">Search</button>
+            </div>
+        </form>
     </div>
+
     <div class="card-body">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
 
@@ -33,6 +101,7 @@
                         <span><strong>Description:</strong> {{Ordre.description_panne}}</span>
                         <span><strong>Causes:</strong> {{Ordre.causes_panne}}</span>
                         <span><strong>Actions:</strong> {{Ordre.actions}}</span>
+                        <span><strong>Date:</strong> {{Ordre.date_diagnostic}}</span>
                     </div>
                 </td>
             </ng-container>

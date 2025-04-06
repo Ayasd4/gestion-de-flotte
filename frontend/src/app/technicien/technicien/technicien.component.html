@@ -27,15 +27,25 @@
                     <strong>E-mail:</strong> {{ technicien.email_techn }}<br>
                     <strong>Speciality:</strong> {{ technicien.specialite }}<br>
                     <strong>date of employment:</strong> {{ technicien.date_embauche }}<br>
-                    
+
+                    <div class="actions">
+                        <button mat-icon-button (click)="updateTechnicien(technicien)" color="primary"
+                            matTooltip="Edit">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="deleteTechnicien(technicien.id_technicien)" color="warn"
+                            matTooltip="Delete">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+
                 </div>
-                <div class="actions">
-                    <button mat-icon-button (click)="updateTechnicien(technicien)" color="primary" matTooltip="Edit">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="deleteTechnicien(technicien.id_technicien)" color="warn" matTooltip="Delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
+                <div class="technicien-image">
+                    <!--<img *ngIf="Chauffeur.image" src="{{Chauffeur.image}}" alt="Driver photo"
+                        width="100" height="100">-->
+                    <img *ngIf="technicien.image"
+                        [src]="'http://localhost:3100/uploads/' + extractImageName(technicien.image)" alt="Technician photo"
+                        width="250" height="200">
                 </div>
             </li>
         </ul>

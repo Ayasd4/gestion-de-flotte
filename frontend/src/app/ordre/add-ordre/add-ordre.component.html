@@ -9,7 +9,10 @@
 
                     <mat-form-field>
                         <mat-label>Emergency Breakdown</mat-label>
-                        <input matInput [(ngModel)]="ordre.urgence_panne" name="urgence_panne" required>
+                        <mat-select matInput [(ngModel)]="ordre.urgence_panne"
+                            name="urgence_panne" required><!-- [(value)]="selected"-->
+                            <mat-option *ngFor="let urgence_panne of Disponibles" [value]="urgence_panne">{{urgence_panne}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
 
                     <mat-form-field>

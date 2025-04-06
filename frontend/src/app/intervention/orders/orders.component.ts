@@ -18,6 +18,12 @@ import { UpdateOrdersComponent } from '../update-orders/update-orders.component'
 import { AddInterventionComponent } from '../add-intervention/add-intervention.component';
 import { InterventionService } from '../intervention.service';
 import { Router } from '@angular/router';
+import { AtelierService } from 'src/app/atelier/atelier.service';
+import { DiagnosticService } from 'src/app/maintenance/diagnostic/diagnostic.service';
+import { TechnicienService } from 'src/app/technicien/technicien.service';
+import { Atelier } from 'src/app/atelier/atelier';
+import { Diagnostic } from 'src/app/maintenance/diagnostic/diagnostic';
+import { Technicien } from 'src/app/technicien/technicien';
 
 @Component({
   selector: 'app-orders',
@@ -46,13 +52,16 @@ export class OrdersComponent implements AfterViewInit {
   cout_estime: any = undefined;
   capacite: any = undefined;
   matricule_techn: any = undefined;
-  numparc: any= undefined;
+  numparc: any = undefined;
 
   constructor(private ordreService: OrdreService,
     private interventionService: InterventionService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private diagnosticService: DiagnosticService,
+    private technicienService: TechnicienService,
+    private atelierService: AtelierService
   ) { }
 
   @ViewChild(MatSort) sort: any;
@@ -98,9 +107,13 @@ export class OrdersComponent implements AfterViewInit {
       email_techn: '',
       specialite: '',
       date_embauche: '',
+      image: ''
     }
   }
 
+  diagnostics: Diagnostic[] = [];
+  techniciens: Technicien[] = [];
+  ateliers: Atelier[] = [];
   ordres: Ordre[] = [];
   filtredOrdres: Ordre[] = [];
 
@@ -115,6 +128,10 @@ export class OrdersComponent implements AfterViewInit {
       default:
         return '';
     }
+    this.loadDiagnostic();
+    this.loadTechnicien();
+    this.loadAtelier();
+    this.loadOrdre();
   }
 
   getStatusClass(status: string): string {
@@ -145,18 +162,100 @@ export class OrdersComponent implements AfterViewInit {
     );
   }
 
-  searchOrder(input: any) {
-    this.filtredOrdres = this.ordres.filter(item => item.urgence_panne?.toLowerCase().includes(input.toLowerCase())
-      || item.travaux?.toLowerCase().includes(input.toLowerCase())
-      || item.material_requis?.toLowerCase().includes(input.toLowerCase())
-      || item.planning?.toLowerCase().includes(input.toLowerCase())
-      || item.date_ordre?.toLowerCase().includes(input.toLowerCase())
-      || item.status?.toLowerCase().includes(input.toLowerCase())
-    )
-    this.dataSource = new MatTableDataSource<Ordre>(this.filtredOrdres);
+  loadOrdre(): void {
+    this.ordreService.fetchAllOrders().subscribe(
+      (data) => {
+        this.ordres = data;
+        this.filtredOrdres = data;
+        this.dataSource.data = data;
+      },
+      (error) => {
+        console.error('Error fetching orders:', error);
+        this.snackBar.open('Error fetching orders, please try again later.', 'Close', { duration: 5000 });
+      }
+    );
+}
+
+
+  loadDiagnostic(): void {
+    this.diagnosticService.fetchAllDiagnostic().subscribe(
+      (data) => {
+        this.diagnostics = data;
+      },
+      (error) => {
+        console.error('Error fetching Diagnostic:', error);
+      }
+    );
+  }
+
+  loadTechnicien(): void {
+    this.technicienService.fetchAllTechnicien().subscribe(
+      (data) => {
+        this.techniciens = data;
+      },
+      (error) => {
+        console.error('Error fetching technician:', error);
+      }
+    );
+  }
+
+  loadAtelier(): void {
+    this.atelierService.fetchAllAtelier().subscribe(
+      (data) => {
+        this.ateliers = data;
+      },
+      (error) => {
+        console.error('Error fetching workshops:', error);
+      }
+    );
+  }
+
+  searchParams: any = {
+    date_diagnostic: '',
+    date_ordre: '',
+    status: '',
+    nom_atelier: '',
+    nom: '',
+    prenom: '',
+    matricule_techn: 0,
 
   }
 
+  searchOrdre(): void {
+    const filteredParams = Object.fromEntries(
+      Object.entries(this.searchParams).filter(([__dirname, value]) => value !== null && value !== undefined && value !== '')
+    );
+
+    if (Object.keys(filteredParams).length === 0) {
+      this.loadOrdre();
+      return;
+    }
+
+    this.ordreService.searchOrdre(filteredParams).subscribe((data) => {
+      this.filtredOrdres = data;
+      this.dataSource.data = data;
+    },
+      (error) => {
+        console.error('Error searching Order:', error);
+      }
+    );
+  }
+
+  // Reset search form
+  resetSearch(): void {
+    this.searchParams = {};
+    this.loadOrdre();
+  }
+
+  // Apply quick filter to the table
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   editStatus(ordre: Ordre) {
     const dialogRef = this.dialog.open(UpdateOrdersComponent, {
@@ -180,30 +279,30 @@ export class OrdersComponent implements AfterViewInit {
   }
 
   interventionOrdre(ordre: any) {
-      //this.ngxService.start();
-      const dialogRef = this.dialog.open(AddInterventionComponent, {
-        width: '600px',
-        height: '600px',
-        //data: { id_ordre: ordre.id_ordre}
-        data: { ...ordre}
+    //this.ngxService.start();
+    const dialogRef = this.dialog.open(AddInterventionComponent, {
+      width: '600px',
+      height: '600px',
+      //data: { id_ordre: ordre.id_ordre}
+      data: { ...ordre }
 
-      });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.interventionService.createIntervention(result).subscribe(() => {
-            //this.ngxService.stop();
-            console.log("Intervention added successfully!");
-            this.snackBar.open("Intervention added successfully!", "Close", { duration: 5000 });
-            //this.router.navigate(['/intervention']);
-            //window.location.reload();
-          },
-            (error) => {
-              console.log(error);
-             // window.location.reload();
-            });
-        }
-      })
-    }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.interventionService.createIntervention(result).subscribe(() => {
+          //this.ngxService.stop();
+          console.log("Intervention added successfully!");
+          this.snackBar.open("Intervention added successfully!", "Close", { duration: 5000 });
+          //this.router.navigate(['/intervention']);
+          //window.location.reload();
+        },
+          (error) => {
+            console.log(error);
+            // window.location.reload();
+          });
+      }
+    })
+  }
 
 }

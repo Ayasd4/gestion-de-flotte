@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Intervention } from './intervention';
 import { Observable } from 'rxjs';
@@ -64,5 +64,19 @@ export class InterventionService {
     return this.httpClient.get(`${this.ApiUrl}/technicien`);
   }
 
+  // Recherche des demandes avec des paramètres filtrés
+  searchIntervention(params: any): Observable<Intervention[]> {
+    let httpParams = new HttpParams();
+
+    // Ajouter chaque paramètre de recherche non vide à HttpParams
+    for (const key in params) {
+      if (params[key] && params[key] !== '') {
+        httpParams = httpParams.set(key, params[key]);
+      }
+    }
+
+    // Envoi de la requête GET avec les paramètres filtrés
+    return this.httpClient.get<Intervention[]>(this.baseUrl, { params: httpParams });
+  }
 
 }

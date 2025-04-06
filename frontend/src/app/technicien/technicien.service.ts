@@ -16,12 +16,12 @@ export class TechnicienService {
     return this.httpClient.get<Technicien[]>(`${this.baseUrl}`);
   }
 
-  createTechnicien(data: Technicien) {
-    return this.httpClient.post<Technicien>(`${this.baseUrl}`, data);
+  createTechnicien(formData: FormData): Observable<Technicien> {
+    return this.httpClient.post<Technicien>(`${this.baseUrl}`, formData);
   }
 
-  updateTechnicien(data: Technicien) {
-    return this.httpClient.put<Technicien>(`${this.baseUrl}/${data.id_technicien}`, data);
+  updateTechnicien(id_technicien: number, formData: FormData): Observable<Technicien> {
+    return this.httpClient.put<Technicien>(`${this.baseUrl}/${id_technicien}`, formData);
   }
 
   deleteTechnicien(id_technicien: Number) {

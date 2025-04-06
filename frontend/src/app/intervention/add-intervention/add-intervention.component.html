@@ -56,7 +56,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Works</mat-label>
                         <mat-select matNativeControl (selectionChange)="getOrdreInfo()"
-                            [(ngModel)]="intervention.ordre.travaux" name="travaux" disabled readonly>
+                            [(ngModel)]="intervention.ordre.travaux" name="travaux" required>
                             <mat-option *ngFor="let num of ordreList" [value]="num">
                                 {{ num }}
                             </mat-option>

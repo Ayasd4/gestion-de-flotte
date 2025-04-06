@@ -1,10 +1,17 @@
+/*img {
+    border-radius: 8px;
+    object-fit: cover;
+    margin-top: 8px;
+  }
+*/  
+
+
 /* Conteneur de l'image du chauffeur */
 .chauffeur-image {
     position: relative;
     display: inline-block;
 }
 
-/* Style de l'image du chauffeur */
 .chauffeur-image-style {
     width: 100%;
     height: 100%;
@@ -13,7 +20,6 @@
     border: 2px solid #ddd;
 }
 
-/* Style de l'icône associée à l'image */
 .chauffeur-icon {
     position: absolute;
     top: 0;
@@ -26,7 +32,6 @@
     transition: background-color 0.3s ease;
 }
 
-/* Effet au survol de l'icône */
 .chauffeur-icon:hover {
     background-color: #007bff;
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ordre } from './ordre';
@@ -13,37 +13,53 @@ export class OrdreService {
   baseUrl: string = "http://localhost:3100/ordre";
 
 
-  fetchAllOrders(): Observable<Ordre[]>{
+  fetchAllOrders(): Observable<Ordre[]> {
     return this.httpClient.get<Ordre[]>(`${this.baseUrl}`);
   }
 
-  createOrder(data: Ordre){
+  createOrder(data: Ordre) {
     return this.httpClient.post<Ordre>(`${this.baseUrl}`, data);
   }
 
-  updateOrder(data: Ordre){
+  updateOrder(data: Ordre) {
     return this.httpClient.put<Ordre>(`${this.baseUrl}/${data.id_ordre}`, data);
   }
 
-  updateStatus(data: Ordre){
+  updateStatus(data: Ordre) {
     return this.httpClient.put<Ordre>(`${this.baseUrl}/status/${data.id_ordre}`, data);
   }
 
-  deleteOrder(id_ordre: Number){
+  deleteOrder(id_ordre: Number) {
     return this.httpClient.delete<Ordre>(`${this.baseUrl}/${id_ordre}`);
   }
 
-  getDiagnosticByPanne(description_panne: string){
+  getDiagnosticByPanne(description_panne: string) {
     return this.httpClient.get<any>(`${this.baseUrl}/diagnostic/${description_panne}`);
   }
 
-  getAtelierByNom(nom_atelier: string){
+  getAtelierByNom(nom_atelier: string) {
     return this.httpClient.get<any>(`${this.baseUrl}/atelier/${nom_atelier}`);
 
   }
-  
-  getTechnicienByMatricule(matricule_techn: Number){
+
+  getTechnicienByMatricule(matricule_techn: Number) {
     return this.httpClient.get<any>(`${this.baseUrl}/technicien/${matricule_techn}`);
 
   }
+
+  // Recherche des demandes avec des paramètres filtrés
+  searchOrdre(params: any): Observable<Ordre[]> {
+    let httpParams = new HttpParams();
+
+    // Ajouter chaque paramètre de recherche non vide à HttpParams
+    for (const key in params) {
+      if (params[key] && params[key] !== '') {
+        httpParams = httpParams.set(key, params[key]);
+      }
+    }
+
+    // Envoi de la requête GET avec les paramètres filtrés
+    return this.httpClient.get<Ordre[]>(this.baseUrl, { params: httpParams });
+  }
+  
 }
