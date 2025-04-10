@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Chauffeur } from '../chauffeur';
 import { ChauffeurService } from '../chauffeur.service';
@@ -34,7 +34,7 @@ import { AddChauffeurComponent } from '../add-chauffeur/add-chauffeur.component'
     MatTooltipModule
   ]
 })
-export class ChauffeurComponent implements AfterViewInit {
+export class ChauffeurComponent implements OnInit {
 
   displayedColumns: string[] = ['id_chauf', 'nom', 'prenom', 'matricule_chauf', 'cin', 'telephone', 'email', 'image', 'actions'];
   dataSource = new MatTableDataSource<Chauffeur>();
@@ -58,10 +58,19 @@ export class ChauffeurComponent implements AfterViewInit {
   chauffeurs: Chauffeur[] = [];
   filtredChauffeurs: Chauffeur[] = [];
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.loadChauffeurs();
+  }
+
+  loadChauffeurs(): void {
     this.chauffeurService.fetchAllChauffeurs().subscribe((data) => {
-      this.chauffeurs = data;
-      this.dataSource = new MatTableDataSource<Chauffeur>(data);
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenChauffeurs') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleChauffeurs = data.filter(chauffeur => !hiddenIds.includes(chauffeur.id_chauf));
+
+      this.chauffeurs = visibleChauffeurs;
+      this.dataSource = new MatTableDataSource<Chauffeur>(this.chauffeurs);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -106,7 +115,7 @@ export class ChauffeurComponent implements AfterViewInit {
     // Pour traiter les cas comme "uploads\\image.jpg" ou juste "image.jpg"
     return imagePath.split('\\').pop() || imagePath;
   }
-  
+
   editChauffeur(Chauffeur: Chauffeur) {
     const dialogRef = this.dialog.open(AddChauffeurComponent, {
       width: '600px',
@@ -115,7 +124,7 @@ export class ChauffeurComponent implements AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        
+
         const formData = new FormData();
         formData.append('nom', result.nom);
         formData.append('prenom', result.prenom);
@@ -142,16 +151,28 @@ export class ChauffeurComponent implements AfterViewInit {
   deleteChauffeur(id_chauf: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
-      this.chauffeurService.deleteChauffeur(id_chauf).subscribe((data) => {
+      /*  this.chauffeurService.deleteChauffeur(id_chauf).subscribe((data) => {
+          this.chauffeurs = this.chauffeurs.filter(item => item.id_chauf !== id_chauf);
+          this.snackBar.open('driver deleted successfully!', 'Close', { duration: 6000 });
+          window.location.reload();
+        }, (error) => {
+          console.error("Error while deleted driver :", error);
+        }
+        );
+      }*/
+      // Ajouter l'ID de l'atelier supprimé dans le localStorage
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenChauffeurs') || '[]');
+      if (!hiddenIds.includes(id_chauf)) {
+        hiddenIds.push(id_chauf);
+        localStorage.setItem('hiddenChauffeurs', JSON.stringify(hiddenIds));
+
         this.chauffeurs = this.chauffeurs.filter(item => item.id_chauf !== id_chauf);
+        this.dataSource.data = this.chauffeurs;
+
+        // Afficher un message de confirmation
         this.snackBar.open('driver deleted successfully!', 'Close', { duration: 6000 });
-        window.location.reload();
-      }, (error) => {
-        console.error("Error while deleted driver :", error);
       }
-      );
     }
+
   }
-
 }
-

@@ -43,7 +43,7 @@ import { AddAtelierComponent } from '../add-atelier/add-atelier.component';
     MatListModule
   ],
 })
-export class AtelierComponent implements AfterViewInit {
+export class AtelierComponent implements OnInit {
 
   displayedColumns: string[] = ['id_atelier', 'nom', 'telephone', 'email', 'capacite', 'statut', 'actions'];
   dataSource = new MatTableDataSource<Atelier>();
@@ -61,12 +61,16 @@ export class AtelierComponent implements AfterViewInit {
         return '';
     }
   }
-  
+
   constructor(private atelierService: AtelierService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private ngxService: NgxUiLoaderService
   ) { }
+
+  ngOnInit(): void {
+    this.loadAteliers();
+  }
 
   @ViewChild(MatSort) sort: any;
   @ViewChild(MatPaginator) paginator: any;
@@ -89,12 +93,17 @@ export class AtelierComponent implements AfterViewInit {
         ...ateliers,
       }));
       this.dataSource.data = this.ateliers; */
-      
-  ngAfterViewInit(): void {
+
+  loadAteliers(): void {
     this.atelierService.fetchAllAtelier().subscribe((data) => {
       //console.log('Données récupérées : ', data);
-      this.ateliers = data;
-      this.dataSource = new MatTableDataSource<Atelier>(data);
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenAteliers') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleAteliers = data.filter(atelier => !hiddenIds.includes(atelier.id_atelier));
+  
+      this.ateliers = visibleAteliers;
+      this.dataSource = new MatTableDataSource<Atelier>(this.ateliers);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -113,7 +122,7 @@ export class AtelierComponent implements AfterViewInit {
 
   }
 
-  
+
   openDialog() {
     const dialogRef = this.dialog.open(AddAtelierComponent, {
       width: '400px',
@@ -158,18 +167,35 @@ export class AtelierComponent implements AfterViewInit {
   }
 
   deleteAtelier(id_atelier: Number) {
-    const isConfirmed = window.confirm("Are you sure you want to delete?");
+    /* const isConfirmed = window.confirm("Are you sure you want to delete?");
+     if (isConfirmed) {
+       this.atelierService.deleteAtelier(id_atelier).subscribe(() => {
+         this.ateliers = this.ateliers.filter(item => item.id_atelier !== id_atelier);
+         this.snackBar.open('Workshop deleted successfully!', 'Close', { duration: 6000 });
+         window.location.reload();
+       }, (error) => {
+         console.error("Error while deleting workshop:", error);
+       }
+       );
+     }*/
+    const isConfirmed = window.confirm("Are you sure you want to remove this item from the interface?");
     if (isConfirmed) {
-      this.atelierService.deleteAtelier(id_atelier).subscribe(() => {
-        this.ateliers = this.ateliers.filter(item => item.id_atelier !== id_atelier);
-        this.snackBar.open('Workshop deleted successfully!', 'Close', { duration: 6000 });
-        window.location.reload();
-      }, (error) => {
-        console.error("Error while deleting workshop:", error);
+      // Ajouter l'ID de l'atelier supprimé dans le localStorage
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenAteliers') || '[]');
+      if (!hiddenIds.includes(id_atelier)) {
+        hiddenIds.push(id_atelier);
+        localStorage.setItem('hiddenAteliers', JSON.stringify(hiddenIds));
       }
-      );
+
+      // Supprimer l'atelier de la liste locale (interface)
+      this.ateliers = this.ateliers.filter(item => item.id_atelier !== id_atelier);
+      this.dataSource.data = this.ateliers;
+
+      // Afficher un message de confirmation
+      this.snackBar.open('Workshop removed!', 'Close', { duration: 5000 });
     }
   }
+
 
 
 }

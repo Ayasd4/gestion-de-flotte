@@ -31,6 +31,7 @@ const interventionRouter = require('./routes/intervention');
 const infosIntervRouter = require('./routes/getInfoIntervention');
 const getordreRouter = require("./routes/getOrdreById");
 const uploadsRouter = require('./routes/uploads');
+const generateRouter = require('./routes/generateAllDemande');
 
 // Créer le serveur Node.js
 app.use(bodyParser.json());
@@ -67,6 +68,7 @@ app.use('/infosIntervention', infosIntervRouter);
 app.use('/getOrdreById', getordreRouter);
 app.use('/list-uploads', uploadsRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/genrateAllDemandes', generateRouter);
 
 app.listen(port, (err) => {
     if (err) throw err;

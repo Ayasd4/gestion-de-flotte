@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { OrdreService } from '../ordre.service';
 import { Ordre } from '../ordre';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -41,9 +41,9 @@ import { DiagnosticService } from 'src/app/maintenance/diagnostic/diagnostic.ser
     MatSnackBarModule
   ]
 })
-export class OrdreComponent implements AfterViewInit {
+export class OrdreComponent implements OnInit {
 
-  displayedColumns: string[] = ['id_ordre', 'diagnostic', 'urgence_panne', 'travaux', 'material_requis', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
+  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'diagnostic', 'urgence_panne', 'travaux', 'material_requis', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
   dataSource = new MatTableDataSource<Ordre>();
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -139,11 +139,21 @@ export class OrdreComponent implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.loadOrdre();
+  }
+
+  loadOrdre(): void {
     this.ordreService.fetchAllOrders().subscribe((data) => {
       console.log('Données récupérées : ', data);
-      this.ordres = data;
-      this.dataSource = new MatTableDataSource<Ordre>(data);
+
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenOrdres') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleOrdres = data.filter(ordre => !hiddenIds.includes(ordre.id_ordre));
+
+      this.ordres = visibleOrdres;
+      this.dataSource = new MatTableDataSource<Ordre>(this.ordres);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -153,11 +163,11 @@ export class OrdreComponent implements AfterViewInit {
     this.loadDiagnostic();
     this.loadTechnicien();
     this.loadAtelier();
-    this.loadOrdre();
+    //this.loadOrdre();
 
   }
 
-  loadOrdre(): void {
+  /*loadOrdre(): void {
     this.ordreService.fetchAllOrders().subscribe(
       (data) => {
         this.ordres = data;
@@ -169,7 +179,7 @@ export class OrdreComponent implements AfterViewInit {
         this.snackBar.open('Error fetching orders, please try again later.', 'Close', { duration: 5000 });
       }
     );
-}
+  }*/
 
 
   loadDiagnostic(): void {
@@ -264,8 +274,6 @@ export class OrdreComponent implements AfterViewInit {
 
   }*/
 
-
-
   openDialog(): void {
     const dialogRef = this.dialog.open(AddOrdreComponent, {
       width: '600px',
@@ -311,19 +319,43 @@ export class OrdreComponent implements AfterViewInit {
   }
 
   deleteOrder(id_ordre: Number) {
+
+    /*this.ordreService.deleteOrder(id_ordre).subscribe(() => {
+      this.ordres = this.ordres.filter(item => item.id_ordre !== id_ordre);
+      this.snackBar.open('Order deleted successfully!', 'Close', { duration: 6000 });
+      window.location.reload();
+    }, (error) => {
+      console.error("Error while deleting Request:", error);
+
+    }
+    );*/
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
-      this.ordreService.deleteOrder(id_ordre).subscribe(() => {
-        this.ordres = this.ordres.filter(item => item.id_ordre !== id_ordre);
-        this.snackBar.open('Request deleted successfully!', 'Close', { duration: 6000 });
-        window.location.reload();
-      }, (error) => {
-        console.error("Error while deleting Request:", error);
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenOrdres') || '[]');
+      if (!hiddenIds.includes(id_ordre)) {
+        hiddenIds.push(id_ordre);
+        localStorage.setItem('hiddenOrdres', JSON.stringify(hiddenIds));
 
+        this.ordres = this.ordres.filter(item => item.id_ordre !== id_ordre);
+        this.dataSource.data = this.ordres;
+
+        // Afficher un message de confirmation
+        this.snackBar.open('Order deleted successfully!', 'Close', { duration: 6000 });
       }
-      );
     }
   }
 
+  //exprt to pdf
+  generatePdf(id_ordre: number) {
+    this.ordreService.generatePdfOrdre(id_ordre).subscribe((blob: Blob) => {
+      const url = window.URL.createObjectURL(blob); //Création d'un objet URL pour le blob :
+      const a = document.createElement('a'); //Crée un élément <a> de manière dynamique.
+      a.href = url; //Définit l'URL du fichier PDF pour le lien.
+      a.download = 'document.pdf'; //nom du fichier télécharger
+      a.click(); //Simule un clic sur le lien, ce qui lance le téléchargement du fichier.
+      window.URL.revokeObjectURL(url); // libérer la mémoire
+    })
+
+  }
 
 }

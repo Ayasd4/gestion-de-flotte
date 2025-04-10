@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,8 +18,10 @@ import { TokenService } from 'src/app/services/token.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxUiLoaderModule
-  ],
+    NgxUiLoaderModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -23,6 +29,12 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
   userRole: string = '';  // Variable pour stocker le rôle de l'utilisateur
+
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
@@ -84,7 +96,7 @@ export class LoginComponent {
             this.router.navigate(['/maintenance']);
             this.router.navigate(['/diagnostic']);
 
-          }else if (userRole === 'Responsable maintenance') {
+          } else if (userRole === 'Responsable maintenance') {
             this.router.navigate(['/orders']);
             this.router.navigate(['/intervention']);
           } else if (userRole === 'chef d’agence') {
@@ -93,7 +105,7 @@ export class LoginComponent {
           } else if (userRole === 'agent de saisie maîtrise de l\'énergie') {
             this.router.navigate(['/kilometrage']);
 
-          }else {
+          } else {
             this.router.navigate(['/login']); // Rôle non reconnu
           }
         } else {

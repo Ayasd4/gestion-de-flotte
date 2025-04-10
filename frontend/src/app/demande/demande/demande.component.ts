@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, AfterViewInit, ViewChild } from "@angular/core";
+import { Component, AfterViewInit, ViewChild, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
@@ -18,6 +18,7 @@ import { Chauffeur } from "src/app/chauffeur/chauffeur";
 import { Vehicule } from "src/app/vehicule/vehicule";
 import { VehiculeService } from "src/app/vehicule/vehicule.service";
 import { ChauffeurService } from "src/app/chauffeur/chauffeur.service";
+import { PdfService } from "../pdf.service";
 
 @Component({
   selector: 'app-demande',
@@ -38,7 +39,7 @@ import { ChauffeurService } from "src/app/chauffeur/chauffeur.service";
     MatSnackBarModule
   ]
 })
-export class DemandeComponent implements AfterViewInit {
+export class DemandeComponent implements OnInit {
 
   displayedColumns: string[] = ['id_demande', 'date_demande', 'type_avarie', 'description', 'date_avarie', 'statut', 'vehicule', 'driver', 'actions'];
   dataSource = new MatTableDataSource<Demande>();
@@ -48,7 +49,8 @@ export class DemandeComponent implements AfterViewInit {
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private vehiculeService: VehiculeService,
-    private chauffeurService: ChauffeurService
+    private chauffeurService: ChauffeurService,
+    private pdfService: PdfService
   ) { }
 
   @ViewChild(MatSort) sort: any;
@@ -103,12 +105,22 @@ export class DemandeComponent implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.loadRequest();
+  }
+
+  loadRequest(): void {
     this.demandeService.fetchAllDemandes().subscribe((data) => {
       console.log('Données récupérées : ', data);
-      this.demandes = data;
+
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenDemandes') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleDemandes = data.filter(demande => !hiddenIds.includes(demande.id_demande));
+
+      this.demandes = visibleDemandes;
       this.filteredDemandes = data;
-      this.dataSource = new MatTableDataSource<Demande>(data);//this.filteredDemandes
+      this.dataSource = new MatTableDataSource<Demande>(this.demandes);//this.filteredDemandes
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -151,8 +163,8 @@ export class DemandeComponent implements AfterViewInit {
     this.demandeService.fetchAllDemandes().subscribe(
       (data) => {
         this.demandes = data;
-        this.filteredDemandes= data;
-        this.dataSource.data= data;
+        this.filteredDemandes = data;
+        this.dataSource.data = data;
       },
       (error) => {
         console.error('Error fetching vehicles:', error);
@@ -280,16 +292,38 @@ export class DemandeComponent implements AfterViewInit {
   deleteDemande(id_demande: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
-      this.demandeService.deleteDemande(id_demande).subscribe(() => {
+      /*this.demandeService.deleteDemande(id_demande).subscribe(() => {
         this.demandes = this.demandes.filter(item => item.id_demande !== id_demande);
         this.snackBar.open('Request deleted successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       }, (error) => {
         console.error("Error while deleting Request:", error);
 
+      });*/
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenDemandes') || '[]');
+      if (!hiddenIds.includes(id_demande)) {
+        hiddenIds.push(id_demande);
+        localStorage.setItem('hiddenDemandes', JSON.stringify(hiddenIds));
+
+        this.demandes = this.demandes.filter(item => item.id_demande !== id_demande);
+        this.dataSource.data = this.demandes;
+
+        // Afficher un message de confirmation
+        this.snackBar.open('Request deleted successfully!', 'Close', { duration: 6000 });
       }
-      );
     }
+  }
+
+  //exprt to pdf
+  generatePdf(id_demande: number) {
+    this.pdfService.generatePdf(id_demande).subscribe((blob: Blob) => {
+      const url = window.URL.createObjectURL(blob); //Création d'un objet URL pour le blob :
+      const a = document.createElement('a'); //Crée un élément <a> de manière dynamique.
+      a.href = url; //Définit l'URL du fichier PDF pour le lien.
+      a.download = 'document.pdf'; //nom du fichier télécharger
+      a.click(); //Simule un clic sur le lien, ce qui lance le téléchargement du fichier.
+      window.URL.revokeObjectURL(url); // libérer la mémoire
+    })
   }
 
 }

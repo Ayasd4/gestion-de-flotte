@@ -100,12 +100,12 @@
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
 
             <ng-container matColumnDef="id_demande">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Demand ID </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request ID </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.id_demande}} </td>
             </ng-container>
 
             <ng-container matColumnDef="date_demande">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Demande </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Request Date </th>
                 <td mat-cell *matCellDef="let Demande">
                     <div style="display: flex; flex-direction: column;">
 
@@ -115,17 +115,17 @@
             </ng-container>
 
             <ng-container matColumnDef="type_avarie">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Type Avarie</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Breakdown Type</th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.type_avarie}} </td>
             </ng-container>
 
             <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> description </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.description}} </td>
             </ng-container>
 
             <ng-container matColumnDef="date_avarie">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Avarie </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Breakdown Date  </th>
                 <td mat-cell *matCellDef="let Demande"> {{Demande.date_avarie}} {{Demande.heure_avarie}}</td>
             </ng-container>
 
@@ -212,6 +212,12 @@
                         (click)="deleteDemande(demande.id_demande)" color="warn" matTooltip="delete"
                         aria-label="Button that displays a tooltip when focused or hovered over">
                         <mat-icon>delete</mat-icon>
+                    </button>
+
+                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="generatePdf(demande.id_demande)"
+                        color="black" matTooltip="export pdf"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>file_download</mat-icon>
                     </button>
                 </td>
             </ng-container>

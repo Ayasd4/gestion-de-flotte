@@ -23,14 +23,14 @@
                     <mat-form-field>
                         <mat-label>End Date of intervention</mat-label>
                         <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="intervention.date_fin"
-                            name="date_fin" required>
+                            name="date_fin"><!--required-->
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>End Hour of intervention</mat-label>
-                        <input type="time" matInput [(ngModel)]="intervention.heure_fin" name="heure_fin" required>
+                        <input type="time" matInput [(ngModel)]="intervention.heure_fin" name="heure_fin"><!--required-->
                     </mat-form-field>
 
                     <mat-form-field>

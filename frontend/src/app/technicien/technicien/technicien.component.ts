@@ -41,7 +41,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatListModule
   ],
 })
-export class TechnicienComponent implements AfterViewInit {
+export class TechnicienComponent implements OnInit {
   displayedColumns: string[] = ['id_technicien', 'nom', 'prenom', 'matricule_techn', 'cin', 'telephone_techn', 'email_techn', 'specialite', 'date_embauche', 'actions'];
   dataSource = new MatTableDataSource<Technicien>();
   matricule_techn: any = undefined;
@@ -71,12 +71,20 @@ export class TechnicienComponent implements AfterViewInit {
   techniciens: Technicien[] = [];
   filtredTechniciens: Technicien[] = [];
 
+  ngOnInit(): void {
+    this.loadTechniciens();
+  }
 
-  ngAfterViewInit(): void {
+  loadTechniciens(): void {
     this.technicienService.fetchAllTechnicien().subscribe((data) => {
       //console.log('Données récupérées : ', data);
-      this.techniciens = data;
-      this.dataSource = new MatTableDataSource<Technicien>(data);
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenTechniciens') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleTechniciens = data.filter(technicien => !hiddenIds.includes(technicien.id_technicien));
+
+      this.techniciens = visibleTechniciens;
+      this.dataSource = new MatTableDataSource<Technicien>(this.techniciens);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -161,16 +169,28 @@ export class TechnicienComponent implements AfterViewInit {
   deleteTechnicien(id_technicien: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
-      this.technicienService.deleteTechnicien(id_technicien).subscribe(() => {
+      /*this.technicienService.deleteTechnicien(id_technicien).subscribe(() => {
         this.techniciens = this.techniciens.filter(item => item.id_technicien !== id_technicien);
         this.snackBar.open(' Technician successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       }, (error) => {
         console.error("Error while deleting Technician:", error);
       }
-      );
+      );*/
+
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenTechniciens') || '[]');
+      if (!hiddenIds.includes(id_technicien)) {
+        hiddenIds.push(id_technicien);
+        localStorage.setItem('hiddenTechniciens', JSON.stringify(hiddenIds));
+
+        this.techniciens = this.techniciens.filter(item => item.id_technicien !== id_technicien);
+        this.dataSource.data = this.techniciens;
+
+        // Afficher un message de confirmation
+        this.snackBar.open('Technician deleted successfully!', 'Close', { duration: 6000 });
+      }
     }
   }
 
-
+  
 }

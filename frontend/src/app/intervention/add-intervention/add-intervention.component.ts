@@ -56,6 +56,12 @@ export class AddInterventionComponent implements OnInit {
     id_intervention: 0,
     ordre: {
       id_ordre: 0,
+      diagnostic: {
+        id_diagnostic: 0,
+        demande: {
+          vehicule: { numparc: 0 }
+        },
+      },
       travaux: '',
       urgence_panne: '',
       material_requis: '',
@@ -92,6 +98,7 @@ export class AddInterventionComponent implements OnInit {
     }
     //ordre
     this.intervention.ordre.travaux = data.travaux;
+    this.intervention.ordre.urgence_panne = data.urgence_panne;
     this.intervention.ordre.material_requis = data.material_requis;
     this.intervention.ordre.planning = data.planning;
     this.intervention.ordre.date_ordre = data.date_ordre;
@@ -318,9 +325,11 @@ export class AddInterventionComponent implements OnInit {
 
             console.log("Intervention created successfully:", response);
             this.snackBar.open('Intervention created successfully!', 'Close', { duration: 5000 });
+
           }
+          window.location.reload();
           this.dialogRef.close();
-          this.router.navigate(['/intervention']);
+          //this.router.navigate(['/intervention']);
         },
         error: (error) => {
           console.error("Error while creating Intervention :", error);

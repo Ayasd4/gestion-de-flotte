@@ -1,5 +1,153 @@
 const db = require("../db/db");
 const moment = require("moment");
+//const { content } = require("pdfkit/js/page");
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+
+exports.generatePdf = async (req, res) => {
+    try {
+        const id_ordre = Number(req.params.id_ordre);
+
+        console.log('ID Order received:', id_ordre);
+
+        const sql = `SELECT o.id_ordre,
+    diag.id_diagnostic,
+    diag.description_panne,
+    diag.causes_panne,
+    diag.actions,
+    diag.date_diagnostic,
+    diag.heure_diagnostic,
+    o.urgence_panne,
+    o.travaux,
+    o.material_requis,
+    o.planning,
+    o.date_ordre,
+    o.status,
+    a.nom_atelier,
+    a.telephone,
+    a.email,
+    a.capacite,
+    a.statut,
+    tech.nom,
+    tech.prenom,
+    tech.matricule_techn,
+    tech.email_techn,
+    tech.telephone_techn,
+    tech.specialite,
+    v.numparc
+    FROM acc.ordre_travail AS o
+    JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
+    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
+    JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+    JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule
+    WHERE id_ordre=$1`;
+
+
+        db.query(sql, [id_ordre], (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'Order Not Found!' });
+            }
+
+            const ordre = result.rows[0];
+
+
+            // Création du PDF
+            const doc = new PDFDocument();
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="document.pdf"');
+
+            doc.pipe(res); // envoyer directement dans la réponse
+
+
+            const logoPath = 'assets/srtj.png'; // chemin relatif vers ton logo
+            if (fs.existsSync(logoPath)) {
+                doc.image(logoPath, 50, 30, { width: 50 }); // x = 50, y = 30, largeur = 80
+                doc.moveDown(); // petit espace après le logo
+
+                doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', 400, 30, { align: 'left' });
+                doc.fontSize(11).font('Helvetica').text('Division Technique', 400, 50, { align: 'left' });
+                doc.font('Helvetica').text('Service Maintenance', 400, 65, { align: 'left' });
+                
+                /*doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', { align: 'right' });
+                //doc.moveDown()
+                doc.font('Helvetica').text('Division Technique', { align: 'right' });
+                //doc.moveDown()
+                doc.font('Helvetica').text('service Maintenance', { align: 'right' });*/
+            }
+            doc.x = 50;
+
+            doc.moveTo(50, 100).lineTo(550, 100).stroke();
+            doc.moveDown(3); 
+            //doc.y = 120;
+            doc.fontSize(25)
+                .font('Helvetica')
+                .text(`Ordre de travail N° ${ordre.id_ordre} - SRT Jendouba`, {
+                    align: 'center',
+                    underline: true,
+                });
+            doc.moveDown(1);
+
+            doc.fontSize(13).font('Helvetica-Bold').text(`Numéro de Vehicule: ${ordre.numparc}`);
+            doc.moveDown(1);
+
+            //diagnostic
+            doc.fontSize(15).font('Helvetica-Bold').text('Diagnostic et controle:',50, doc.y, { underline: true });
+            doc.font('Helvetica').text(`Description de panne: ${ordre.description_panne}`)
+            doc.font('Helvetica').text(`causes: ${ordre.causes_panne}`);
+            doc.font('Helvetica').text(`Actions: ${ordre.actions}`);
+            doc.font('Helvetica').text(`Date de diagnostic: ${ordre.date_diagnostic}`);
+            doc.font('Helvetica').text(`heure de diagnostic: ${ordre.heure_diagnostic}`);
+
+            doc.moveDown(1);
+
+            //atelier
+            doc.fontSize(15).font('Helvetica-Bold').text('Atelier de réparation:', { underline: true });
+            doc.font('Helvetica').text(`• Nom de l'atelier: ${ordre.nom_atelier}`);
+            doc.font('Helvetica').text(`• Email: ${ordre.email}`);
+            doc.font('Helvetica').text(`• Capacité d'accueil : ${ordre.capacite}`);
+            doc.font('Helvetica').text(`• Telephone: ${ordre.telephone}`);
+
+            doc.moveDown(1);
+
+            //technicien
+            doc.fontSize(15).font('Helvetica-Bold').text('Technicien Concerné :', { underline: true });
+            doc.font('Helvetica').text(`Numéro de technicien: ${ordre.matricule_techn}`);
+            doc.font('Helvetica').text(`Nom: ${ordre.nom} ${ordre.prenom}`);
+            doc.font('Helvetica').text(`E-mail: ${ordre.email_techn}`);
+            doc.font('Helvetica').text(`Téléphone: ${ordre.telephone_techn}`);
+            doc.font('Helvetica').text(`Specialité: ${ordre.specialite}`);
+
+            doc.fontSize(14).font('Helvetica').text('----------------------------------------------------------------------------------------------------');
+
+            doc.moveDown(1);
+            
+            // Informations de la demande
+            doc.fontSize(14).font('Helvetica');
+            doc.font('Helvetica-Bold').text(`Information sur L'ordre de travail ${ordre.id_ordre}`);
+            doc.font('Helvetica').text(`Travaux Effectué: ${ordre.travaux}`);
+            doc.font('Helvetica').text(`Materiel Requis: ${ordre.material_requis}`);
+            doc.font('Helvetica').text(`Plannification de L'intervention: ${ordre.planning}`);
+            doc.font('Helvetica').text(`Date de création: ${ordre.date_ordre?.toLocaleDateString?.() || ordre.date_ordre}`);
+
+            doc.moveDown(1); // saut de 2 lignes
+
+            const y = doc.y + 20; // position verticale actuelle + un petit espace
+
+            doc.fontSize(12);
+            doc.text('Jendouba le  ......./....../.........', 50, y); // côté gauche
+            doc.text('Signature Chef Service', 467, y);   // côté droit
+
+            doc.end();
+
+        });
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+} 
 
 exports.search = async (req, res) => {
     try {
@@ -116,6 +264,7 @@ exports.search = async (req, res) => {
     }
 
 }
+
 exports.list = async (req, res) => {
     const sql = `SELECT o.id_ordre,
     diag.id_diagnostic,
@@ -139,11 +288,17 @@ exports.list = async (req, res) => {
     tech.prenom,
     tech.matricule_techn,
     tech.email_techn,
-    tech.specialite
+    tech.specialite,
+    v.numparc
     FROM acc.ordre_travail AS o
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
     JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
-    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien;`;
+    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
+    JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+    JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule;`;
+
+    //-- Jointure avec demandes
+    //-- Jointure avec vehicule à partir de demandes
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });

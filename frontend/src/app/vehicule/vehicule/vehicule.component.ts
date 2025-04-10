@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { VehiculeService } from '../vehicule.service';
 import { Vehicule } from '../vehicule';
@@ -24,10 +24,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,    
+    MatButtonModule,
     MatTableModule,
     MatIconModule,
-    FormsModule, 
+    FormsModule,
     MatSortModule,
     MatPaginatorModule,
     MatSnackBarModule,
@@ -36,44 +36,53 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './vehicule.component.html',
   styleUrls: ['./vehicule.component.css']
 })
-export class VehiculeComponent implements AfterViewInit{
-  numparc: any= undefined;
-  annee: any= undefined;
+export class VehiculeComponent implements OnInit {
+  numparc: any = undefined;
+  annee: any = undefined;
 
-  displayedColumns: string[] = ['idvehicule', 'numparc', 'immatricule', 'modele','annee','etat','actions'];
+  displayedColumns: string[] = ['idvehicule', 'numparc', 'immatricule', 'modele', 'annee', 'etat', 'actions'];
   dataSource = new MatTableDataSource<Vehicule>();
 
-  constructor(private vehiculeService: VehiculeService, public dialog: MatDialog, private snackBar: MatSnackBar){}
+  constructor(private vehiculeService: VehiculeService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   //@ViewChild() permet d’accéder à l'élément <p> du template.
   @ViewChild(MatSort) sort: any;
-  @ViewChild(MatPaginator) paginator: any ;
+  @ViewChild(MatPaginator) paginator: any;
 
 
   vehicule: Vehicule = {
     idvehicule: 0,
-    numparc: this.numparc, 
-    immatricule: '', 
-    modele: '', 
-    annee: this.annee, 
-    etat: '' 
+    numparc: this.numparc,
+    immatricule: '',
+    modele: '',
+    annee: this.annee,
+    etat: ''
   }
 
   //vehicules est une propriété de la classe qui contient un tableau d'objets de type Vehicule.
   vehicules: Vehicule[] = [];
   filteredVehicules: Vehicule[] = [];
 
+  ngOnInit(): void {
+    this.loadVehicules();
+  }
   //ngAfterViewInit() modifie le texte du paragraphe une fois que la vue est complètement rendue.
-  ngAfterViewInit(): void{
+  loadVehicules(): void {
     this.vehiculeService.fetchAllVehicules().subscribe((data) => {
-      this.vehicules = data;
+
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenVehicules') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleVehicules = data.filter(vehicule => !hiddenIds.includes(vehicule.idvehicule));
+
+      this.vehicules = visibleVehicules;
       this.dataSource = new MatTableDataSource<Vehicule>(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
       console.error('Error while recovery vehicle :', error);
     }
-  );
+    );
   }
 
   openDialog(): void {
@@ -81,7 +90,7 @@ export class VehiculeComponent implements AfterViewInit{
       width: '400px',
       data: {}
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.vehiculeService.createVehicule(result).subscribe(
@@ -96,14 +105,14 @@ export class VehiculeComponent implements AfterViewInit{
         );
       }
     });
-  } 
-  
+  }
+
   editVehicule(vehicule: Vehicule) {
     const dialogRef = this.dialog.open(AddVehiculeComponent, {
       width: '400px',
       data: { ...vehicule } // Passer les données du véhicule
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.vehiculeService.updateVehicule(result).subscribe(
@@ -120,26 +129,43 @@ export class VehiculeComponent implements AfterViewInit{
     });
   }
 
-  searchVehicule(input: any){
-    this.filteredVehicules= this.vehicules.filter(item=> item.numparc.toString().includes(input)
-    || item.immatricule.toLowerCase().includes(input.toLowerCase())
-    || item.modele.toLowerCase().includes(input.toLowerCase())
-    || item.annee.toString().includes(input)
-    || item.etat.toLowerCase().includes(input.toLowerCase()))
+  searchVehicule(input: any) {
+    this.filteredVehicules = this.vehicules.filter(item => item.numparc.toString().includes(input)
+      || item.immatricule.toLowerCase().includes(input.toLowerCase())
+      || item.modele.toLowerCase().includes(input.toLowerCase())
+      || item.annee.toString().includes(input)
+      || item.etat.toLowerCase().includes(input.toLowerCase()))
     this.dataSource = new MatTableDataSource<Vehicule>(this.filteredVehicules);
   }
 
-  deleteVehicule(idvehicule: Number){
+  deleteVehicule(idvehicule: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
-    if(isConfirmed){
-      this.vehiculeService.deleteVehicule(idvehicule).subscribe((data)=>{
-        this.vehicules = this.vehicules.filter(item => item.idvehicule!==idvehicule);
+    /*if (isConfirmed) {
+      this.vehiculeService.deleteVehicule(idvehicule).subscribe((data) => {
+        this.vehicules = this.vehicules.filter(item => item.idvehicule !== idvehicule);
         this.snackBar.open('Vehicle updated successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       }, (error) => {
         console.error("Error while deleted vehicle :", error);
       }
-    );
+      );
+    }*/
+
+    if (isConfirmed) {
+      // Ajouter l'ID de l'atelier supprimé dans le localStorage
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenVehicules') || '[]');
+      if (!hiddenIds.includes(idvehicule)) {
+        hiddenIds.push(idvehicule);
+        localStorage.setItem('hiddenVehicules', JSON.stringify(hiddenIds));
+      }
+
+      // Supprimer l'atelier de la liste locale (interface)
+      this.vehicules = this.vehicules.filter(item => item.idvehicule !== idvehicule);
+      this.dataSource.data = this.vehicules;
+
+      // Afficher un message de confirmation
+      this.snackBar.open('Vehicle removed!', 'Close', { duration: 5000 });
     }
+
   }
 }

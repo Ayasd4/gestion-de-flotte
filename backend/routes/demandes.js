@@ -45,4 +45,9 @@ router.delete('/:id_demande', async (req, res) => {
 router.get('/vehicule/:numparc', demandesController.getVehiculeByNumparc);
 router.get('/chauffeur/:nom', demandesController.getChauffeurByNom);
 
+router.get('/generatePdf/:id_demande', async (req, res) => {
+    await demandesController.generatePdf(req, res);
+});
+
+
 module.exports = router;

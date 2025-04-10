@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const interventionController = require("../controllers/intervention");
 
+router.get('/generatePdf/:id_intervention', async (req, res)=>{
+    await interventionController.generatePdf(req, res);
+})
+
 // Get all fuel consumption records
 router.get('/', async (req, res) => {
     // If search parameters are provided, use search function

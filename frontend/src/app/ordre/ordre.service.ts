@@ -61,5 +61,10 @@ export class OrdreService {
     // Envoi de la requête GET avec les paramètres filtrés
     return this.httpClient.get<Ordre[]>(this.baseUrl, { params: httpParams });
   }
-  
+
+  //Un Blob (objet binaire) est un type de données qui représente un fichier brut comme (pdf, image, word, vidéo...)
+  generatePdfOrdre(id_ordre: number): Observable<Blob> {
+    return this.httpClient.get<Blob>(`${this.baseUrl}/generatePdf/${id_ordre}`, { responseType: 'blob' as 'json' }); //pour recevoir le fichier
+  }
+
 }

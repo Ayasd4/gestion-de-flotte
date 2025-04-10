@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Intervention } from '../intervention';
 import { InterventionService } from '../intervention.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -38,9 +38,9 @@ import { TechnicienService } from 'src/app/technicien/technicien.service';
     MatSnackBarModule
   ]
 })
-export class InterventionComponent implements AfterViewInit {
+export class InterventionComponent implements OnInit {
 
-  displayedColumns: string[] = ['id_intervention', 'ordre', 'technicien', 'date_debut', 'date_fin', 'status', 'commentaire', 'actions'];
+  displayedColumns: string[] = ['id_intervention', 'Vehicle', 'ordre', 'technicien', 'date_debut', 'date_fin', 'status', 'commentaire', 'actions'];
   dataSource = new MatTableDataSource<Intervention>();
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -61,6 +61,12 @@ export class InterventionComponent implements AfterViewInit {
     id_intervention: 0,
     ordre: {
       id_ordre: 0,
+      diagnostic: {
+        id_diagnostic: 0,
+        demande: {
+          vehicule: { numparc: 0 }
+        },
+      },
       urgence_panne: '',
       travaux: '',
       material_requis: '',
@@ -103,21 +109,33 @@ export class InterventionComponent implements AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.loadIntervention();
+
+  }
+
+  loadIntervention(): void {
     this.interventionService.fetchAllInterventions().subscribe((data) => {
       console.log('Données récupérées : ', data);
-      this.interventions = data;
-      this.dataSource = new MatTableDataSource<Intervention>(data);
+
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenInterventions') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleInterventions = data.filter(intervention => !hiddenIds.includes(intervention.id_intervention));
+
+      this.interventions = visibleInterventions;
+      this.dataSource = new MatTableDataSource<Intervention>(this.interventions);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
       console.log('Error while retrieving Intervention: ', error);
     }
     );
+    this.loadOrdre();
     this.loadTechnicien();
   }
 
-  loadIntervention(): void {
+  /*loadIntervention(): void {
     this.interventionService.fetchAllInterventions().subscribe(
       (data) => {
         this.interventions = data;
@@ -129,7 +147,7 @@ export class InterventionComponent implements AfterViewInit {
         this.snackBar.open('Error fetching interventions, please try again later.', 'Close', { duration: 5000 });
       }
     );
-}
+  }*/
 
   loadOrdre(): void {
     this.ordreService.fetchAllOrders().subscribe(
@@ -250,18 +268,43 @@ export class InterventionComponent implements AfterViewInit {
   }
 
   deleteIntervention(id_intervention: Number) {
+
+    /*this.interventionService.deleteIntervention(id_intervention).subscribe(() => {
+      this.interventions = this.interventions.filter(item => item.id_intervention !== id_intervention);
+      this.snackBar.open('Intervention deleted successfully!', 'Close', { duration: 6000 });
+      window.location.reload();
+    }, (error) => {
+      console.error("Error while deleting Intervention:", error);
+
+    }
+    );*/
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
-      this.interventionService.deleteIntervention(id_intervention).subscribe(() => {
-        this.interventions = this.interventions.filter(item => item.id_intervention !== id_intervention);
-        this.snackBar.open('Intervention deleted successfully!', 'Close', { duration: 6000 });
-        window.location.reload();
-      }, (error) => {
-        console.error("Error while deleting Intervention:", error);
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenInterventions') || '[]');
+      if (!hiddenIds.includes(id_intervention)) {
+        hiddenIds.push(id_intervention);
+        localStorage.setItem('hiddenInterventions', JSON.stringify(hiddenIds));
 
+        this.interventions = this.interventions.filter(item => item.id_intervention !== id_intervention);
+        this.dataSource.data = this.interventions;
+
+        // Afficher un message de confirmation
+        this.snackBar.open('Intervention deleted successfully!', 'Close', { duration: 6000 });
       }
-      );
     }
   }
+
+  //exprt to pdf
+  generatePdf(id_intervention: number) {
+    this.interventionService.generatePdfIntervention(id_intervention).subscribe((blob: Blob) => {
+      const url = window.URL.createObjectURL(blob); //Création d'un objet URL pour le blob :
+      const a = document.createElement('a'); //Crée un élément <a> de manière dynamique.
+      a.href = url; //Définit l'URL du fichier PDF pour le lien.
+      a.download = 'document.pdf'; //nom du fichier télécharger
+      a.click(); //Simule un clic sur le lien, ce qui lance le téléchargement du fichier.
+      window.URL.revokeObjectURL(url); // libérer la mémoire
+    })
+  }
+
 
 }

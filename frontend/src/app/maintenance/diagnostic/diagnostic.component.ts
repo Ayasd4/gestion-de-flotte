@@ -45,7 +45,7 @@ import * as moment from 'moment';
 })
 export class DiagnosticComponent implements OnInit {
 
-  displayedColumns: string[] = ['id_diagnostic', 'id_demande', 'description_panne', 'causes_panne', 'actions_panne', 'date_diagnostic', 'heure_diagnostic', 'Actions'];
+  displayedColumns: string[] = ['id_diagnostic', 'Vehicle', 'id_demande', 'description_panne', 'causes_panne', 'actions_panne', 'date_diagnostic', 'heure_diagnostic', 'Actions'];
   dataSource = new MatTableDataSource<Diagnostic>();
   numparc: any = undefined;
 
@@ -81,11 +81,20 @@ export class DiagnosticComponent implements OnInit {
   filtredDiagnostic: Diagnostic[] = [];
 
   ngOnInit(): void {
+    this.load();
+  }
+
+  load(): void {
     this.diagnosticService.fetchAllDiagnostic().subscribe((data) => {
       console.log("data", data);  // Vérifiez la structure de la réponse API
 
-      this.diagnostics = data;
-      this.dataSource = new MatTableDataSource<Diagnostic>(data);//this.filteredDemandes
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenDiagnostics') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleDiagnostics = data.filter(diagnostic => !hiddenIds.includes(diagnostic.id_diagnostic));
+
+      this.diagnostics = visibleDiagnostics;
+      this.dataSource = new MatTableDataSource<Diagnostic>(this.diagnostics);//this.filteredDemandes
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -150,7 +159,7 @@ export class DiagnosticComponent implements OnInit {
       this.loadDemandes();
       return;
     }
-    
+
     this.diagnosticService.searchDiagnostic(filteredParams).subscribe((data) => {
       this.filtredDiagnostic = data;
       this.dataSource.data = data;
@@ -177,7 +186,7 @@ export class DiagnosticComponent implements OnInit {
     }
   }
 
- 
+
   /*searchDiagnostic(input: any) {
     input = input?.toString().trim().toLowerCase();
 
@@ -217,14 +226,26 @@ export class DiagnosticComponent implements OnInit {
   deleteDiagnostic(id_diagnostic: Number) {
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
-      this.diagnosticService.deleteDiagnostic(id_diagnostic).subscribe(() => {
+      /*this.diagnosticService.deleteDiagnostic(id_diagnostic).subscribe(() => {
         this.diagnostics = this.diagnostics.filter(item => item.id_diagnostic !== id_diagnostic);
         this.snackBar.open('Diagnostic deleted successfully!', 'Close', { duration: 6000 });
         window.location.reload();
       }, (error) => {
         console.error("Error while deleting Diagnostic:", error);
       }
-      );
+      );*/
+
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenDiagnostics') || '[]');
+      if (!hiddenIds.includes(id_diagnostic)) {
+        hiddenIds.push(id_diagnostic);
+        localStorage.setItem('hiddenDiagnostics', JSON.stringify(hiddenIds));
+
+        this.diagnostics = this.diagnostics.filter(item => item.id_diagnostic !== id_diagnostic);
+        this.dataSource.data = this.diagnostics;
+
+        this.snackBar.open('Diagnostic deleted successfully!', 'Close', { duration: 6000 });
+        window.location.reload();
+      }
     }
   }
 

@@ -1,9 +1,9 @@
-.main-container {
-    transition: margin-left 0.3s ease-in-out;
-    margin-left: 60px; /* Navbar fermé */
-  }
-  
-  .main-container.collapsed {
-    margin-left: 250px; /* Navbar ouvert */
-  }
-  
+/*.main-container {
+  background-color: rgba(228, 226, 224, 0.897);
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: 60px;} /* Navbar fermé */
+
+
+/*.main-container.collapsed {
+  margin-left: 250px; ;}/* Navbar ouvert */
+

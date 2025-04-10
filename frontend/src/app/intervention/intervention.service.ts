@@ -53,6 +53,11 @@ export class InterventionService {
     return this.httpClient.get<any>(`${this.Url}/${id_ordre}`);
   }
 
+  //Un Blob (objet binaire) est un type de données qui représente un fichier brut comme (pdf, image, word, vidéo...)
+  generatePdfIntervention(id_intervention: number): Observable<Blob> {
+    return this.httpClient.get<Blob>(`${this.baseUrl}/generatePdf/${id_intervention}`, { responseType: 'blob' as 'json' }); //pour recevoir le fichier
+  }
+
 
   ApiUrl: string = "http://localhost:3100/infosIntervention";
 

@@ -2,6 +2,12 @@ export interface Intervention {
     id_intervention: number,
     ordre: {
         id_ordre: number,
+        diagnostic: {
+            id_diagnostic: number,
+            demande: {
+                vehicule: { numparc: number }
+            },
+        }
         travaux: string,
         urgence_panne: string,
         material_requis: string,

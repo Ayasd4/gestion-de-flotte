@@ -18,7 +18,7 @@
         width: 100%;
 
         .logo{
-            background: #fff;/*fff*/
+            background: #000;/*fff*/
             text-align: center;
             width: 3rem;
             min-height: 3rem;
@@ -55,7 +55,7 @@
 }
 
 .header-collapsed{
-    width: 16.5625rem;
+    width: 16rem; /*16.5625rem*/
 }
 
 .header-nav{

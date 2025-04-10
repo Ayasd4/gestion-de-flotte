@@ -1,6 +1,7 @@
 const db = require("../db/db");
 const moment = require('moment');
 
+
 exports.search = async (req, res) => {
     try {
 
@@ -31,7 +32,7 @@ exports.search = async (req, res) => {
             values.push(`%${req.query.date_demande}%`);
             paramIndex++;
         }
-        
+
         if (req.query.type_avarie) {
             conditions.push(`d.type_avarie ILIKE $${paramIndex}`);
             values.push(`%${req.query.type_avarie}%`);
@@ -50,7 +51,7 @@ exports.search = async (req, res) => {
             values.push(`%${req.query.description_panne}%`);
             paramIndex++;
         }
-        
+
         if (req.query.causes_panne) {
             conditions.push(`diag.causes_panne ILIKE $${paramIndex}`);
             values.push(`%${req.query.causes_panne}%`);
@@ -62,7 +63,7 @@ exports.search = async (req, res) => {
             values.push(`%${req.query.actions}%`);
             paramIndex++;
         }
-        
+
         if (req.query.date_diagnostic) {
             conditions.push(`diag.date_diagnostic::DATE = $${paramIndex}`);
             values.push(`%${req.query.date_diagnostic}%`);
@@ -75,7 +76,7 @@ exports.search = async (req, res) => {
             paramIndex++;
         }
 
-        let sql= `SELECT diag.id_diagnostic,
+        let sql = `SELECT diag.id_diagnostic,
         d.id_demande,
         d.date_demande,
         d.type_avarie,
@@ -104,6 +105,8 @@ exports.search = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 }
+
+
 exports.list = async (req, res) => {
     sql = `SELECT diag.id_diagnostic,
     d.id_demande,

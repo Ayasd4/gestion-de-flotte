@@ -1,5 +1,135 @@
 const db = require("../db/db");
 const moment = require("moment");
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+
+exports.generatePdf = async (req, res) => {
+
+    try {
+        const id_intervention = Number(req.params.id_intervention);
+
+        console.log('ID Intervention received:', id_intervention);
+
+        const sql = `SELECT i.id_intervention,
+        o.id_ordre,
+        o.urgence_panne,
+        o.travaux,
+        o.material_requis,
+        o.planning,
+        o.date_ordre,
+        tech.nom,
+        tech.prenom,
+        tech.matricule_techn,
+        tech.email_techn,
+        tech.specialite,
+        i.date_debut,
+        i.heure_debut,
+        i.date_fin,
+        i.heure_fin,
+        i.status_intervention,
+        i.commentaire,
+        v.numparc
+        FROM acc.intervention AS i
+        JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
+        JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
+        JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+        JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule
+        WHERE id_intervention=$1`;
+
+
+        db.query(sql, [id_intervention], (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'Intervention Not Found!' });
+            }
+
+            const intervention = result.rows[0];
+
+
+            // Création du PDF
+            const doc = new PDFDocument();
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="document.pdf"');
+
+            doc.pipe(res); // envoyer directement dans la réponse
+
+
+            const logoPath = 'assets/srtj.png'; // chemin relatif vers ton logo
+            if (fs.existsSync(logoPath)) {
+                doc.image(logoPath, 50, 30, { width: 50 }); // x = 50, y = 30, largeur = 80
+                doc.moveDown(); // petit espace après le logo
+
+                doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', 400, 30, { align: 'left' });
+                doc.fontSize(11).font('Helvetica').text('Division Technique', 400, 50, { align: 'left' });
+                doc.font('Helvetica').text('Service Maintenance', 400, 65, { align: 'left' });
+
+            }
+            doc.x = 50;
+
+            //doc.moveTo(50, 100).lineTo(550, 100).stroke();
+            doc.moveDown(3);
+            //doc.y = 120;
+            doc.fontSize(25)
+                .font('Helvetica')
+                .text(`Rapport d'Intervention Technique sur l'Ordre de Travail N° ${intervention.id_ordre}`, {
+                    align: 'center',
+                    underline: true,
+                });
+
+            doc.moveDown(1);
+
+            doc.fontSize(14).font('Helvetica').text('jour:......................................................................................................................');   // côté droit
+
+            doc.moveDown(1);
+
+            // Informations de la demande
+            doc.fontSize(15).font('Helvetica-Bold').text('Informatin sur l\'ordre de travail:', 50, doc.y, { underline: true });
+            doc.font('Helvetica').text(`Travaux Effectué: ${intervention.travaux}`);
+            doc.font('Helvetica').text(`Materiel Requis: ${intervention.material_requis}`);
+            doc.font('Helvetica').text(`Plannification de L'intervention: ${intervention.planning}`);
+            doc.font('Helvetica').text(`Date de création: ${intervention.date_ordre?.toLocaleDateString?.() || intervention.date_ordre}`);
+
+            doc.moveDown(1);
+
+            //technicien
+            doc.fontSize(15).font('Helvetica-Bold').text('Technicien Concerné :', { underline: true });
+            doc.font('Helvetica').text(`Numéro de technicien: ${intervention.matricule_techn}`);
+            doc.font('Helvetica').text(`Nom: ${intervention.nom} ${intervention.prenom}`);
+            doc.font('Helvetica').text(`E-mail: ${intervention.email_techn}`);
+            doc.font('Helvetica').text(`Téléphone: ${intervention.telephone_techn}`);
+            doc.font('Helvetica').text(`Specialité: ${intervention.specialite}`);
+
+            //doc.fontSize(14).font('Helvetica').text('----------------------------------------------------------------------------------------------------');
+
+            doc.moveDown(1);
+
+            // Informations sur l'interv.
+            doc.fontSize(14).font('Helvetica');
+            doc.font('Helvetica-Bold').text(`L'intervention N° ${intervention.id_intervention}`, { underline: true });
+            doc.font('Helvetica').text(`Date de début de l'intervention: ${intervention.date_debut?.toLocaleDateString?.() || intervention.date_debut}`);
+            doc.font('Helvetica').text(`Heure de début de l'intervention: ${intervention.heure_debut}`);
+            doc.font('Helvetica').text(`Date de Fin de l'intervention: ${intervention.date_fin?.toLocaleDateString?.() || intervention.date_fin}`);
+            doc.font('Helvetica').text(`Heure de Fin de l'intervention: ${intervention.heure_fin}`);
+            doc.font('Helvetica').text(`L'intervention: ${intervention.status_intervention}`);
+            doc.font('Helvetica').text(`Commentaire: ${intervention.commentaire}`);
+
+            doc.moveDown(3); // saut de 2 lignes
+
+            const y = doc.y + 20; // position verticale actuelle + un petit espace
+
+            doc.fontSize(12);
+            doc.text('Signature Chef d\'atelier', 50, y); // côté gauche
+            doc.text('Signature responsable maintenance', 400, y);   // côté droit
+
+            doc.end();
+
+        });
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
 
 exports.search = async (req, res) => {
     try {
@@ -95,7 +225,7 @@ exports.search = async (req, res) => {
             paramIndex++;
         }
 
-       let sql = `SELECT i.id_intervention,
+        let sql = `SELECT i.id_intervention,
     o.urgence_panne,
     o.travaux,
     o.material_requis,
@@ -113,7 +243,8 @@ exports.search = async (req, res) => {
     i.commentaire
     FROM acc.intervention AS i
     JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
-    JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien`;
+    JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
+    `;
 
         if (conditions.length > 0) {
             sql += " WHERE " + conditions.join(" AND ");
@@ -145,10 +276,14 @@ exports.list = async (req, res) => {
     i.date_fin,
     i.heure_fin,
     i.status_intervention,
-    i.commentaire
+    i.commentaire,
+    v.numparc
     FROM acc.intervention AS i
     JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
-    JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien;`;
+    JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
+    JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+    JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule; `;
 
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -204,7 +339,7 @@ exports.create = async (req, res) => {
 
 
         const sql = `INSERT INTO acc.intervention(id_ordre, id_technicien, date_debut, heure_debut, date_fin, heure_fin, status_intervention, commentaire)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    VALUES($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING id_ordre, id_technicien, date_debut, heure_debut, date_fin, heure_fin, status_intervention, commentaire`;
 
         db.query(sql, [id_ordre, id_technicien, formattedDateDebut, formattedHeureDebut, formattedDateFin, formattedHeureFin, status_intervention, commentaire], (err, result) => {
@@ -255,9 +390,9 @@ exports.update = async (req, res) => {
         const formattedHeureFin = moment(heure_fin, 'HH:mm').format("HH:mm");
 
 
-        const sql = `UPDATE acc.intervention SET id_ordre=$1, id_technicien=$2, date_debut=$3, heure_debut=$4, date_fin=$5, heure_fin=$6, status_intervention=$7, commentaire=$8
-        WHERE id_intervention= $9
-        RETURNING *`;
+        const sql = `UPDATE acc.intervention SET id_ordre = $1, id_technicien = $2, date_debut = $3, heure_debut = $4, date_fin = $5, heure_fin = $6, status_intervention = $7, commentaire = $8
+        WHERE id_intervention = $9
+    RETURNING * `;
 
         db.query(sql, [id_ordre, id_technicien, formattedDateDebut, formattedHeureDebut, formattedDateFin, formattedHeureFin, status_intervention, commentaire, id_intervention], (err, result) => {
             if (err) return res.status(500).json({ error: err.message });

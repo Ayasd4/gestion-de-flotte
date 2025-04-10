@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AuthService } from '../services/auth.service';
 import { NgxUiLoaderModule, NgxUiLoaderService } from 'ngx-ui-loader';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-change-password',
@@ -12,6 +13,8 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     NgxUiLoaderModule,
+    MatSnackBarModule
+
   ],
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css']
@@ -25,7 +28,8 @@ export class ChangePasswordComponent {
 
   constructor(private fb: FormBuilder,
     private authService: AuthService,
-    private ngxService: NgxUiLoaderService
+    private ngxService: NgxUiLoaderService,
+    private snackbar: MatSnackBar
   ) {
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', [Validators.required, Validators.minLength(6)]], //, Validators.oldPassword
@@ -55,6 +59,7 @@ export class ChangePasswordComponent {
       if (newPassword !== confirmPassword) {
         this.ngxService.stop();
         this.errorMessage = 'New passwords do not match';
+        this.snackbar.open('New passwords do not match', 'close', {duration: 6000})
         this.message = '';
         return;
       }
@@ -63,7 +68,7 @@ export class ChangePasswordComponent {
       this.authService.changePassword(oldPassword, newPassword).subscribe((response: any) => {
         this.ngxService.stop();
 
-        
+
         this.message = response.message;
         this.errorMessage = '';
 

@@ -1,6 +1,6 @@
 /* Style de la toolbar */
 .toolbar {
-  background: #202020; /*02534d Même couleur que le header */
+  background: white; /*202020*/ /*02534d Même couleur que le header */
   height: 3rem; /* Hauteur ajustée pour être plus moderne */
   width: 100vw;
   position: fixed;
@@ -40,14 +40,14 @@ button[mat-menu-button]:hover {
 /* Icône du profil */
 .mat-icon {
   font-size: 24px; /* Taille de l'icône */
-  color: white; /* Couleur de l'icône */
+  color: 202020; /* Couleur de l'icône */
 }
 
 /* Espacement du texte (nom d'utilisateur) */
 button[mat-menu-button] span {
   margin-left: 8px; /* Un petit espacement entre l'icône et le texte */
   font-size: 14px; /* Taille du texte */
-  color: white; /* Assure que le texte est lisible */
+  color: black; /* Assure que le texte est lisible */
   font-weight: 500; /* Donne un poids de police moyen pour une meilleure lisibilité */
 }
 

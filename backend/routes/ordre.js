@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const ordreController = require("../controllers/ordre");
 
+router.get('/generatePdf/:id_ordre', async (req, res)=>{
+    await ordreController.generatePdf(req, res);
+})
+
 router.get('/', async (req, res) => {
     if (Object.keys(req.query).length > 0) {
         await ordreController.search(req, res);
