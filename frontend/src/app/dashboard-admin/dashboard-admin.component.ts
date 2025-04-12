@@ -1,137 +1,161 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { CreateUserDialogComponent } from './create-user-dialog/create-user-dialog.component';
 
 @Component({
   selector: 'app-dashboard-admin',
   templateUrl: './dashboard-admin.component.html',
   styleUrls: ['./dashboard-admin.component.css'],
   standalone: true,
-  imports: [FormsModule,CommonModule]
+  imports: [
+    FormsModule,
+    CommonModule,
+    MatButtonModule,
+    MatDialogModule,
+    CreateUserDialogComponent,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule
+  ]
 })
-export class DashboardAdminComponent implements OnInit{
+export class DashboardAdminComponent implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['name', 'email', 'telephone', 'role', 'actions'];
+  dataSource = new MatTableDataSource<any>();
+  filisble: boolean = false;
 
-  users: any[] = [];
-  isFormVisible = false;
-  isEditing = false;
-  
-  userForm: any = {
-    nom: '',
-    prenom: '',
-    telephone:'',
-    email: '',
-    password: '',
-    roles: ''
-  };
+  @ViewChild(MatSort) sort: any;
+  @ViewChild(MatPaginator) paginator: any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.fetchUsers();
+    const currentUser = localStorage.getItem('currentUser');
+
+    // If the currentUser is found and it's a valid JSON, parse it
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
+      const currentUserRole = user?.roles;
+
+      // Check if the role is admin
+      if (currentUserRole === 'admin') {
+        // Set 'filisble' to true
+        this.filisble = true;
+        this.fetchUsers();
+      } else {
+        this.router.navigate(['/login']);
+      }
+    }
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   fetchUsers() {
-    const token = localStorage.getItem('token'); // Récupérer le token
-  
-    if (!token) {
-      console.error("Token non trouvé !");
-      return;
-    }
-  
-    const headers = { Authorization: `Bearer ${token}` }; // Ajouter l'en-tête d'authentification
-  
-    this.http.get<any[]>('http://localhost:3100/utilisateur', { headers })
-      .subscribe(
-        (data) => {
-          console.log("Users fetched:", data);
-          this.users = data;
-        },
-        (error) => {
-          console.error("Error fetching users:", error);
-        }
-      );
-  }
-  
+    const token = localStorage.getItem('token');
 
-  /*fetchUsers() {
-    this.http.get<any[]>('http://localhost:3100/utilisateur').subscribe((data) => {
-      this.users = data;
+    if (!token) {
+      console.error("token no trouvé!");
+
+    }
+
+    const headers = { Authorization: `Bearer ${token}` };
+
+    this.http.get<any[]>('http://localhost:3100/utilisateur', { headers }).subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+      },
+      error: (error) => {
+        console.error('Error loading user data:', error);
+      }
     });
-  }*/
+  }
+
+  searchUsers(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   openCreateUserForm() {
-    
-    this.isFormVisible = true;
-    this.isEditing = false;
-    this.userForm = { nom: '', prenom: '', email: '', password: '', roles: '' };
+    const dialogRef = this.dialog.open(CreateUserDialogComponent, {
+      width: '600px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.http.post('http://localhost:3100/utilisateur', result)
+          .subscribe(() => {
+            this.fetchUsers();
+          });
+      }
+    });
   }
 
   openEditUserForm(user: any) {
-    this.isFormVisible = true;
-    this.isEditing = true;
-    this.userForm = { ...user };
-  }
+    const dialogRef = this.dialog.open(CreateUserDialogComponent, {
+      width: '600px',
+      disableClose: true,
+      data: { ...user, isEditing: true }
+    });
 
-  onSubmit() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error("Token non trouvé !");
-      return;
-    }
-    
-    const headers = { Authorization: `Bearer ${token}` };
-  
-    if (this.isEditing) {
-      this.http.put(`http://localhost:3100/utilisateur/${this.userForm.id}`, this.userForm, { headers })
-        .subscribe(() => {
-          this.fetchUsers();
-          this.isFormVisible = false;
-        });
-    } else {
-      this.http.post('http://localhost:3100/utilisateur', this.userForm, { headers })
-        .subscribe(() => {
-          this.fetchUsers();
-          this.isFormVisible = false;
-        });
-    }
-  }
-  
-  /*onSubmit() {
-    if (!this.userForm.nom || !this.userForm.prenom || !this.userForm.email || !this.userForm.password || !this.userForm.roles) {
-      alert("Tous les champs sont obligatoires !");
-      return;
-    }
-  
-    if (this.isEditing) {
-      this.http.put(`http://localhost:3100/utilisateur/${this.userForm.id}`, this.userForm)
-        .subscribe(() => {
-          this.fetchUsers();
-          this.isFormVisible = false;
-        });
-    } else {
-      this.http.post('http://localhost:3100/utilisateur', this.userForm)
-        .subscribe(() => {
-          this.fetchUsers();
-          this.isFormVisible = false;
-        });
-    }
-  }*/
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const token = localStorage.getItem('token');
 
-    deleteUser(id: number) {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error("Token non trouvé !");
-        return;
+        if (!token) {
+          console.error("token no trouvé!");
+
+        }
+
+        const headers = { Authorization: `Bearer ${token}` };
+
+        this.http.put(`http://localhost:3100/utilisateur/${user.id}`, result, { headers })
+          .subscribe(() => {
+            this.fetchUsers();
+          });
       }
-      
+    });
+  }
+
+  deleteUser(id: number) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        console.error("token no trouvé!");
+
+      }
+
       const headers = { Authorization: `Bearer ${token}` };
-    
-      this.http.delete(`http://localhost:3100/utilisateur/${id}`, { headers })
-        .subscribe(() => {
-          this.fetchUsers();
+
+      this.http.delete(`http://localhost:3100/utilisateur/${id}`, {headers})
+        .subscribe({
+          next: () => {
+            this.fetchUsers();
+          },
+          error: (error) => {
+            console.error('Error deleting user:', error);
+          }
         });
     }
-    
+  }
 }

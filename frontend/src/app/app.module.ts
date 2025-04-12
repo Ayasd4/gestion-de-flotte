@@ -44,6 +44,13 @@ import { OrdersComponent } from './intervention/orders/orders.component';
 import { UpdateOrdersComponent } from './intervention/update-orders/update-orders.component';
 import { FileUploaderComponent } from './chauffeur/file-uploader/file-uploader.component';
 import { ChauffeurModule } from './chauffeur/chauffeur.module';
+import { CreateUserDialogComponent } from './dashboard-admin/create-user-dialog/create-user-dialog.component';
+import { ConsomationComponent } from './consomation/consomation/consomation.component';
+import { AddConsomationComponent } from './consomation/add-consomation/add-consomation.component';
+import { ConsomationModule } from './consomation/consomation.module';
+import { KilometrageComponent } from './kilometrage/kilometrage/kilometrage.component';
+import { AddKilometrageComponent } from './kilometrage/add-kilometrage/add-kilometrage.component';
+import { KilometrageModule } from './kilometrage/kilometrage.module';
 
 @NgModule({
   declarations: [
@@ -67,7 +74,12 @@ import { ChauffeurModule } from './chauffeur/chauffeur.module';
     AddInterventionComponent,
     OrdersComponent,
     UpdateOrdersComponent,
-    FileUploaderComponent
+    FileUploaderComponent,
+    CreateUserDialogComponent,
+    ConsomationComponent,
+    AddConsomationComponent,
+    KilometrageComponent,
+    AddKilometrageComponent
     
   ],
   imports: [
@@ -95,7 +107,10 @@ import { ChauffeurModule } from './chauffeur/chauffeur.module';
     MatTooltipModule,
     MatListModule,
     MatCardModule,
-    ChauffeurModule
+    ChauffeurModule,
+    ConsomationModule,
+    KilometrageModule
+
     //MatTimepickerModule,
 
   ],

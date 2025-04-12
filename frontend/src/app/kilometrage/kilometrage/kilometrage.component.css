@@ -1,0 +1,56 @@
+.card {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    overflow: hidden;
+  }
+  
+  .card-head {
+    background-color: #3f51b5;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .card-head button {
+    margin-left: auto;
+  }
+  
+  .card-body {
+    padding: 16px;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-elevation-z8 {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  }
+  
+  .mat-header-cell {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  
+  .mat-cell {
+    padding: 8px 16px;
+  }
+  
+  button.mat-flat-button {
+    margin: 0 4px;
+  }
+  
+  mat-paginator {
+    margin-top: 16px;
+  }
+  
+  .btn-primary {
+    background-color: #3f51b5;
+    color: white;
+  }

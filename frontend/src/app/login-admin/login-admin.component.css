@@ -1,106 +1,105 @@
 /* Conteneur principal */
 .login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 25px;
-    background: linear-gradient(135deg, #ffffff, #f0f0f0);
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 25px;
+  background: linear-gradient(135deg, #ffffff, #f0f0f0);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.login-container:hover {
+  transform: scale(1.02);
+}
+
+/* Titre */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Groupe du formulaire */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Labels */
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+/* Inputs */
+input.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Placeholder stylé */
+input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Bouton */
+button.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: bold;
+}
+
+button.btn:hover {
+  background: linear-gradient(135deg, #0056b3, #004494);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 91, 187, 0.3);
+}
+
+/* Messages d'erreur */
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-container {
+      max-width: 90%;
+      padding: 20px;
   }
-  
-  .login-container:hover {
-    transform: scale(1.02);
-  }
-  
-  /* Titre */
+
   h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 22px;
-    color: #333;
-    font-weight: 600;
+      font-size: 20px;
   }
-  
-  /* Groupe du formulaire */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  /* Labels */
-  label {
-    display: block;
-    font-weight: bold;
-    font-size: 14px;
-    color: #444;
-    margin-bottom: 5px;
-  }
-  
-  /* Inputs */
-  input.form-control {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    transition: all 0.3s ease;
-    outline: none;
-  }
-  
-  input.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-  }
-  
-  /* Placeholder stylé */
-  input::placeholder {
-    color: #aaa;
-    font-style: italic;
-  }
-  
-  /* Bouton */
+
   button.btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    font-weight: bold;
+      font-size: 14px;
+      padding: 10px;
   }
-  
-  button.btn:hover {
-    background: linear-gradient(135deg, #0056b3, #004494);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 91, 187, 0.3);
-  }
-  
-  /* Messages d'erreur */
-  .error-message {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  /* Responsive */
-  @media (max-width: 480px) {
-    .login-container {
-        max-width: 90%;
-        padding: 20px;
-    }
-  
-    h2 {
-        font-size: 20px;
-    }
-  
-    button.btn {
-        font-size: 14px;
-        padding: 10px;
-    }
-  }
-  
+}

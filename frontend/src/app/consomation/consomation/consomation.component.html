@@ -1,0 +1,182 @@
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <h2>Fuel Consumption Management</h2>
+      </div>
+      <div class="col-md-6 text-end">
+      
+        <button class="btn btn-primary" (click)="openDialog()">
+          <i class="bi bi-plus-circle me-2"></i>Add New Record
+        </button>
+      </div>
+    </div>
+  
+    <!-- Search Form -->
+    <div class="card mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Search Filters</h5>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="searchConsomation()" #searchForm="ngForm">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="numPark">Park Number</label>
+                <input type="number" class="form-control" id="numPark" name="numPark" [(ngModel)]="searchParams.numPark">
+              </div>
+            </div>
+            <!--<div class="col-md-3">
+              <div class="form-group">
+                <label for="idVehicule">Vehicle</label>
+                <select class="form-control" id="idVehicule" name="idVehicule" [(ngModel)]="searchParams.idVehicule">
+                  <option [ngValue]="">All Vehicles</option>
+                  <option *ngFor="let vehicule of vehicules" [ngValue]="vehicule.idvehicule">{{vehicule.immatricule}}</option>
+                </select>
+              </div>
+            </div>-->
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="idChaff">Driver</label>
+                <select class="form-control" id="idChaff" name="idChaff" [(ngModel)]="searchParams.idChaff">
+                  <option [ngValue]="">All Drivers</option>
+                  <option *ngFor="let chauffeur of chauffeurs" [ngValue]="chauffeur.id_chauf">{{chauffeur.nom}} {{chauffeur.prenom}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="idAgence">Agency</label>
+                <select class="form-control" id="idAgence" name="idAgence" [(ngModel)]="searchParams.idAgence">
+                  <option [ngValue]="">All Agencies</option>
+                  <option *ngFor="let agence of agences" [ngValue]="agence.id_agence">{{agence.nom}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="searchParams.startDate">
+              </div>
+            </div>
+            <!--<div class="col-md-3">
+              <div class="form-group">
+                <label for="endDate">End Date</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="searchParams.endDate">
+              </div>
+            </div>-->
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="form-group d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-search me-2"></i>Search
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="resetSearch()">
+                  <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Quick Filter and Agency Filter -->
+  
+  
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource" matSort class="table table-striped table-hover">
+            
+            <!-- ID Column -->
+            <ng-container matColumnDef="idConsomation">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+              <td mat-cell *matCellDef="let element">{{element.idConsomation}}</td>
+            </ng-container>
+  
+            <!-- Park Number Column -->
+            <ng-container matColumnDef="numPark">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Park Number</th>
+              <td mat-cell *matCellDef="let element">{{element.numPark}}</td>
+            </ng-container>
+  
+            <!-- Fuel Quantity Column -->
+            <ng-container matColumnDef="QteCarb">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuel Quantity</th>
+              <td mat-cell *matCellDef="let element">{{element.QteCarb}}</td>
+            </ng-container>
+  
+            <!-- Kilometer Index Column -->
+            <ng-container matColumnDef="indexkilo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Kilometer Index</th>
+              <td mat-cell *matCellDef="let element">{{element.indexkilo}}</td>
+            </ng-container>
+  
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="dateDebut">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
+              <td mat-cell *matCellDef="let element">{{element.dateDebut | date:'mediumDate'}}</td>
+            </ng-container>
+  
+            <!-- End Date Column -->
+            <ng-container matColumnDef="ImmatChauffeur">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver Mat</th>
+              <td mat-cell *matCellDef="let element">{{element.chauffeur_matricule}}  </td>
+            </ng-container>
+  
+            <!-- Driver Column -->
+            <ng-container matColumnDef="chauffeur">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Driver</th>
+              <td mat-cell *matCellDef="let element">{{element.chauffeur_nom}} {{element.chauffeur_prenom}}  </td>
+            </ng-container>
+  
+            <!-- Vehicle Column -->
+            
+  
+            <!-- Agency Column -->
+            <ng-container matColumnDef="agence">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Agency</th>
+              <td mat-cell *matCellDef="let element">{{element.agence_nom}}</td>
+            </ng-container>
+  
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let element">
+                <button class="btn-primary" color="primary" (click)="editConsomation(element)">
+                    <mat-icon>edit</mat-icon>
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteConsomation(element.idConsomation)">
+                    <mat-icon>delete</mat-icon>
+
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </ng-container>
+  
+            <!-- Fuel Efficiency Column -->
+            <ng-container matColumnDef="calcul">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Fuel Consumption (L/100km)</th>
+              <td mat-cell *matCellDef="let element">{{(element.QteCarb / element.indexkilo) * 100 | number:'1.2-2'}}</td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center" colspan="10">No data matching the filter</td>
+            </tr>
+          </table>
+  
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn-export" (click)="exportToPDF()">
+            <i class="bi bi-file-earmark-pdf me-2"></i>Export to PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

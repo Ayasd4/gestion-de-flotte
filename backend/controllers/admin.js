@@ -3,7 +3,7 @@ const db = require("../db/db");
 
 exports.create = async (req, res) => {
     const { nom, prenom, email, password, roles } = req.body;
-    const sql = "INSERT INTO acc.admin (nom, prenom, email, password, roles) VALUES ($1, $2, $3, $4) RETURNING *";
+    const sql = "INSERT INTO acc.admin (nom, prenom, email, password, roles) VALUES ($1, $2, $3, $4, $5) RETURNING *";
     
     try {
         const result = await db.query(sql, [nom, prenom, email, password, roles]);
@@ -46,7 +46,7 @@ exports.update = async (req, res) => {
     const { nom, prenom, email, password, roles } = req.body;
     const sql = "UPDATE acc.admin SET nom = $1, prenom = $2, email = $3, password = $4, roles=$5 WHERE id = $6 RETURNING *";
     try {
-        const result = await db.query(sql, [nom, prenom, email, password, roles, id]);
+        const result = await db.query(sql, [nom, prenom, email, password,roles, id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "Admin not found" });
         }

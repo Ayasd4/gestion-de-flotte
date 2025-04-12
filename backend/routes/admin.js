@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
     await adminController.create(req, res);
 });
 
-// Route pour lister tous les administrateurs
+// Route pours lister tous les administrateurs
 router.get('/', async (req, res) => {
     await adminController.list(req, res);
 });

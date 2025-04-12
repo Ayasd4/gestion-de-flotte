@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Edit' : 'Add' }} User</h2>
+
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>First Name</mat-label>
+      <input matInput [(ngModel)]="userForm.nom" name="nom" required>
+      <mat-error>First name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Last Name</mat-label>
+      <input matInput [(ngModel)]="userForm.prenom" name="prenom" required>
+      <mat-error>Last name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Telephone</mat-label>
+      <input matInput type="number" [(ngModel)]="userForm.telephone" name="telephone" required>
+      <mat-error>Telephone is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" [(ngModel)]="userForm.email" name="email" required>
+      <mat-error>Email is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [(ngModel)]="userForm.password" name="password" [required]="!isEditing">
+      <mat-error>Password is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Role</mat-label>
+      <mat-select [(ngModel)]="userForm.roles" name="roles" required>
+        <mat-option value="Admin">Admin</mat-option>
+        <mat-option value="Chef de direction technique">Chef de direction technique</mat-option>
+        <mat-option value="Chef service maintenance">Chef service maintenance</mat-option>
+        <mat-option value="Responsable maintenance">Responsable maintenance</mat-option>
+        <mat-option value="Chef d'agence">Chef d'agence</mat-option>
+        <mat-option value="Chef service maîtrise de l'énergie">Chef service maîtrise de l'énergie</mat-option>
+        <mat-option value="Agent de saisie maîtrise de l'énergie">Agent de saisie maîtrise de l'énergie</mat-option>
+      </mat-select>
+      <mat-error>Role is required</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="userForm.invalid">
+    {{ isEditing ? 'Update' : 'Save' }}
+  </button>
+</div>
+  

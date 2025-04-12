@@ -1,55 +1,53 @@
-<div class="container">
-    <h1>Admin Dashboard</h1>
-  
-    <button (click)="openCreateUserForm()">Create User</button>
-  
-    <div *ngIf="users && users.length">
-      <h2>User List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Telephone</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td>{{ user.nom }} {{ user.prenom }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.telephone}}</td>
-            <td>{{ user.roles }}</td>
-            <td>
-              <button (click)="openEditUserForm(user)">Edit</button>
-              <button (click)="deleteUser(user.id)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Create/Edit User Form -->
-    <div *ngIf="isFormVisible">
-      <h2>{{ isEditing ? 'Edit' : 'Create' }} User</h2>
-      <form (ngSubmit)="onSubmit()">
-        <input type="text" [(ngModel)]="userForm.nom" name="nom" placeholder="First Name" required />
-        <input type="text" [(ngModel)]="userForm.prenom" name="prenom" placeholder="Last Name" required />
-        <input type="number" [(ngModel)]="userForm.telephone" name="telephone" placeholder="telephone" required />
-        <input type="email" [(ngModel)]="userForm.email" name="email" placeholder="Email" required />
-        <input type="password" [(ngModel)]="userForm.password" name="password" placeholder="Password" required />
-        <select [(ngModel)]="userForm.roles" name="roles" required>
-          <option value="Admin">Admin</option>
-          <option value="Chef de direction technique">Chef de direction technique</option>
-          <option value="Chef service maintenance">Chef service maintenance</option>
-          <option value="Responsable maintenance">Responsable maintenance</option>
-          <option value="Chef d’agence">Chef d’agence</option>
-          <option value="Chef service maîtrise de l’énergie">Chef service maîtrise de l’énergie</option>
-          <option value="Agent de saisie maîtrise de l’énergie">Agent de saisie maîtrise de l’énergie</option>
-        </select>
-        <button type="submit">{{ isEditing ? 'Update' : 'Create' }} User</button>
-      </form>
-    </div>
+<mat-form-field style="width: 180px;margin-left: 15px;">
+  <input (input)="searchUsers(filter.value)" matInput placeholder="search users" type="text" style="width: 190px;" #filter>
+  <mat-icon fontIcon="search" matSuffix></mat-icon>
+</mat-form-field>
+
+<div class="card">
+  <div class="card-head">Liste Utilisateurs
+    <button style="margin-left: 800px;" (click)="openCreateUserForm()" mat-flat-button>Add User</button>
   </div>
   
+  <div class="card-body">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+        <td mat-cell *matCellDef="let user">{{user.nom}} {{user.prenom}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let user">{{user.email}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="telephone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Téléphone</th>
+        <td mat-cell *matCellDef="let user">{{user.telephone}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Rôle</th>
+        <td mat-cell *matCellDef="let user">{{user.roles}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let user">
+          <button style="height: 27px;margin-left: 20px;" mat-flat-button (click)="openEditUserForm(user)" color="primary">edit</button>
+          <button style="height: 27px;margin-right: 20px;" mat-flat-button (click)="deleteUser(user.id)" color="warn">delete</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="5">No data matching the filter "{{filter.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  </div>
+</div>

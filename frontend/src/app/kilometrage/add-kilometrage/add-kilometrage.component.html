@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'Add' }} Kilometrage</h2>
+
+<div mat-dialog-content>
+  <form #kilometrageForm="ngForm">
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Vehicle</mat-label>
+      <mat-select [(ngModel)]="kilometrage.vehiculeId" name="vehiculeId" required>
+        <mat-option *ngFor="let vehicle of vehicles" [value]="vehicle.idvehicule">
+          {{ vehicle.numparc }} - {{ vehicle.immatricule }}
+        </mat-option>
+      </mat-select>
+      <mat-error>Vehicle is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="kilometrage.date" name="date" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error>Date is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Driver</mat-label>
+      <mat-select [(ngModel)]="kilometrage.driverId" name="driverId" required>
+        <mat-option *ngFor="let driver of drivers" [value]="driver.id_chauf">
+          {{ driver.nom }} {{ driver.prenom }} ({{ driver.matricule_chauf }})
+        </mat-option>
+      </mat-select>
+      <mat-error>Driver is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
+      <mat-label>Kilometrage</mat-label>
+      <input matInput type="number" [(ngModel)]="kilometrage.calcul" name="calcul" required min="0">
+      <span matSuffix>km</span>
+      <mat-error>Valid kilometrage value is required</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="kilometrageForm.invalid">
+    {{ isEdit ? 'Update' : 'Save' }}
+  </button>
+</div>

@@ -70,9 +70,9 @@ export const navbarData= [
     },
 
     {
-        routeLink: 'consommation',
+        routeLink: 'consomation',
         icon: 'fal fa-gas-pump', //fal fa-oil-can //fal fa-tags
-        label: 'consommation'
+        label: 'consomation'
     },
  
     {

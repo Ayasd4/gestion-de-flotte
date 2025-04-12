@@ -73,15 +73,15 @@ export class HeaderComponent implements OnInit {
     this.screenwidth = window.innerWidth;
 
     // Écoute les changements de l'utilisateur pour mettre à jour le header dynamiquement
-   /* this.authService.user$.subscribe(user => {
-      if (user && user.roles) {
-        this.role = user.roles;
-        this.navData = this.getUserNavData();
-      } else {
-        this.role = null;
-        this.navData = [];
-      }
-    });*/
+    /* this.authService.user$.subscribe(user => {
+       if (user && user.roles) {
+         this.role = user.roles;
+         this.navData = this.getUserNavData();
+       } else {
+         this.role = null;
+         this.navData = [];
+       }
+     });*/
 
     const user = this.authService.getUser();
     console.log('Utilisateur retourné par getUser():', user);
@@ -109,27 +109,31 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
         { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
-        { routeLink: 'atelier', icon: 'fal fa-hard-hat', label: 'atelier'},
-        { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien'},
+        { routeLink: 'atelier', icon: 'fal fa-hard-hat', label: 'atelier' },
+        { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien' },
         { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
-        { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic'},
-        { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
-        { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention'},
+        { routeLink: 'diagnostic', icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' },
+        { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail' },
+        { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention' },
         //{ routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'orders'},
         { routeLink: 'demande', icon: ' fal fa-file-alt', label: 'demande d’avarie' },
-        { routeLink: 'consommation', icon: 'fal fa-gas-pump', label: 'Consommation' },
+        {
+          routeLink: 'consomation',
+          icon: 'fal fa-gas-pump', //fal fa-oil-can //fal fa-tags
+          label: 'consomation'
+        },
         { routeLink: 'kilometrage', icon: 'fal fa-tachometer-alt', label: 'Kilométrage' }
       ];
     }
 
     if (this.role.includes('chef de direction technique')) {
-      
+
       return [
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
         { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
-        {routeLink: 'atelier', icon: 'fal fa-hard-hat', label: 'atelier'},
-        { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien'},
+        { routeLink: 'atelier', icon: 'fal fa-hard-hat', label: 'atelier' },
+        { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien' },
 
       ];
     }
@@ -137,15 +141,15 @@ export class HeaderComponent implements OnInit {
     if (this.role.includes('chef service maintenance')) {
       return [
         { routeLink: 'maintenance', icon: 'fal fa-tools', label: 'Maintenance' },
-        { routeLink: 'diagnostic',  icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' },
-        { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail'},
+        { routeLink: 'diagnostic', icon: 'fal fa-clipboard-list-check ', label: 'diagnostic' },
+        { routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'ordre de travail' },
       ];
     }
 
     if (this.role.includes('Responsable maintenance')) {
       return [
-        { routeLink: 'ordres', icon: 'fal fa-clipboard-list', label: 'orders'},
-        { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention'},
+        { routeLink: 'ordres', icon: 'fal fa-clipboard-list', label: 'orders' },
+        { routeLink: 'intervention', icon: 'fal fa-hammer', label: 'intervention' },
       ];
     }
 
@@ -153,6 +157,22 @@ export class HeaderComponent implements OnInit {
       return [{ routeLink: 'demande', icon: 'fal fa-file-alt', label: 'demandes d’avarie' }];
     }
 
+    if (this.role.includes('Agent de saisie maîtrise de l\'énergie')) {
+      return [
+        {
+          routeLink: 'consomation',
+          icon: 'fal fa-gas-pump', //fal fa-oil-can //fal fa-tags
+          label: 'consomation'
+          
+        },
+        
+    {
+      routeLink: 'kilometrage',
+      icon: 'fal fa-tachometer-alt', //fal fa-road//fal fa-cog:parametre
+      label: 'kilometrage'
+  }
+      ]
+    }
 
     return [];
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -102,9 +102,9 @@ export class LoginComponent {
           } else if (userRole === 'chef d’agence') {
             this.router.navigate(['/demande']);
 
-          } else if (userRole === 'agent de saisie maîtrise de l\'énergie') {
+          } else if (userRole === 'Agent de saisie maîtrise de l\'énergie') {
+            this.router.navigate(['/consomation']);
             this.router.navigate(['/kilometrage']);
-
           } else {
             this.router.navigate(['/login']); // Rôle non reconnu
           }

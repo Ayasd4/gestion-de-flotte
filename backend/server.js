@@ -32,6 +32,9 @@ const infosIntervRouter = require('./routes/getInfoIntervention');
 const getordreRouter = require("./routes/getOrdreById");
 const uploadsRouter = require('./routes/uploads');
 const generateRouter = require('./routes/generateAllDemande');
+const agenceRouter = require('./routes/agence');
+const consomationCarbRouter = require('./routes/consomationCarb');
+const kilometrageRouter = require('./routes/kilometrage');
 
 // Créer le serveur Node.js
 app.use(bodyParser.json());
@@ -69,6 +72,9 @@ app.use('/getOrdreById', getordreRouter);
 app.use('/list-uploads', uploadsRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/genrateAllDemandes', generateRouter);
+app.use('/agence',agenceRouter);
+app.use('/consomation', consomationCarbRouter);
+app.use('/kilometrage', kilometrageRouter);
 
 app.listen(port, (err) => {
     if (err) throw err;

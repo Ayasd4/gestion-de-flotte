@@ -1,0 +1,79 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>{{dialogTitle}}</h2>
+    <form (ngSubmit)="onSubmit()" #consomationForm="ngForm">
+      <div mat-dialog-content>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="numPark">Park Number</label>
+              <select class="form-control" id="numPark" name="numPark" [(ngModel)]="consomation.numPark" required>
+                <option *ngFor="let vehicule of vehicules" [ngValue]="vehicule.numparc">{{vehicule.numparc}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="QteCarb">Fuel Quantity</label>
+              <input type="number" class="form-control" id="QteCarb" name="QteCarb" [(ngModel)]="consomation.QteCarb" required>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="indexkilo">Kilometer Index</label>
+              <input type="number" class="form-control" id="indexkilo" name="indexkilo" [(ngModel)]="consomation.indexkilo" required>
+            </div>
+          </div>
+          <!--<div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="idVehicule">Vehicle</label>
+              <select class="form-control" id="idVehicule" name="idVehicule" [(ngModel)]="consomation.idVehicule" required>
+                <option *ngFor="let vehicule of vehicules" [ngValue]="vehicule.idvehicule">{{vehicule.immatricule}}</option>
+              </select>
+            </div>
+          </div>-->
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="dateDebut">Start Date</label>
+              <input type="date" class="form-control" id="dateDebut" name="dateDebut" [(ngModel)]="consomation.dateDebut" required>
+            </div>
+          </div>
+          <!--<div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="dateFin">End Date</label>
+              <input type="date" class="form-control" id="dateFin" name="dateFin" [(ngModel)]="consomation.dateFin" required>
+            </div>
+          </div>-->
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-group">
+              <label for="idChaff">Driver</label>
+              <select class="form-control" id="idChaff" name="idChaff" [(ngModel)]="consomation.idChaff" required>
+                <option *ngFor="let chauffeur of chauffeurs" [ngValue]="chauffeur.id_chauf">{{chauffeur.matricule_chauf}} - {{chauffeur.nom}} {{chauffeur.prenom}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+          le  <div class="form-group">
+              <label for="idAgence">Agency</label>
+              <select class="form-control" id="idAgence" name="idAgence" [(ngModel)]="consomation.idAgence" required>
+                <option *ngFor="let agence of agences" [ngValue]="agence.id_agence">{{agence.nom}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div mat-dialog-actions class="d-flex justify-content-end gap-2 mt-3">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!consomationForm.form.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
+      </div>
+    </form>
+  </div>
