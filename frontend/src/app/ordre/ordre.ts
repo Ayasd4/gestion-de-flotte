@@ -1,6 +1,7 @@
 import { Atelier } from "../atelier/atelier";
 import { Diagnostic } from "../maintenance/diagnostic/diagnostic";
 import { Technicien } from "../technicien/technicien";
+import { Travaux } from "./travaux";
 
 export interface Ordre {
     id_ordre: number,
@@ -19,8 +20,7 @@ export interface Ordre {
         heure_diagnostic: string
     },
     urgence_panne: string,
-    travaux: string,
-    material_requis: string,
+    travaux: Travaux,
     planning: string,
     date_ordre: string,
     status: string,

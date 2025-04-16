@@ -18,8 +18,7 @@ exports.generatePdf = async (req, res) => {
     diag.date_diagnostic,
     diag.heure_diagnostic,
     o.urgence_panne,
-    o.travaux,
-    o.material_requis,
+    t.nom_travail,
     o.planning,
     o.date_ordre,
     o.status,
@@ -37,6 +36,7 @@ exports.generatePdf = async (req, res) => {
     v.numparc
     FROM acc.ordre_travail AS o
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
     JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
     JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
     JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
@@ -70,7 +70,7 @@ exports.generatePdf = async (req, res) => {
                 doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', 400, 30, { align: 'left' });
                 doc.fontSize(11).font('Helvetica').text('Division Technique', 400, 50, { align: 'left' });
                 doc.font('Helvetica').text('Service Maintenance', 400, 65, { align: 'left' });
-                
+
                 /*doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', { align: 'right' });
                 //doc.moveDown()
                 doc.font('Helvetica').text('Division Technique', { align: 'right' });
@@ -80,7 +80,7 @@ exports.generatePdf = async (req, res) => {
             doc.x = 50;
 
             doc.moveTo(50, 100).lineTo(550, 100).stroke();
-            doc.moveDown(3); 
+            doc.moveDown(3);
             //doc.y = 120;
             doc.fontSize(25)
                 .font('Helvetica')
@@ -94,7 +94,7 @@ exports.generatePdf = async (req, res) => {
             doc.moveDown(1);
 
             //diagnostic
-            doc.fontSize(15).font('Helvetica-Bold').text('Diagnostic et controle:',50, doc.y, { underline: true });
+            doc.fontSize(15).font('Helvetica-Bold').text('Diagnostic et controle:', 50, doc.y, { underline: true });
             doc.font('Helvetica').text(`Description de panne: ${ordre.description_panne}`)
             doc.font('Helvetica').text(`causes: ${ordre.causes_panne}`);
             doc.font('Helvetica').text(`Actions: ${ordre.actions}`);
@@ -123,12 +123,11 @@ exports.generatePdf = async (req, res) => {
             doc.fontSize(14).font('Helvetica').text('----------------------------------------------------------------------------------------------------');
 
             doc.moveDown(1);
-            
+
             // Informations de la demande
             doc.fontSize(14).font('Helvetica');
             doc.font('Helvetica-Bold').text(`Information sur L'ordre de travail ${ordre.id_ordre}`);
-            doc.font('Helvetica').text(`Travaux Effectué: ${ordre.travaux}`);
-            doc.font('Helvetica').text(`Materiel Requis: ${ordre.material_requis}`);
+            doc.font('Helvetica').text(`Travail à faire: ${ordre.nom_travail}`);
             doc.font('Helvetica').text(`Plannification de L'intervention: ${ordre.planning}`);
             doc.font('Helvetica').text(`Date de création: ${ordre.date_ordre?.toLocaleDateString?.() || ordre.date_ordre}`);
 
@@ -147,7 +146,7 @@ exports.generatePdf = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-} 
+}
 
 exports.search = async (req, res) => {
     try {
@@ -201,18 +200,6 @@ exports.search = async (req, res) => {
             paramIndex++;
         }
 
-        if (req.query.travaux) {
-            conditions.push(`o.travaux ILIKE $${paramIndex}`);
-            values.push(`%${req.query.travaux}%`);
-            paramIndex++;
-        }
-
-        if (req.query.material_requis) {
-            conditions.push(`o.material_requis ILIKE $${paramIndex}`);
-            values.push(`%${req.query.material_requis}%`);
-            paramIndex++;
-        }
-
         if (req.query.planning) {
             conditions.push(`o.planning ILIKE $${paramIndex}`);
             values.push(`%${req.query.planning}%`);
@@ -235,8 +222,6 @@ exports.search = async (req, res) => {
     diag.id_diagnostic,
     diag.date_diagnostic,
     o.urgence_panne,
-    o.travaux,
-    o.material_requis,
     o.planning,
     o.date_ordre,
     o.status,
@@ -274,8 +259,7 @@ exports.list = async (req, res) => {
     diag.date_diagnostic,
     diag.heure_diagnostic,
     o.urgence_panne,
-    o.travaux,
-    o.material_requis,
+    t.nom_travail,
     o.planning,
     o.date_ordre,
     o.status,
@@ -287,11 +271,13 @@ exports.list = async (req, res) => {
     tech.nom,
     tech.prenom,
     tech.matricule_techn,
+    tech.telephone_techn,
     tech.email_techn,
     tech.specialite,
     v.numparc
     FROM acc.ordre_travail AS o
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
     JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
     JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
     JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
@@ -324,20 +310,22 @@ exports.show = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const { diagnostic, urgence_panne, travaux, material_requis, planning, date_ordre, status, atelier, technicien } = req.body;
+        const { diagnostic, urgence_panne, travaux, planning, date_ordre, atelier, technicien } = req.body;
 
         // Vérification que les données sont présentes
-        if (!diagnostic || !atelier || !technicien) {
-            return res.status(400).json({ error: "Missing diagnostic or workshop or technician" });
+        if (!diagnostic || !atelier || !technicien || !travaux) {
+            return res.status(400).json({ error: "Missing diagnostic or workshop or technician or works" });
         }
 
         const { description_panne } = diagnostic;
         const { nom_atelier } = atelier;
         const { matricule_techn } = technicien;
+        const { nom_travail } = travaux;
+
 
         // Vérification des données
-        if (!description_panne || !nom_atelier || !matricule_techn) {
-            return res.status(400).json({ error: "Missing information for vehicle or driver" });
+        if (!description_panne || !nom_atelier || !matricule_techn || !nom_travail) {
+            return res.status(400).json({ error: "Missing information for vehicle or driver or works" });
         }
 
         const diagnosticResult = await db.query("SELECT id_diagnostic FROM acc.diagnostic WHERE description_panne = $1", [description_panne]);
@@ -359,16 +347,23 @@ exports.create = async (req, res) => {
         }
         const id_technicien = technicienResult.rows[0].id_technicien;
 
+        const travauxResult = await db.query("SELECT id_travaux FROM acc.travaux WHERE nom_travail = $1", [nom_travail]);
+        if (travauxResult.rows.length === 0) {
+            return res.status(400).json({ error: "works not found!" });
+        }
+        const id_travaux = travauxResult.rows[0].id_travaux;
+
 
         const formattedDateOrdre = moment(date_ordre, 'YYYY-MM-DD').format("YYYY-MM-DD");
+        const status = "En attente";
 
-        const sql = `INSERT INTO acc.ordre_travail(id_diagnostic, urgence_panne, travaux, material_requis, planning, date_ordre, status, id_atelier, id_technicien) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
-        RETURNING id_diagnostic, urgence_panne, travaux, material_requis, planning, date_ordre, status, id_atelier, id_technicien`;
+        const sql = `INSERT INTO acc.ordre_travail(id_diagnostic, urgence_panne, id_travaux, planning, date_ordre, status, id_atelier, id_technicien) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+        RETURNING id_diagnostic, urgence_panne, id_travaux, planning, date_ordre, status, id_atelier, id_technicien`;
 
-        db.query(sql, [id_diagnostic, urgence_panne, travaux, material_requis, planning, formattedDateOrdre, status, id_atelier, id_technicien], (err, result) => {
+        db.query(sql, [id_diagnostic, urgence_panne, id_travaux, planning, formattedDateOrdre, status, id_atelier, id_technicien], (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
-            return res.status(200).json({ message: "work order added successfully!", order: result.rows });
+            return res.status(200).json({ message: "work order added successfully!", order: result.rows[0] });
         });
 
     } catch (error) {
@@ -381,24 +376,25 @@ exports.update = async (req, res) => {
     try {
         const id_ordre = Number(req.params.id_ordre);
 
-        const { diagnostic, urgence_panne, travaux, material_requis, planning, date_ordre, status, atelier, technicien } = req.body;
+        const { diagnostic, urgence_panne, travaux, planning, date_ordre, status, atelier, technicien } = req.body;
 
         if (!id_ordre) {
             return res.status(400).json({ error: "Missing ID of Order " });
         }
 
         // Vérification que les données sont présentes
-        if (!diagnostic || !atelier || !technicien) {
-            return res.status(400).json({ error: "Missing diagnostic or workshop or technician" });
+        if (!diagnostic || !atelier || !technicien || !travaux) {
+            return res.status(400).json({ error: "Missing diagnostic or workshop or technician or works" });
         }
 
         const { description_panne } = diagnostic;
         const { nom_atelier } = atelier;
         const { matricule_techn } = technicien;
+        const { nom_travail } = travaux;
 
         // Vérification des données
-        if (!description_panne || !nom_atelier || !matricule_techn) {
-            return res.status(400).json({ error: "Missing information for vehicle or driver" });
+        if (!description_panne || !nom_atelier || !matricule_techn || !nom_travail) {
+            return res.status(400).json({ error: "Missing information for vehicle or driver or works" });
         }
 
         const diagnosticResult = await db.query("SELECT id_diagnostic FROM acc.diagnostic WHERE description_panne = $1", [description_panne]);
@@ -420,16 +416,22 @@ exports.update = async (req, res) => {
         }
         const id_technicien = technicienResult.rows[0].id_technicien;
 
+        const travauxResult = await db.query("SELECT id_travaux FROM acc.travaux WHERE nom_travail = $1", [nom_travail]);
+        if (travauxResult.rows.length === 0) {
+            return res.status(400).json({ error: "works not found!" });
+        }
+        const id_travaux = travauxResult.rows[0].id_travaux;
+
 
         const formattedDateOrdre = moment(date_ordre, 'YYYY-MM-DD').format("YYYY-MM-DD");
 
-        const sql = `UPDATE acc.ordre_travail SET id_diagnostic=$1, urgence_panne=$2, travaux=$3, 
-        material_requis=$4, planning=$5, date_ordre=$6, 
-        status=$7, id_atelier=$8, id_technicien=$9
-        WHERE id_ordre = $10
+        const sql = `UPDATE acc.ordre_travail SET id_diagnostic=$1, urgence_panne=$2, id_travaux=$3, 
+        planning=$4, date_ordre=$5, 
+        status=$6, id_atelier=$7, id_technicien=$8
+        WHERE id_ordre = $9
         RETURNING *`;
 
-        db.query(sql, [id_diagnostic, urgence_panne, travaux, material_requis, planning, formattedDateOrdre, status, id_atelier, id_technicien, id_ordre], (err, result) => {
+        db.query(sql, [id_diagnostic, urgence_panne, id_travaux, planning, formattedDateOrdre, status, id_atelier, id_technicien, id_ordre], (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
 
             // Vérifier si la mise à jour a bien eu lieu
@@ -481,6 +483,16 @@ exports.getTechnicienByMatricule = async (req, res) => {
     const sql = "SELECT  matricule_techn, nom, prenom, telephone_techn, email_techn, specialite FROM acc.technicien WHERE matricule_techn=$1";
     //idvehicule,
     db.query(sql, [matricule_techn], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        return res.status(200).json(result.rows[0]);
+    });
+}
+
+exports.getTravauxByNom = async (req, res) => {
+    const nom_travail = req.params.nom_travail;
+    const sql = "SELECT nom_travail FROM acc.travaux WHERE nom_travail=$1";
+    //idvehicule,
+    db.query(sql, [nom_travail], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         return res.status(200).json(result.rows[0]);
     });

@@ -43,6 +43,7 @@ router.put('/status/:id_ordre', async (req, res) => {
 router.get('/diagnostic/:description_panne', ordreController.getDiagnosticByPanne);
 router.get('/atelier/:nom_atelier', ordreController.getAtelierByNom);
 router.get('/technicien/:matricule_techn', ordreController.getTechnicienByMatricule);
+router.get('/travaux/:nom_travail', ordreController.getTravauxByNom);
 
 
 module.exports = router;

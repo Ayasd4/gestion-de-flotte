@@ -126,9 +126,13 @@ export class MaintenanceComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.maintenanceService.getDemandes().subscribe((data) => {
       console.log('Données récupérées : ', data);
-      this.demandes = data;
-      //this.filteredDemandes = data; 
-      this.dataSource = new MatTableDataSource<Demande>(data);//this.filteredDemandes
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenDemandes') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleDemandes = data.filter(demande => !hiddenIds.includes(demande.id_demande));
+
+      this.demandes = visibleDemandes;      //this.filteredDemandes = data; 
+      this.dataSource = new MatTableDataSource<Demande>(this.demandes);//this.filteredDemandes
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {

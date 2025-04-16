@@ -55,3 +55,21 @@ h2.mat-dialog-title {
     color: #333; /* Couleur du texte */
     margin: 0; /* Enlève la marge par défaut */
 }
+
+
+/* Style pour le message d'erreur */
+.alert.alert-danger {
+    color: #721c24; /* Texte rouge foncé */
+    /*padding: 10px;*/
+    margin-top: -25px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* Style pour le texte d'erreur lorsqu'il est affiché */
+  .alert.alert-danger {
+    display: block; /* Assure que l'alerte est visible */
+  }

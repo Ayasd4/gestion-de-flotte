@@ -3,7 +3,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: './uploads', // Répertoire pour stocker les fichiers
-    filename: function(req, file, cb){
+    filename: function (req, file, cb) {
         cb(null, Date.now() + '.' + file.mimetype.split('/')[1]); // Créer un nom unique pour chaque fichier
     }
 });
@@ -12,12 +12,20 @@ const upload = multer({ storage: storage });
 
 exports.create = async (req, res) => {
     // Utilisation de 'upload.single('image')' pour gérer l'upload du fichier image
-    upload.single('image')(req, res, (err) => {
+    upload.single('image')(req, res, async (err) => {
         if (err) return res.status(500).json({ error: err.message });
 
         const { nom, prenom, matricule_chauf, cin, telephone, email } = req.body;
         //const imagePath = req.file ? req.file.path : null;
         const imagePath = req.file ? req.file.filename : null;  // Enregistrer juste le nom de l'image
+
+        // Vérification d'existence
+        const checkSql = "SELECT * FROM acc.chauffeur WHERE matricule_chauf = $1";
+        const checkResult = await db.query(checkSql, [matricule_chauf]);
+
+        if (checkResult.rows.length > 0) {
+            return res.status(400).json({ message: 'This Driver already exists.' });
+        }
 
         const sql = "INSERT INTO acc.chauffeur (nom, prenom, matricule_chauf, cin, telephone, email, image) VALUES ($1, $2, $3, $4,$5,$6, $7) RETURNING *";
         db.query(sql, [nom, prenom, matricule_chauf, cin, telephone, email, imagePath], (err, result) => {

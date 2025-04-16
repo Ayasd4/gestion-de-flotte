@@ -117,6 +117,8 @@ export class AddDemandeComponent implements OnInit {
     public dialogRef: MatDialogRef<AddDemandeComponent>,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private cd: ChangeDetectorRef,
+
   ) {
 
     //vehicule
@@ -131,29 +133,6 @@ export class AddDemandeComponent implements OnInit {
     this.demande.chauffeur.cin = data.cin;
     this.demande.chauffeur.telephone = data.telephone;
     this.demande.chauffeur.email = data.email;
-
-    /*this.demandeForm = this.fb.group({
-      id_demande: [this.data?.id_demande || 0],
-      date_demande: [this.data?.date_demande || '', Validators.required],
-      type_avarie: [this.data?.type_avarie || '', Validators.required],
-      description: [this.data?.description || '', Validators.required],
-      date_avarie: [this.data?.date_avarie || '', Validators.required],
-      heure_avarie: [this.data?.heure_avarie || '', Validators.required],
-      statut: [this.data?.statut || '', Validators.required],
-      vehicule: this.fb.group({
-        idvehicule: [{ value: this.data?.vehicule?.idvehicule || 0, disabled: true }],
-        numparc: [{ value: this.data?.vehicule?.numparc || '', disabled: true }],
-        immatricule: [{ value: this.data?.vehicule?.immatricule || '', disabled: true }],
-        modele: [{ value: this.data?.vehicule?.modele || '', disabled: true }],
-      }),
-      chauffeur: this.fb.group({
-        id_chauf: [{ value: this.data?.chauffeur?.id_chauf || 0, disabled: true }],
-        nom: [{ value: this.data?.chauffeur?.nom || '', disabled: true }],
-        prenom: [{ value: this.data?.chauffeur?.prenom || '', disabled: true }],
-        matricule_chauf: [{ value: this.data?.chauffeur?.matricule_chauf || '', disabled: true }],
-      })
-    });*/
-
   }
 
   getNumparc() {
@@ -192,7 +171,7 @@ export class AddDemandeComponent implements OnInit {
           console.log('Vehicle data retrieved:', data);
 
           if (data) {
-
+            this.demande.vehicule.numparc = data.numparc;
             this.demande.vehicule.immatricule = data.immatricule;
             this.demande.vehicule.modele = data.modele;
 
@@ -213,7 +192,7 @@ export class AddDemandeComponent implements OnInit {
       next: (data) => {
         console.log('Données du chauffeur récupérées:', data);
         if (data) {
-
+          this.demande.chauffeur.nom = data.nom;
           this.demande.chauffeur.prenom = data.prenom;
           this.demande.chauffeur.matricule_chauf = data.matricule_chauf;
           this.demande.chauffeur.cin = data.cin;
@@ -226,6 +205,8 @@ export class AddDemandeComponent implements OnInit {
         console.error('Erreur de récupération du chauffeur', err);
       }
     });
+    this.cd.detectChanges();
+
   }
 
 

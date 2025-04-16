@@ -37,6 +37,7 @@ export const routes: Routes = [
   {path:'kilometrage', component: KilometrageComponent, canActivate: [authGuard], data: {roles: ['Agent de saisie maîtrise de l\'énergie']}},
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login-admin', pathMatch: 'full' },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'change-password', component: ChangePasswordComponent },
   { path: 'login-admin', component: LoginAdminComponent },

@@ -1,5 +1,5 @@
 <div class="container">
-    <h2 mat-dialog-title>{{ demande.id_demande  ? 'Update' : 'Add' }} Request</h2>
+    <h2 mat-dialog-title>{{ demande.id_demande ? 'Update' : 'Add' }} Request</h2>
     <mat-dialog-content>
         <form #demandeForm="ngForm">
             <br>
@@ -12,7 +12,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Requst Date</mat-label>
                         <input matInput [matDatepicker]="picker1" [(ngModel)]="demande.date_demande" name="date_demande"
-                            required><!--(dateChange)="getValidDate(demande.date_demande)" -->
+                            required>
                         <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                         <mat-datepicker #picker1></mat-datepicker>
                     </mat-form-field>
@@ -30,7 +30,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Date Domage</mat-label>
                         <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="demande.date_avarie"
-                            name="date_avarie" required><!--(dateChange)="getValidDate(demande.date_avarie)"-->
+                            name="date_avarie" required>
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
@@ -48,13 +48,6 @@
                         <input type="time" matInput [(ngModel)]="demande.heure_avarie" name="heure_avarie" required>
                     </mat-form-field>
 
-                    <mat-form-field>
-                        <mat-label>status</mat-label>
-                        <mat-select matInput [(ngModel)]="demande.statut" name="statut" [(value)]="selected"><!---->
-                            <mat-option value="En attente">En attente</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
                     <!--</fieldset><br>-->
                     <button mat-button matStepperNext>Next</button>
                 </mat-step>
@@ -65,7 +58,7 @@
                     <!--<legend>Vehicle Information</legend>-->
                     <mat-form-field>
                         <mat-label>Park Number</mat-label>
-                        <mat-select matNativeControl (selectionChange)="getVehiculeInfo()"
+                        <mat-select (selectionChange)="getVehiculeInfo()"
                             [(ngModel)]="demande.vehicule.numparc" name="numparc" required>
                             <mat-option *ngFor="let num of numparcList" [value]="num">
                                 {{ num }}
@@ -82,7 +75,7 @@
                         <mat-label>Model</mat-label>
                         <input matInput [(ngModel)]="demande.vehicule.modele" name="modele" disabled readonly>
                     </mat-form-field>
-                   
+
 
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
@@ -93,12 +86,12 @@
                 <!--</fieldset>-->
                 <!--<fieldset>-->
 
-                <mat-step label="Declarant Information">
-                    <ng-template matStepLabel>Declarant Information</ng-template>
+                <mat-step label="Driver Information">
+                    <ng-template matStepLabel>Driver Information</ng-template>
                     <!--<legend>Declarant Information</legend>-->
                     <mat-form-field>
                         <mat-label>Last Name</mat-label>
-                        <mat-select matNativeControl (selectionChange)="getChauffeurInfo()"
+                        <mat-select (selectionChange)="getChauffeurInfo()"
                             [(ngModel)]="demande.chauffeur.nom" name="nom" required>
                             <mat-option *ngFor="let num of nameList" [value]="num">
                                 {{ num }}
@@ -113,7 +106,8 @@
 
                     <mat-form-field>
                         <mat-label>Driver Number</mat-label>
-                        <input matInput [(ngModel)]="demande.chauffeur.matricule_chauf" name="matricule_chauf" disabled readonly>
+                        <input matInput [(ngModel)]="demande.chauffeur.matricule_chauf" name="matricule_chauf" disabled
+                            readonly>
                     </mat-form-field>
 
                     <mat-form-field>
@@ -132,22 +126,23 @@
                     </mat-form-field>
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button color="primary" (click)="saveDemande(demandeForm)">Save</button>
                     </div>
                     <!--</fieldset>-->
                 </mat-step>
-                <mat-step>
+
+                <!--<mat-step>
                     <ng-template matStepLabel>Done</ng-template>
                     <p>Please verify all information before submitting.</p>
                     <div>
                       <button mat-button matStepperPrevious>Back</button>
                       <button mat-button color="primary" (click)="saveDemande(demandeForm)">Save</button>
-                      <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
+                      <button mat-button (click)="stepper.reset()">Reset</button>
 
                     </div>
-                  </mat-step>
+                  </mat-step>-->
             </mat-stepper>
-              
+
         </form>
     </mat-dialog-content>
     <!--<div class="buton">

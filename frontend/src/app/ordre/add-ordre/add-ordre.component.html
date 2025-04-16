@@ -1,5 +1,5 @@
 <div class="container">
-    <h2 mat-dialog-title>{{ ordre.id_ordre  ? 'Update' : 'Add' }} Order</h2>
+    <h2 mat-dialog-title>{{ ordre.id_ordre ? 'Update' : 'Add' }} Order</h2>
     <mat-dialog-content>
         <form #ordreForm="ngForm">
             <br>
@@ -9,20 +9,20 @@
 
                     <mat-form-field>
                         <mat-label>Emergency Breakdown</mat-label>
-                        <mat-select matInput [(ngModel)]="ordre.urgence_panne"
-                            name="urgence_panne" required><!-- [(value)]="selected"-->
-                            <mat-option *ngFor="let urgence_panne of Disponibles" [value]="urgence_panne">{{urgence_panne}}</mat-option>
+                        <mat-select matInput [(ngModel)]="ordre.urgence_panne" name="urgence_panne"
+                            required><!-- [(value)]="selected"-->
+                            <mat-option *ngFor="let urgence_panne of Disponibles"
+                                [value]="urgence_panne">{{urgence_panne}}</mat-option>
                         </mat-select>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Works</mat-label>
-                        <input matInput [(ngModel)]="ordre.travaux" name="travaux" required>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <mat-label>Equipment</mat-label>
-                        <input matInput [(ngModel)]="ordre.material_requis" name="material_requis" required>
+                        <mat-select (selectionChange)="getTravauxInfo()" [(ngModel)]="ordre.travaux.nom_travail" name="nom_travail" required>
+                            <mat-option *ngFor="let num of travauxList" [value]="num">
+                                {{ num }}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
 
                     <mat-form-field>
@@ -33,17 +33,10 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Order Date </mat-label>
-                        <input matInput matInput [matDatepicker]="picker" [(ngModel)]="ordre.date_ordre"
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="ordre.date_ordre"
                             name="date_ordre" required>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <mat-label>status</mat-label>
-                        <mat-select matInput [(ngModel)]="ordre.status" name="status" [(value)]="selected"><!---->
-                          <mat-option value="En attente">En attente</mat-option>
-                        </mat-select>
                     </mat-form-field>
 
                     <button mat-button matStepperNext>Next</button>
@@ -52,10 +45,10 @@
                 <!--step 2-->
                 <mat-step label="Diagnostic Information">
                     <ng-template matStepLabel>Diagnostic Information</ng-template>
-                    
+
                     <mat-form-field>
                         <mat-label>Breakdown</mat-label>
-                        <mat-select matNativeControl (selectionChange)="getDiagnosticInfo()"
+                        <mat-select (selectionChange)="getDiagnosticInfo()"
                             [(ngModel)]="ordre.diagnostic.description_panne" name="description_panne" required>
                             <mat-option *ngFor="let num of diagnosticList" [value]="num">
                                 {{ num }}
@@ -65,7 +58,8 @@
 
                     <mat-form-field>
                         <mat-label>Causes of Breakdown</mat-label>
-                        <input matInput [(ngModel)]="ordre.diagnostic.causes_panne" name="causes_panne" disabled readonly>
+                        <input matInput [(ngModel)]="ordre.diagnostic.causes_panne" name="causes_panne" disabled
+                            readonly>
                     </mat-form-field>
 
                     <mat-form-field>
@@ -75,15 +69,16 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Diagnostic Date </mat-label>
-                        <input matInput matInput [matDatepicker]="picker2" [(ngModel)]="ordre.diagnostic.date_diagnostic"
-                            name="date_diagnostic" disabled readonly>
+                        <input matInput [matDatepicker]="picker2"
+                            [(ngModel)]="ordre.diagnostic.date_diagnostic" name="date_diagnostic" disabled readonly>
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field>
                         <mat-label>Hour diagnostic</mat-label>
-                        <input type="heure" matInput [(ngModel)]="ordre.diagnostic.heure_diagnostic" name="heure_diagnostic" disabled readonly>
+                        <input type="heure" matInput [(ngModel)]="ordre.diagnostic.heure_diagnostic"
+                            name="heure_diagnostic" disabled readonly>
                     </mat-form-field>
 
                     <div>
@@ -97,7 +92,7 @@
                     <ng-template matStepLabel>Workshop Information</ng-template>
                     <mat-form-field>
                         <mat-label>Workshop Name</mat-label>
-                        <mat-select matNativeControl (selectionChange)="getAtelierInfo()"
+                        <mat-select (selectionChange)="getAtelierInfo()"
                             [(ngModel)]="ordre.atelier.nom_atelier" name="nom_atelier" required>
                             <mat-option *ngFor="let num of atelierList" [value]="num">
                                 {{ num }}
@@ -131,7 +126,7 @@
                     <ng-template matStepLabel>Technician Information</ng-template>
                     <mat-form-field>
                         <mat-label>Technician Number</mat-label>
-                        <mat-select matNativeControl (selectionChange)="getTechnicienInfo()"
+                        <mat-select (selectionChange)="getTechnicienInfo()"
                             [(ngModel)]="ordre.technicien.matricule_techn" name="matricule_techn" required>
                             <mat-option *ngFor="let num of technicienList" [value]="num">
                                 {{ num }}
@@ -151,7 +146,8 @@
 
                     <mat-form-field>
                         <mat-label>Phone Number</mat-label>
-                        <input matInput [(ngModel)]="ordre.technicien.telephone_techn" name="telephone_techn" disabled readonly>
+                        <input matInput [(ngModel)]="ordre.technicien.telephone_techn" name="telephone_techn" disabled
+                            readonly>
                     </mat-form-field>
 
                     <mat-form-field>
@@ -166,22 +162,23 @@
 
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button color="primary" (click)="saveOrder(ordreForm)">Save</button>
                     </div>
                 </mat-step>
 
-                <mat-step>
+                <!--<mat-step>
                     <ng-template matStepLabel>Done</ng-template>
                     <p>Please verify all information before submitting.</p>
                     <div>
                       <button mat-button matStepperPrevious>Back</button>
                       <button mat-button color="primary" (click)="saveOrder(ordreForm)">Submit</button>
-                      <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
+                     <button mat-button (click)="stepper.reset()">Reset</button>
 
                     </div>
-                  </mat-step>
+                  </mat-step>-->
+
             </mat-stepper>
-              
+
         </form>
     </mat-dialog-content>
     <!--<div class="buton">

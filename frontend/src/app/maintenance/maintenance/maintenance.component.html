@@ -6,12 +6,8 @@
     </div>
     <!--search form-->
     <div class="search-container">
-        <!--<div class="card-header bg-light">
-                    <h5 class="mb-0">Search Filters</h5>
-                </div>-->
-
         <form (ngSubmit)="searchDemandes()" #searchForm="ngForm" class="search-form">
-            <div class="row g-3">
+            <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="numparc">Parc Number</label>
@@ -39,6 +35,9 @@
                             [(ngModel)]="searchParams.date_demande">
                     </div>
                 </div>
+            </div>
+            <div class="row">
+
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="type_avarie">Breakdown type</label>
@@ -47,17 +46,6 @@
                             <option ngValue="">All Types</option>
                             <option *ngFor="let demande of demandes" [ngValue]="demande.type_avarie">
                                 {{demande.type_avarie}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="description">description</label>
-                        <select class="form-control" name="description" id="description"
-                            [(ngModel)]="searchParams.description">
-                            <option ngValue="">All descriptions</option>
-                            <option *ngFor="let demande of demandes" [ngValue]="demande.description">
-                                {{demande.description}}</option>
                         </select>
                     </div>
                 </div>

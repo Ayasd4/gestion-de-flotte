@@ -1,7 +1,7 @@
 <div class="card">
     <div class="buton-container">
-        <div class="title" style="margin-right: 890px;margin-top: 20px;"> List Orders</div>
-        <button (click)="openDialog()">Add</button>
+        <div class="title"> List Orders</div>
+        <button (click)="openDialog()">Add Order</button>
     </div>
     <!--<div class="card-head">
         <div class="search-container">
@@ -12,22 +12,14 @@
             </mat-form-field>
         </div>
     </div>-->
-
+    <div class="search-header">
+        Search Filters
+    </div>
     <div class="search-container">
-        
-        <form (ngSubmit)="searchOrdre()" #searchForm="ngForm" class="search-form">
-            <div class="search-header">
-                Search Filters
-            </div>
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="date_diagnostic">Diagnostic Date</label>
-                        <input type="date" class="form-control" name="date_diagnostic" id="date_diagnostic"
-                            [(ngModel)]="searchParams.date_diagnostic">
-                    </div>
-                </div>
 
+        <form (ngSubmit)="searchOrdre()" #searchForm="ngForm" class="search-form">
+
+            <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="id_atelier">Workshops</label>
@@ -53,6 +45,8 @@
                         </select>
                     </div>
                 </div>
+            </div>
+            <div class="row">
 
                 <div class="col-md-3">
                     <div class="form-group">
@@ -93,23 +87,18 @@
                 <td mat-cell *matCellDef="let Ordre"> {{Ordre.numparc}} </td>
             </ng-container>
 
-            <ng-container matColumnDef="diagnostic">
+            <!--<ng-container matColumnDef="diagnostic">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic </th>
                 <td mat-cell *matCellDef="let Ordre">
-                    <!--<button mat-button color="primary" (click)="openDetailsDialog(Ordre.diagnostic, 'Diagnostic')">
-                        See
-                    </button>-->
-                    <!--{{Ordre.description_panne}} {{Ordre.causes_panne}} {{Ordre.actions}}-->
-
+           
                     <div style="display: flex; flex-direction: column;">
-                        <!--<span><strong>Vehicle:</strong> {{Ordre.diagnostic.demande.vehicule.numparc}}</span>-->
                         <span><strong>Description:</strong> {{Ordre.description_panne}}</span>
                         <span><strong>Causes:</strong> {{Ordre.causes_panne}}</span>
                         <span><strong>Actions:</strong> {{Ordre.actions}}</span>
                         <span><strong>Date:</strong> {{Ordre.date_diagnostic}}</span>
                     </div>
                 </td>
-            </ng-container>
+            </ng-container>-->
 
             <ng-container matColumnDef="urgence_panne">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency Breakdown </th>
@@ -124,16 +113,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Works </th>
                 <td mat-cell *matCellDef="let Ordre">
                     <div style="display: flex; flex-direction: column;">
-                        {{Ordre.travaux}}
-                    </div>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="material_requis">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Equipment </th>
-                <td mat-cell *matCellDef="let Ordre">
-                    <div style="display: flex; flex-direction: column;">
-                        {{Ordre.material_requis}}
+                        {{Ordre.nom_travail}}
                     </div>
                 </td>
             </ng-container>
@@ -182,7 +162,28 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
                 <td mat-cell *matCellDef="let ordre">
 
-                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editOrder(ordre)"
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editOrder(ordre)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit Order</span>
+                        </button>
+                        <button mat-menu-item (click)="deleteOrder(ordre.id_ordre)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Delete order</span>
+
+                        </button>
+                        <button mat-menu-item (click)="generatePdf(ordre.id_ordre)">
+                            <mat-icon>file_download</mat-icon>
+                            <span>export to pdf</span>
+
+                        </button>
+                    </mat-menu>
+
+                    <!--<button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editOrder(ordre)"
                         color="primary" matTooltip="edit"
                         aria-label="Button that displays a tooltip when focused or hovered over">
                         <mat-icon>edit</mat-icon>
@@ -194,11 +195,11 @@
                         <mat-icon>delete</mat-icon>
                     </button>
 
-                    <button style="height: 27px; margin-left: 20px;" mat-icon-button (click)="generatePdf(ordre.id_ordre)"
-                        color="black" matTooltip="export order"
+                    <button style="height: 27px; margin-left: 20px;" mat-icon-button
+                        (click)="generatePdf(ordre.id_ordre)" color="black" matTooltip="export order"
                         aria-label="Button that displays a tooltip when focused or hovered over">
                         <mat-icon>file_download</mat-icon>
-                    </button>
+                    </button>-->
                 </td>
             </ng-container>
 

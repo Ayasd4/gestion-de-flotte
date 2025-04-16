@@ -1,131 +1,97 @@
-.card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: white; 
-    padding: 15px 20px;
-    border-radius: 8px 8px 0 0;
+.card {
+    background-color: #fff;
+    border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Conteneur du bouton (en haut) */
-.buton-container {
-    display: flex;
-    justify-content: flex-end;
-    
-    margin-bottom: 10px;
-}
-
-/* Style du bouton "Ajouter" */
-.buton-container button {
-    background-color: #000; /*007bff*/
+    margin: 16px;
+    overflow: hidden;
+  }
+  
+  .card-head {
+    background-color: #3f51b5;
     color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    margin-top: 30px;
-    margin-right: 30px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.buton-container button:hover {
-    background-color: #02534d;/*0056b3*/
-}
-
-/* Conteneur du titre et de la recherche */
-.card-head {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-/* Style du titre */
-.title {
-    font-size: 18px;
+  }
+  
+  .card-head button {
+    margin-left: auto;
+    width: 150px;
+    height: 40px;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  
+  .card-body {
+    padding: 16px;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-elevation-z8 {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  }
+  
+  .mat-header-cell {
     font-weight: bold;
-    color: #333;
-    padding-top: 10px; /* Ajoute un espace interne sans affecter la position globale */
-}
+    color: rgba(0, 0, 0, 0.87);
+  }
+  
+  .mat-cell {
+    padding: 8px 16px;
+  }
+  
+  button.mat-flat-button {
+    margin: 0 4px;
+  }
+  
+  mat-paginator {
+    margin-top: 16px;
+  }
+  
+  .btn-primary {
+    background-color: #3f51b5;
+    color: white;
+  }
+
 
 /* Style de la recherche */
 .search-container {
     display: flex;
     justify-content: flex-end;
+    margin-top: 30px;
+    padding-bottom: 1px;
 }
 
-mat-form-field {
-    width: 250px !important;
-}
 
-
-
-
-
-/*.card-head {
+.boutton {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f8f9fa; 
-    color: #333;
-    padding: 15px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px 8px 0 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.search-container {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-}
-
-mat-form-field {
-    width: 250px !important;
-}
-
-.buton-container button {
-    background-color: #007bff;
+    gap: 5px; /* Espace entre les boutons */
+  }
+  
+  .boutton button {
+    flex: 1;
+    min-width: 8px;
+    font-weight: 450;
+    font-size: 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
     color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.buton-container button:hover {
-    background-color: #0056b3;
-}
-*/
+  }
   
-
-
-
-
-
-/*.card-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: white; 
-    color: #000;
-    padding: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px 8px 0 0;
-
-    .search-container{
-        align-items: center;
-        margin-left: 400px;
-    }
-
-    .buton-container{
-        background-color: blue;
-        margin-right: 0;
-    }
-  }*/
+  /* Hover pour le bouton 'edit' */
+  .boutton button[color="primary"]:hover {
+    background-color: #1976d2; /* plus foncé */
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.4);
+  }
   
+  /* Hover pour le bouton 'delete' */
+  .boutton button[color="warn"]:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+  }

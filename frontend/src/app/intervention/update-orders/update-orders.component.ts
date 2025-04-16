@@ -69,8 +69,7 @@ export class UpdateOrdersComponent implements OnInit {
       heure_diagnostic: ''
     },
     urgence_panne: '',
-    travaux: '',
-    material_requis: '',
+    travaux: {id_travaux: 0, nom_travail: '', type_atelier: ''},
     planning: '',
     date_ordre: '',
     status: '',

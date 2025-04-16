@@ -15,5 +15,8 @@ router.get('/technicien', async (req, res) => {
     await infosController.getAllTechnicien(req, res);
 });
 
+router.get('/travaux', async (req, res) => {
+    await infosController.getAllTravaux(req, res);
+});
 
 module.exports = router;

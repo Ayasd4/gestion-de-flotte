@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ordre } from './ordre';
+import { Travaux } from './travaux';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,14 @@ export class OrdreService {
   constructor(private httpClient: HttpClient) { }
 
   baseUrl: string = "http://localhost:3100/ordre";
-
+  apiUrl: string = "http://localhost:3100/travaux"
 
   fetchAllOrders(): Observable<Ordre[]> {
     return this.httpClient.get<Ordre[]>(`${this.baseUrl}`);
+  }
+
+  fetchTravaux(): Observable<Travaux[]> {
+    return this.httpClient.get<Travaux[]>(`${this.apiUrl}`);
   }
 
   createOrder(data: Ordre) {
@@ -44,6 +49,11 @@ export class OrdreService {
 
   getTechnicienByMatricule(matricule_techn: Number) {
     return this.httpClient.get<any>(`${this.baseUrl}/technicien/${matricule_techn}`);
+
+  }
+
+  getTravauxByNom(nom_travail: string) {
+    return this.httpClient.get<any>(`${this.baseUrl}/travaux/${nom_travail}`);
 
   }
 

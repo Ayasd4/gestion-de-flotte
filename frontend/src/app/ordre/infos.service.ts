@@ -23,4 +23,7 @@ export class InfosService {
     return this.httpClient.get(`${this.baseUrl}/technicien`);
   }
 
+  fetchAllTravaux(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/travaux`);
+  }
 }

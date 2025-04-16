@@ -48,9 +48,8 @@ export class AddOrdreComponent implements OnInit {
 
   capacite: any = undefined;
   matricule_techn: any = undefined;
-  selected = "En attente";
   numparc: any= undefined;
-  Disponibles: string[] = ['critique', 'moyenne', 'faible'];
+  Disponibles: string[] = ['urgente', 'moyenne', 'faible'];
 
   ordre: Ordre = {
     id_ordre: 0,
@@ -69,8 +68,12 @@ export class AddOrdreComponent implements OnInit {
       heure_diagnostic: ''
     },
     urgence_panne: '',
-    travaux: '',
-    material_requis: '',
+    travaux: {
+      id_travaux: 0, 
+      nom_travail: '', 
+      type_atelier: ''
+    },
+
     planning: '',
     date_ordre: '',
     status: '',
@@ -98,6 +101,7 @@ export class AddOrdreComponent implements OnInit {
   diagnosticList: any;
   atelierList: any;
   technicienList: any;
+  travauxList: any;
 
   constructor(private ordreService: OrdreService,
     private infosService: InfosService,
@@ -125,6 +129,11 @@ export class AddOrdreComponent implements OnInit {
     this.ordre.technicien.telephone_techn = data.telephone_techn;
     this.ordre.technicien.email_techn = data.email_techn;
     this.ordre.technicien.specialite = data.specialite;
+
+     //works
+     this.ordre.travaux.nom_travail = data.nom_travail;
+     this.ordre.travaux.type_atelier = data.type_atelier;
+
   }
 
   //selection
@@ -160,6 +169,19 @@ export class AddOrdreComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading technicians', err);
+      }
+    });
+  }
+
+  getTravaux() {
+    this.infosService.fetchAllTravaux().subscribe({
+      next: (data) => {
+        console.log("List of works received", data);
+        
+        this.travauxList = data.map((item: any) => item.nom_travail);
+      },
+      error: (err) => {
+        console.error('Error loading works', err);
       }
     });
   }
@@ -240,6 +262,28 @@ export class AddOrdreComponent implements OnInit {
     }
   }
 
+  getTravauxInfo() {
+    const nom_travail = this.ordre.travaux.nom_travail;
+    console.log("Works sent to the backend:", nom_travail); // Vérification
+
+    if (nom_travail) {
+      this.ordreService.getTravauxByNom(nom_travail).subscribe({
+        next: (data) => {
+          console.log('Works data retrieved:', data);
+
+          if (data) {
+
+            this.ordre.travaux.nom_travail = data.nom_travail;
+            this.ordre.travaux.type_atelier = data.type_atelier;
+          }
+        },
+        error: (err) => {
+          console.error('Error retrieving works information', err);
+        }
+      });
+    }
+  }
+
   ngOnInit(): void {
     if (this.data) {
       this.ordre = { ...this.ordre,...this.data };
@@ -247,13 +291,15 @@ export class AddOrdreComponent implements OnInit {
       // Vérifier si les sous-objets existent sinon les initialiser
       this.ordre.diagnostic = this.ordre.diagnostic || { description_panne: '', causes_panne: '', actions: '', date_diagnostic: '', heure_diagnostic: '' };
       this.ordre.atelier = this.ordre.atelier || { nom_atelier: '', telephone: '', email: '', capacite: this.capacite, statut: '' };
-      this.ordre.technicien = this.ordre.technicien || { nom: '', prenom: '', matricule_techn: this.matricule_techn, cin: '', telephone: '', email: '', specialite: '', date_embauche: '' };
+      this.ordre.technicien = this.ordre.technicien || { nom: '', prenom: '', matricule_techn: this.matricule_techn, cin: '', telephone_techn: '', email_techn: '', specialite: '', date_embauche: '' };
+      this.ordre.travaux = this.ordre.travaux || { nom_travail: '', type_atelier: ''};
 
       console.log(this.data);
     }
     this.getDiagnostic();
     this.getAtelier();
     this.getTechnicien();
+    this.getTravaux();
 
   }
 
@@ -274,8 +320,8 @@ export class AddOrdreComponent implements OnInit {
       return;
     }
 
-    if (!this.ordre.diagnostic || !this.ordre.atelier || !this.ordre.technicien) {
-      this.snackBar.open('Diagnosti, workshop and technician are required!', 'Close', { duration: 6000 });
+    if (!this.ordre.diagnostic || !this.ordre.atelier || !this.ordre.technicien || !this.ordre.travaux) {
+      this.snackBar.open('Diagnosti, workshop, technician and works are required!', 'Close', { duration: 6000 });
     }
 
     const ordreToSend = {
@@ -301,12 +347,14 @@ export class AddOrdreComponent implements OnInit {
     } else {
       this.ordreService.createOrder(ordreToSend).subscribe({
         next: (response) => {
-          if (response.diagnostic && response.atelier && response.technicien) {
+          if (response.diagnostic && response.atelier && response.technicien && response.travaux) {
 
             // Associer les ids retournés avec l'objet ordre
             this.ordre.diagnostic.id_diagnostic = response.diagnostic.id_diagnostic;
             this.ordre.atelier.id_atelier = response.atelier.id_atelier;
             this.ordre.technicien.id_technicien = response.technicien.id_technicien;
+            this.ordre.travaux.nom_travail = response.travaux.nom_travail;
+
           }
           console.log("Order created successfully:", response);
           this.snackBar.open('Order created successfully!', 'Close', { duration: 5000 });

@@ -45,7 +45,7 @@ import * as moment from 'moment';
 })
 export class DiagnosticComponent implements OnInit {
 
-  displayedColumns: string[] = ['id_diagnostic', 'Vehicle', 'id_demande', 'description_panne', 'causes_panne', 'actions_panne', 'date_diagnostic', 'heure_diagnostic', 'Actions'];
+  displayedColumns: string[] = ['id_diagnostic', 'Vehicle', 'description_panne', 'causes_panne', 'actions_panne', 'date_diagnostic', 'heure_diagnostic', 'Actions'];
   dataSource = new MatTableDataSource<Diagnostic>();
   numparc: any = undefined;
 

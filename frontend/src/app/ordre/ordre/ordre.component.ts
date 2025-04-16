@@ -21,6 +21,8 @@ import { Diagnostic } from 'src/app/maintenance/diagnostic/diagnostic';
 import { TechnicienService } from 'src/app/technicien/technicien.service';
 import { AtelierService } from 'src/app/atelier/atelier.service';
 import { DiagnosticService } from 'src/app/maintenance/diagnostic/diagnostic.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { Travaux } from '../travaux';
 
 @Component({
   selector: 'app-ordre',
@@ -38,12 +40,13 @@ import { DiagnosticService } from 'src/app/maintenance/diagnostic/diagnostic.ser
     MatSortModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ]
 })
 export class OrdreComponent implements OnInit {
 
-  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'diagnostic', 'urgence_panne', 'travaux', 'material_requis', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
+  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'urgence_panne', 'travaux', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
   dataSource = new MatTableDataSource<Ordre>();
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -78,8 +81,7 @@ export class OrdreComponent implements OnInit {
       heure_diagnostic: ''
     },
     urgence_panne: '',
-    travaux: '',
-    material_requis: '',
+    travaux: {id_travaux: 0,nom_travail: '', type_atelier: ''},
     planning: '',
     date_ordre: '',
     status: '',
@@ -109,12 +111,13 @@ export class OrdreComponent implements OnInit {
   techniciens: Technicien[] = [];
   ateliers: Atelier[] = [];
   ordres: Ordre[] = [];
+  travaux: Travaux[]= [];
   filtredOrdres: Ordre[] = [];
 
   getEmergencyClass(urgence_panne: string): string {
     switch (urgence_panne) {
-      case 'critique':
-        return 'urgence_panne-critique';
+      case 'urgente':
+        return 'urgence_panne-urgent';
       case 'moyenne':
         return 'urgence_panne-moyenne';
       case 'faible':
@@ -163,7 +166,7 @@ export class OrdreComponent implements OnInit {
     this.loadDiagnostic();
     this.loadTechnicien();
     this.loadAtelier();
-    //this.loadOrdre();
+    this.loadTravaux();
 
   }
 
@@ -211,6 +214,17 @@ export class OrdreComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching workshops:', error);
+      }
+    );
+  }
+
+  loadTravaux(): void {
+    this.ordreService.fetchTravaux().subscribe(
+      (data) => {
+        this.travaux = data;
+      },
+      (error) => {
+        console.error('Error fetching Works:', error);
       }
     );
   }
@@ -305,6 +319,8 @@ export class OrdreComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        console.log("Payload to update:", result);
+
         this.ordreService.updateOrder(result).subscribe(
           () => {
             console.log("Order updated!", result);

@@ -47,7 +47,7 @@ import { Technicien } from 'src/app/technicien/technicien';
 export class OrdersComponent implements AfterViewInit {
 
 
-  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'diagnostic', 'urgence_panne', 'travaux', 'material_requis', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
+  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'diagnostic', 'urgence_panne', 'travaux', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
   dataSource = new MatTableDataSource<Ordre>();
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -84,8 +84,7 @@ export class OrdersComponent implements AfterViewInit {
       heure_diagnostic: '',
     },
     urgence_panne: '',
-    travaux: '',
-    material_requis: '',
+    travaux: {id_travaux: 0, nom_travail: '', type_atelier: ''},
     planning: '',
     date_ordre: '',
     status: '',

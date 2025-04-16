@@ -109,11 +109,19 @@ export class AddChauffeurComponent implements OnInit {
       });
     } else {
       this.chauffeurService.createChauffeur(formData).subscribe(() => {
+
         this.snackBar.open('Driver added successfully!', 'close', { duration: 9000 });
         this.dialogRef.close(this.chauffeur);
-      }, error => {
+      }, (error: any) => {
         console.error('Error while creating Driver:', error);
-      });
+
+        if (error?.error?.message === 'This Driver already exists.') {
+          this.snackBar.open('This driver already exists.', 'Close', { duration: 9000 });
+        } else {
+          this.snackBar.open('An error occurred while adding the driver.', 'Close', { duration: 9000 });
+        }
+      }
+    );
     }
   }
 

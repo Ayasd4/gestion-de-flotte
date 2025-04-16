@@ -2,39 +2,77 @@
   <h2 mat-dialog-title>{{ vehicule.idvehicule ? 'Update' : 'Add' }} Vehicle</h2>
   <mat-dialog-content>
     <form #vehiculeForm="ngForm">
-      <mat-form-field>
-        <mat-label>Numéro de parc</mat-label>
-        <input matInput [(ngModel)]="vehicule.numparc" name="numparc" required>
-      </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Immatricule</mat-label>
-        <input matInput [(ngModel)]="vehicule.immatricule" name="immatricule" required>
+        <mat-label>Parc number</mat-label>
+        <input matInput [(ngModel)]="vehicule.numparc" name="numparc" id="numparc" required #numparcInput="ngModel"
+          pattern="^[0-9]{4}$">
+
       </mat-form-field>
+      <div class="alert alert-danger"
+        *ngIf="numparcInput?.errors?.['required'] && (numparcInput?.dirty || numparcInput?.touched)">
+        Parc number is required.
+      </div>
+
+      <div class="alert alert-danger"
+        *ngIf="numparcInput?.errors?.['pattern'] && (numparcInput?.dirty || numparcInput?.touched)">
+        numparc must be 4 numbers.
+      </div>
 
       <mat-form-field>
-        <mat-label>Modèle</mat-label>
-        <input matInput [(ngModel)]="vehicule.modele" name="modele" required>
+        <mat-label>Serial Number</mat-label>
+        <input matInput [(ngModel)]="vehicule.immatricule" name="immatricule" required pattern="^\d{2}-\d{4}$"
+          #immatriculeInput="ngModel">
       </mat-form-field>
+      <div class="alert alert-danger"
+        *ngIf="immatriculeInput.errors?.['required'] && (immatriculeInput.dirty || immatriculeInput.touched)">
+        Serial number is required.
+      </div>
+
+      <div class="alert alert-danger"
+        *ngIf="immatriculeInput.errors?.['pattern'] && (immatriculeInput.dirty || immatriculeInput.touched)">
+        Format must be like "15-1234".
+      </div>
 
       <mat-form-field>
-        <mat-label>Année</mat-label>
-        <input matInput type="number" [(ngModel)]="vehicule.annee" name="annee" required>
+        <mat-label>Model</mat-label>
+        <input matInput [(ngModel)]="vehicule.modele" name="modele" required #modelInput="ngModel">
       </mat-form-field>
+      <div class="alert alert-danger"
+        *ngIf="modelInput.errors?.['required'] && (modelInput.dirty || modelInput.touched)">
+        Model is required.
+      </div>
 
       <mat-form-field>
-        <mat-label>État</mat-label>
-        <mat-select [(ngModel)]="vehicule.etat" name="etat" required>
+        <mat-label>Year</mat-label>
+        <input matInput type="number" [(ngModel)]="vehicule.annee" name="annee" required #yearInput="ngModel" pattern="^[0-9]{4}$">
+      </mat-form-field>
+      <div class="alert alert-danger"
+        *ngIf="yearInput.errors?.['required'] && (yearInput.dirty || yearInput.touched)">
+        Year is required.
+      </div>
+      <div class="alert alert-danger"
+        *ngIf="yearInput?.errors?.['pattern'] && (yearInput?.dirty || yearInput?.touched)">
+        Year must be 4 numbers.
+      </div>
+
+      <mat-form-field>
+        <mat-label>State</mat-label>
+        <mat-select [(ngModel)]="vehicule.etat" name="etat" required #stateInput="ngModel">
           <mat-option value="en_service">En service</mat-option>
           <mat-option value="en_panne">En panne</mat-option>
           <mat-option value="en_maintenance">En maintenance</mat-option>
         </mat-select>
       </mat-form-field>
+      <div class="alert alert-danger"
+        *ngIf="stateInput.errors?.['required'] && (stateInput.dirty || stateInput.touched)">
+        State is required.
+      </div>
 
       <!-- Message d'erreur -->
-      <div *ngIf="vehiculeForm.invalid && (vehiculeForm.dirty || vehiculeForm.touched)" class="error-message">
+      <!--<div *ngIf="vehiculeForm.invalid && (vehiculeForm.dirty || vehiculeForm.touched)" class="error-message">
         All fields must be completed.
-      </div>
+      </div>-->
     </form>
   </mat-dialog-content>
 

@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { AddVehiculeComponent } from '../add-vehicule/add-vehicule.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-vehicule',
@@ -31,7 +32,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSortModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatMenuModule
   ],
   templateUrl: './vehicule.component.html',
   styleUrls: ['./vehicule.component.css']
@@ -76,7 +78,7 @@ export class VehiculeComponent implements OnInit {
       const visibleVehicules = data.filter(vehicule => !hiddenIds.includes(vehicule.idvehicule));
 
       this.vehicules = visibleVehicules;
-      this.dataSource = new MatTableDataSource<Vehicule>(data);
+      this.dataSource = new MatTableDataSource<Vehicule>(this.vehicules);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {

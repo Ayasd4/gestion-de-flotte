@@ -19,6 +19,7 @@ import { Vehicule } from "src/app/vehicule/vehicule";
 import { VehiculeService } from "src/app/vehicule/vehicule.service";
 import { ChauffeurService } from "src/app/chauffeur/chauffeur.service";
 import { PdfService } from "../pdf.service";
+import { MatMenuModule } from "@angular/material/menu";
 
 @Component({
   selector: 'app-demande',
@@ -36,7 +37,8 @@ import { PdfService } from "../pdf.service";
     MatSortModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ]
 })
 export class DemandeComponent implements OnInit {
@@ -119,7 +121,7 @@ export class DemandeComponent implements OnInit {
       const visibleDemandes = data.filter(demande => !hiddenIds.includes(demande.id_demande));
 
       this.demandes = visibleDemandes;
-      this.filteredDemandes = data;
+      //this.filteredDemandes = data;
       this.dataSource = new MatTableDataSource<Demande>(this.demandes);//this.filteredDemandes
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

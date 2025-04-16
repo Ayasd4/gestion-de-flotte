@@ -56,7 +56,7 @@ export class DashboardAdminComponent implements OnInit, AfterViewInit {
         this.filisble = true;
         this.fetchUsers();
       } else {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login-admin']);
       }
     }
   }

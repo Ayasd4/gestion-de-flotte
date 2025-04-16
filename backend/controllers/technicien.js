@@ -30,11 +30,19 @@ exports.show = async (req, res) => {
 }
 
 exports.create = async (req, res) => {
-    upload.single('image')(req, res, (err) => {
+    upload.single('image')(req, res, async (err) => {
         if (err) return res.status(500).json({ error: err.message });
 
         const { nom, prenom, matricule_techn, cin, telephone_techn, email_techn, specialite, date_embauche } = req.body;
         const imagePath = req.file ? req.file.filename : null;  // Enregistrer juste le nom de l'image
+
+        // Vérification d'existence
+        const checkSql = "SELECT * FROM acc.technicien WHERE matricule_techn = $1";
+        const checkResult = await db.query(checkSql, [matricule_techn]);
+
+        if (checkResult.rows.length > 0) {
+            return res.status(400).json({ message: 'This Technician already exists.' });
+        }
 
         const sql = "INSERT INTO acc.technicien(nom, prenom, matricule_techn, cin, telephone_techn, email_techn, specialite, date_embauche, image) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *";
 
@@ -64,7 +72,7 @@ exports.update = async (req, res) => {
 
         const formattedDateEmbauche = moment(date_embauche, 'YYYY-MM-DD').format("YYYY-MM-DD");
 
-        db.query(sql, [nom, prenom, matricule_techn, cin, telephone_techn, email_techn, specialite, formattedDateEmbauche,imagePath, id_technicien], (err, result) => {
+        db.query(sql, [nom, prenom, matricule_techn, cin, telephone_techn, email_techn, specialite, formattedDateEmbauche, imagePath, id_technicien], (err, result) => {
 
             if (err) return res.status(500).json(err.message);
 

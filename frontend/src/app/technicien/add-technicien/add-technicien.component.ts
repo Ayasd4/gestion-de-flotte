@@ -164,11 +164,17 @@ export class AddTechnicienComponent {
         () => {
           this.snackBar.open('Technician added successfully!', 'close', { duration: 9000 });
           this.ngxService.stop();
-          window.location.reload();
+          //window.location.reload();
           this.dialogRef.close(this.technicien);
         },
         (error: any) => {
           console.error('Error while creation Technician :', error);
+
+          if (error?.error?.message === 'This Technician already exists.') {
+            this.snackBar.open('This technician already exists.', 'Close', { duration: 9000 });
+          } else {
+            this.snackBar.open('An error occurred while adding the technician.', 'Close', { duration: 9000 });
+          }
         }
       );
     }

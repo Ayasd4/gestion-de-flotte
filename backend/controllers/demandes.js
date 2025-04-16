@@ -42,7 +42,7 @@ exports.generatePdf = async (req, res) => {
             const demande = result.rows[0];
 
 
-            // 📄 Création du PDF
+            //Création du PDF
             const doc = new PDFDocument();
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename="document.pdf"');
@@ -301,7 +301,7 @@ exports.create = async (req, res) => {
 
         // 4. Insérer la demande dans la base de données
         const sql = `
-      INSERT INTO acc.demandes (date_demande, type_avarie, description, date_avarie, heure_avarie, statut, id_vehicule, id_chauffeur)
+      INSERT INTO acc.demandes (date_demande, type_avarie, description, date_avarie, heure_avarie, statut= 'En attente', id_vehicule, id_chauffeur)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING id_demande, date_demande, type_avarie, description, date_avarie, heure_avarie, statut, id_vehicule, id_chauffeur
     `;

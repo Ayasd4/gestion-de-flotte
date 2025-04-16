@@ -1,10 +1,15 @@
-.search-container {
-    margin: 20px auto;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
+.search-form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
   }
+  
+  .search-form .form-group {
+    flex: 1 1 calc(100% / 2 - 20px); /* 3 colonnes par ligne */
+    min-width: 250px;
+  }
+  
   
   .search-header {
     background-color: #007bff;
@@ -18,6 +23,8 @@
     background-color: white;
     width: 100%;
     padding: 20px;
+    margin-left: 300px;
+    margin-bottom: -60px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -26,8 +33,6 @@
   .form-group {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    width: 50%;
   }
   
   .form-group label {
@@ -43,18 +48,21 @@
   
   .form-buttons {
     display: flex;
-    justify-content: left; /* Centrer les boutons horizontalement */
+    margin-right: 100px;
+    margin-left: 50px;
+    /*justify-content: center; *//* Centrer les boutons horizontalement */
     margin-bottom: 10px;
     gap: 20px; /* Ajouter de l'espace entre les boutons */
   }
-
+  
   .buton{
     display: flex;
-    justify-content: center; /* Centrer les boutons horizontalement */
+    margin-left: 170px;
+   /* justify-content: center; /* Centrer les boutons horizontalement */
     margin-bottom: 100px;
     gap: 20px; /* Ajouter de l'espace entre les boutons */
   }
-
+  
   .buton button {
     background-color: #007bff; /* Couleur de fond du bouton */
     color: white; /* Couleur du texte */
@@ -64,23 +72,22 @@
     font-size: 14px;
     cursor: pointer;
     transition: background 0.3s ease;
-}
-
-.buton button[type="button"] {
+  }
+  
+  .buton button[type="button"] {
     background-color: #9e9e9e; /* Couleur gris pour le bouton Reset */
     color: white;
-}
-
-.buton button[type="button"]:hover {
+  }
+  
+  .buton button[type="button"]:hover {
     background-color: #757575; /* Couleur gris foncé au survol */
-}
-
-
-.buton button:hover {
+  }
+  
+  
+  .buton button:hover {
     background-color: #0056b3; /* Couleur de fond au survol */
-}
-
-
+  }
+  
 
 
 table {
@@ -131,7 +138,8 @@ table {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-    padding-top: 10px; /* Ajoute un espace interne sans affecter la position globale */
+    margin-right: 900px;
+    padding-top: 40px; /* Ajoute un espace interne sans affecter la position globale */
 }
 
 /* Style de la recherche */
@@ -216,7 +224,7 @@ mat-form-field {
     font-weight: bold;
 }*/
 
-.urgence_panne-critique {
+.urgence_panne-urgent {
     color: #f44336;
     font-weight: bold;
 }
