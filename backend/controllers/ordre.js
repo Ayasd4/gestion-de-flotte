@@ -64,12 +64,12 @@ LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
 
             const logoPath = 'assets/srtj.png'; // chemin relatif vers ton logo
             if (fs.existsSync(logoPath)) {
-                doc.image(logoPath, 50, 30, { width: 50 }); // x = 50, y = 30, largeur = 80
+                doc.image(logoPath, 50, 30, { width: 70 }); // x = 50, y = 30, largeur = 80
                 doc.moveDown(); // petit espace après le logo
 
-                doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', 400, 30, { align: 'left' });
-                doc.fontSize(11).font('Helvetica').text('Division Technique', 400, 50, { align: 'left' });
-                doc.font('Helvetica').text('Service Maintenance', 400, 65, { align: 'left' });
+                doc.fontSize(14).font('Helvetica-Bold').text('S.R.T JENDOUBA', 420, 50, { align: 'left' });
+                doc.fontSize(12).font('Helvetica').text('Division Technique', 420, 70, { align: 'left' });
+                doc.font('Helvetica').text('Service Maintenance', 420, 85, { align: 'left' });
 
                 /*doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', { align: 'right' });
                 //doc.moveDown()
@@ -79,8 +79,8 @@ LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
             }
             doc.x = 50;
 
-            doc.moveTo(50, 100).lineTo(550, 100).stroke();
-            doc.moveDown(3);
+            //doc.moveTo(50, 100).lineTo(550, 100).stroke();
+            doc.moveDown(2);
             //doc.y = 120;
             doc.fontSize(25)
                 .font('Helvetica')
@@ -105,10 +105,10 @@ LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
 
             //atelier
             doc.fontSize(15).font('Helvetica-Bold').text('Atelier de réparation:', { underline: true });
-            doc.font('Helvetica').text(`• Nom de l'atelier: ${ordre.nom_atelier}`);
-            doc.font('Helvetica').text(`• Email: ${ordre.email}`);
-            doc.font('Helvetica').text(`• Capacité d'accueil : ${ordre.capacite}`);
-            doc.font('Helvetica').text(`• Telephone: ${ordre.telephone}`);
+            doc.font('Helvetica').text(`Nom de l'atelier: ${ordre.nom_atelier}`);
+            doc.font('Helvetica').text(`Email: ${ordre.email}`);
+            doc.font('Helvetica').text(`Capacité d'accueil : ${ordre.capacite}`);
+            doc.font('Helvetica').text(`Telephone: ${ordre.telephone}`);
 
             doc.moveDown(1);
 
@@ -277,7 +277,7 @@ exports.list = async (req, res) => {
     v.numparc
     FROM acc.ordre_travail AS o
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
-    JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
+    LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
     JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
     JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
     JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
@@ -318,13 +318,12 @@ exports.create = async (req, res) => {
         }
 
         const { description_panne } = diagnostic;
+        const { nom_travail } = travaux;
         const { nom_atelier } = atelier;
         const { matricule_techn } = technicien;
-        const { nom_travail } = travaux;
-
 
         // Vérification des données
-        if (!description_panne || !nom_atelier || !matricule_techn || !nom_travail) {
+        if (!description_panne || !nom_travail || !nom_atelier || !matricule_techn) {
             return res.status(400).json({ error: "Missing information for vehicle or driver or works" });
         }
 

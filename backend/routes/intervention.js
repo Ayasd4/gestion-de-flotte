@@ -38,7 +38,7 @@ router.delete('/:id_intervention', async (req, res) => {
     await interventionController.delete(req, res);
 });
 
-router.get('/ordre/:travaux', interventionController.getOrdreByTravaux);
+router.get('/ordre/:nom_travail', interventionController.getOrdreByTravaux);
 router.get('/technicien/:matricule_techn', interventionController.getTechnicienByMatricule);
 
 

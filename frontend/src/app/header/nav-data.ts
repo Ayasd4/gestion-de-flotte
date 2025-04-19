@@ -70,6 +70,18 @@ export const navbarData= [
     },
 
     {
+        routeLink: 'etat',
+        icon: 'fal fa-calendar-check',
+        label: 'etat vidange'
+    },
+
+   /* {
+        routeLink: 'vidange',
+        icon: 'fal fa-oil-can',
+        label: 'vidange'
+    },*/
+
+    {
         routeLink: 'consomation',
         icon: 'fal fa-gas-pump', //fal fa-oil-can //fal fa-tags
         label: 'consomation'

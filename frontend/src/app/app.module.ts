@@ -51,6 +51,7 @@ import { ConsomationModule } from './consomation/consomation.module';
 import { KilometrageComponent } from './kilometrage/kilometrage/kilometrage.component';
 import { AddKilometrageComponent } from './kilometrage/add-kilometrage/add-kilometrage.component';
 import { KilometrageModule } from './kilometrage/kilometrage.module';
+import { AddVidangeComponent } from './vidange/add-vidange/add-vidange.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { KilometrageModule } from './kilometrage/kilometrage.module';
     ConsomationComponent,
     AddConsomationComponent,
     KilometrageComponent,
-    AddKilometrageComponent
+    AddKilometrageComponent,
+    AddVidangeComponent
     
   ],
   imports: [

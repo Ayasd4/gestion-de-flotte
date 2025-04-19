@@ -1,63 +1,76 @@
-.search-container {
-    margin: 20px auto;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
-  }
-  
-  .search-header {
+.search-form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.search-form .form-group {
+    flex: 1 1 calc(100% / 3 - 20px);
+    /* 3 colonnes par ligne */
+    min-width: 250px;
+}
+
+.search-header {
     background-color: #007bff;
     color: white;
     padding: 12px 20px;
     font-size: 18px;
     font-weight: 600;
-  }
-  
-  .search-form {
+}
+
+.search-form {
     background-color: white;
     width: 100%;
     padding: 20px;
+    margin-left: 300px;
+    margin-bottom: -60px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    width: 50%;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     font-weight: 500;
     margin-bottom: 5px;
-  }
-  
-  .form-control {
+}
+
+.form-control {
     padding: 8px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
-  
-  .form-buttons {
+}
+
+.form-buttons {
     display: flex;
-    justify-content: left; /* Centrer les boutons horizontalement */
+    margin-right: 100px;
+    margin-left: 50px;
+    /*justify-content: center; */
+    /* Centrer les boutons horizontalement */
     margin-bottom: 10px;
-    gap: 20px; /* Ajouter de l'espace entre les boutons */
-  }
+    gap: 20px;
+    /* Ajouter de l'espace entre les boutons */
+}
 
-  .buton{
+.buton {
     display: flex;
-    justify-content: center; /* Centrer les boutons horizontalement */
+    margin-left: 170px;
+    /* justify-content: center; /* Centrer les boutons horizontalement */
     margin-bottom: 100px;
-    gap: 20px; /* Ajouter de l'espace entre les boutons */
-  }
+    gap: 20px;
+    /* Ajouter de l'espace entre les boutons */
+}
 
-  .buton button {
-    background-color: #007bff; /* Couleur de fond du bouton */
-    color: white; /* Couleur du texte */
+.buton button {
+    background-color: #007bff;
+    /* Couleur de fond du bouton */
+    color: white;
+    /* Couleur du texte */
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
@@ -67,30 +80,33 @@
 }
 
 .buton button[type="button"] {
-    background-color: #9e9e9e; /* Couleur gris pour le bouton Reset */
+    background-color: #9e9e9e;
+    /* Couleur gris pour le bouton Reset */
     color: white;
 }
 
 .buton button[type="button"]:hover {
-    background-color: #757575; /* Couleur gris foncé au survol */
+    background-color: #757575;
+    /* Couleur gris foncé au survol */
 }
 
 
 .buton button:hover {
-    background-color: #0056b3; /* Couleur de fond au survol */
+    background-color: #0056b3;
+    /* Couleur de fond au survol */
 }
+
 
 
 table {
     table-layout: fixed;
-    width: 100%;
 }
 
 .card-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: white; 
+    background: white;
     padding: 15px 20px;
     border-radius: 8px 8px 0 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -100,13 +116,14 @@ table {
 .buton-container {
     display: flex;
     justify-content: flex-end;
-    
+
     margin-bottom: 10px;
 }
 
 /* Style du bouton "Ajouter" */
 .buton-container button {
-    background-color: #000; /*007bff*/
+    background-color: #000;
+    /*007bff*/
     color: white;
     border: none;
     padding: 8px 15px;
@@ -119,7 +136,8 @@ table {
 }
 
 .buton-container button:hover {
-    background-color: #02534d;/*0056b3*/
+    background-color: #02534d;
+    /*0056b3*/
 }
 
 /* Conteneur du titre et de la recherche */
@@ -129,7 +147,9 @@ table {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-    padding-top: 10px; /* Ajoute un espace interne sans affecter la position globale */
+    margin-right: 900px;
+    padding-top: 40px;
+    /* Ajoute un espace interne sans affecter la position globale */
 }
 
 /* Style de la recherche */
@@ -142,11 +162,11 @@ mat-form-field {
     width: 250px !important;
 }
 
-  .card-head {
+.card-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: white; 
+    background: white;
     padding: 15px 20px;
     border-radius: 8px 8px 0 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -156,13 +176,14 @@ mat-form-field {
 .buton-container {
     display: flex;
     justify-content: flex-end;
-    
+
     margin-bottom: 10px;
 }
 
 /* Style du bouton "Ajouter" */
 .buton-container button {
-    background-color: #000; /*007bff*/
+    background-color: #000;
+    /*007bff*/
     color: white;
     border: none;
     padding: 8px 15px;
@@ -175,7 +196,8 @@ mat-form-field {
 }
 
 .buton-container button:hover {
-    background-color: #0a0505;/*0056b3*/
+    background-color: #0a0505;
+    /*0056b3*/
 }
 
 /* Conteneur du titre et de la recherche */
@@ -203,38 +225,56 @@ mat-form-field {
     width: 250px !important;
 }
 
-
-/*.urgence_panne-moyenne {
-    color: blue;
-    font-weight: bold;
+.boutton {
+    display: flex;
+    gap: 5px;
+    /* Espace entre les boutons */
 }
 
-.urgence_panne-faible {
-    color: #4caf50;
-    font-weight: bold;
-}*/
+.boutton button {
+    flex: 1;
+    min-width: 8px;
+    font-weight: 450;
+    font-size: 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    color: white;
+}
 
-.urgence_panne-critique {
+/* Hover pour le bouton 'edit' */
+.boutton button[color="primary"]:hover {
+    background-color: #1976d2;
+    /* plus foncé */
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.4);
+}
+
+/* Hover pour le bouton 'delete' */
+.boutton button[color="black"]:hover {
+    background-color: #000;
+    box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+}
+
+.urgence_panne-urgent {
     color: #f44336;
     font-weight: bold;
 }
 
-.status-planifier{
+.status-planifier {
     color: #f44336;
     font-weight: bold;
 }
 
-.status-terminer{
+.status-terminer {
     color: #4caf50;
     font-weight: bold;
 }
 
-.status-en-cours{
+.status-en-cours {
     color: blue;
     font-weight: bold;
 }
 
-.status-en-attente{
+.status-en-attente {
     color: #ffeb3b;
     font-weight: bold;
 }

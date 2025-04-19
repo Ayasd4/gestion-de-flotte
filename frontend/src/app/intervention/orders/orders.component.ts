@@ -24,6 +24,8 @@ import { TechnicienService } from 'src/app/technicien/technicien.service';
 import { Atelier } from 'src/app/atelier/atelier';
 import { Diagnostic } from 'src/app/maintenance/diagnostic/diagnostic';
 import { Technicien } from 'src/app/technicien/technicien';
+import { Travaux } from 'src/app/ordre/travaux';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-orders',
@@ -41,13 +43,14 @@ import { Technicien } from 'src/app/technicien/technicien';
     MatSortModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ]
 })
 export class OrdersComponent implements AfterViewInit {
 
 
-  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'diagnostic', 'urgence_panne', 'travaux', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
+  displayedColumns: string[] = ['id_ordre', 'Vehicle', 'urgence_panne', 'travaux', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
   dataSource = new MatTableDataSource<Ordre>();
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -84,7 +87,7 @@ export class OrdersComponent implements AfterViewInit {
       heure_diagnostic: '',
     },
     urgence_panne: '',
-    travaux: {id_travaux: 0, nom_travail: '', type_atelier: ''},
+    travaux: { id_travaux: 0, nom_travail: '', type_atelier: '' },
     planning: '',
     date_ordre: '',
     status: '',
@@ -114,6 +117,7 @@ export class OrdersComponent implements AfterViewInit {
   techniciens: Technicien[] = [];
   ateliers: Atelier[] = [];
   ordres: Ordre[] = [];
+  travaux: Travaux[] = [];
   filtredOrdres: Ordre[] = [];
 
   getEmergencyClass(urgence_panne: string): string {
@@ -151,8 +155,13 @@ export class OrdersComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.ordreService.fetchAllOrders().subscribe((data) => {
       console.log('Données récupérées : ', data);
-      this.ordres = data;
-      this.dataSource = new MatTableDataSource<Ordre>(data);
+      const hiddenIds = JSON.parse(localStorage.getItem('hiddenOrdres') || '[]');
+
+      // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
+      const visibleOrdres = data.filter(ordre => !hiddenIds.includes(ordre.id_ordre));
+
+      this.ordres = visibleOrdres;
+      this.dataSource = new MatTableDataSource<Ordre>(this.ordres);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
@@ -173,7 +182,11 @@ export class OrdersComponent implements AfterViewInit {
         this.snackBar.open('Error fetching orders, please try again later.', 'Close', { duration: 5000 });
       }
     );
-}
+    this.loadDiagnostic();
+    this.loadTechnicien();
+    this.loadAtelier();
+    this.loadTravaux();
+  }
 
 
   loadDiagnostic(): void {
@@ -205,6 +218,17 @@ export class OrdersComponent implements AfterViewInit {
       },
       (error) => {
         console.error('Error fetching workshops:', error);
+      }
+    );
+  }
+
+  loadTravaux(): void {
+    this.ordreService.fetchTravaux().subscribe(
+      (data) => {
+        this.travaux = data;
+      },
+      (error) => {
+        console.error('Error fetching Works:', error);
       }
     );
   }

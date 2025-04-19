@@ -7,15 +7,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class InterventionService {
-  getAllOrdres() {
-    throw new Error('Method not implemented.');
-  }
-  getAllTechniciens() {
-    throw new Error('Method not implemented.');
-  }
-  addIntervention(interventionData: any) {
-    throw new Error('Method not implemented.');
-  }
 
   constructor(private httpClient: HttpClient) { }
 
@@ -39,8 +30,8 @@ export class InterventionService {
   }
 
 
-  getOrdreByTravaux(travaux: string) {
-    return this.httpClient.get<any>(`${this.baseUrl}/ordre/${travaux}`);
+  getOrdreByTravaux(nom_travail: string) {
+    return this.httpClient.get<any>(`${this.baseUrl}/ordre/${nom_travail}`);
 
   }
 

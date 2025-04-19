@@ -56,8 +56,8 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Works</mat-label>
                         <mat-select matNativeControl (selectionChange)="getOrdreInfo()"
-                            [(ngModel)]="intervention.ordre.travaux" name="travaux" required>
-                            <mat-option *ngFor="let num of ordreList" [value]="num">
+                            [(ngModel)]="intervention.ordre.nom_travail" name="nom_travail" required>
+                            <mat-option *ngFor="let num of travauxList" [value]="num">
                                 {{ num }}
                             </mat-option>
                         </mat-select>
@@ -66,11 +66,6 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Emergency Breakdown</mat-label>
                         <input matInput [(ngModel)]="intervention.ordre.urgence_panne" name="urgence_panne" disabled readonly>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Equipment</mat-label>
-                        <input matInput [(ngModel)]="intervention.ordre.material_requis" name="material_requis" disabled readonly>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
@@ -124,19 +119,11 @@
 
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button color="primary" (click)="saveIntervention(interventionForm)">Save</button>
                     </div>
                 </mat-step>
 
-                <mat-step>
-                    <ng-template matStepLabel>Done</ng-template>
-                    <p>Please verify all information before submitting.</p>
-                    <div style="padding: auto;">
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button color="primary" (click)="saveIntervention(interventionForm)">Save</button>
-                        <!--<button mat-button (click)="stepper.reset()">Reset</button>-->
-                    </div>
-                </mat-step>
+                
             </mat-stepper>
 
         </form>

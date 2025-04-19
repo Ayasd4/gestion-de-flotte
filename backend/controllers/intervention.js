@@ -11,30 +11,33 @@ exports.generatePdf = async (req, res) => {
         console.log('ID Intervention received:', id_intervention);
 
         const sql = `SELECT i.id_intervention,
-        o.id_ordre,
-        o.urgence_panne,
-        o.travaux,
-        o.material_requis,
-        o.planning,
-        o.date_ordre,
-        tech.nom,
-        tech.prenom,
-        tech.matricule_techn,
-        tech.email_techn,
-        tech.specialite,
-        i.date_debut,
-        i.heure_debut,
-        i.date_fin,
-        i.heure_fin,
-        i.status_intervention,
-        i.commentaire,
-        v.numparc
-        FROM acc.intervention AS i
-        JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
-        JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
-        JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
-        JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule
-        WHERE id_intervention=$1`;
+    o.id_ordre,
+    o.urgence_panne,
+    t.nom_travail,
+    o.planning,
+    o.date_ordre,
+    o.status,
+    tech.nom,
+    tech.prenom,
+    tech.matricule_techn,
+    tech.email_techn,
+    tech.telephone_techn,
+    tech.specialite,
+    i.date_debut,
+    i.heure_debut,
+    i.date_fin,
+    i.heure_fin,
+    i.status_intervention,
+    i.commentaire,
+    v.numparc
+    FROM acc.intervention AS i
+    JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
+    LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
+    JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
+    JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+    JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule
+    WHERE id_intervention = $1`;
 
 
         db.query(sql, [id_intervention], (err, result) => {
@@ -57,12 +60,12 @@ exports.generatePdf = async (req, res) => {
 
             const logoPath = 'assets/srtj.png'; // chemin relatif vers ton logo
             if (fs.existsSync(logoPath)) {
-                doc.image(logoPath, 50, 30, { width: 50 }); // x = 50, y = 30, largeur = 80
+                doc.image(logoPath, 50, 30, { width: 70 }); // x = 50, y = 30, largeur = 80
                 doc.moveDown(); // petit espace après le logo
 
-                doc.fontSize(12).font('Helvetica-Bold').text('S.R.T JENDOUBA', 400, 30, { align: 'left' });
-                doc.fontSize(11).font('Helvetica').text('Division Technique', 400, 50, { align: 'left' });
-                doc.font('Helvetica').text('Service Maintenance', 400, 65, { align: 'left' });
+                doc.fontSize(14).font('Helvetica-Bold').text('S.R.T JENDOUBA', 420, 50, { align: 'left' });
+                doc.fontSize(12).font('Helvetica').text('Division Technique', 420, 70, { align: 'left' });
+                doc.font('Helvetica').text('Service Maintenance', 420, 85, { align: 'left' });
 
             }
             doc.x = 50;
@@ -72,7 +75,7 @@ exports.generatePdf = async (req, res) => {
             //doc.y = 120;
             doc.fontSize(25)
                 .font('Helvetica')
-                .text(`Rapport d'Intervention Technique sur l'Ordre de Travail N° ${intervention.id_ordre}`, {
+                .text(`Rapport d'Intervention Technique sur l'Ordre de Travail N° ${ intervention.id_ordre } `, {
                     align: 'center',
                     underline: true,
                 });
@@ -85,50 +88,49 @@ exports.generatePdf = async (req, res) => {
 
             // Informations de la demande
             doc.fontSize(15).font('Helvetica-Bold').text('Informatin sur l\'ordre de travail:', 50, doc.y, { underline: true });
-            doc.font('Helvetica').text(`Travaux Effectué: ${intervention.travaux}`);
-            doc.font('Helvetica').text(`Materiel Requis: ${intervention.material_requis}`);
+            doc.font('Helvetica').text(`Travail à faire: ${ intervention.nom_travail } `);
             doc.font('Helvetica').text(`Plannification de L'intervention: ${intervention.planning}`);
-            doc.font('Helvetica').text(`Date de création: ${intervention.date_ordre?.toLocaleDateString?.() || intervention.date_ordre}`);
+        doc.font('Helvetica').text(`Date de création: ${intervention.date_ordre?.toLocaleDateString?.() || intervention.date_ordre}`);
 
-            doc.moveDown(1);
+        doc.moveDown(1);
 
-            //technicien
-            doc.fontSize(15).font('Helvetica-Bold').text('Technicien Concerné :', { underline: true });
-            doc.font('Helvetica').text(`Numéro de technicien: ${intervention.matricule_techn}`);
-            doc.font('Helvetica').text(`Nom: ${intervention.nom} ${intervention.prenom}`);
-            doc.font('Helvetica').text(`E-mail: ${intervention.email_techn}`);
-            doc.font('Helvetica').text(`Téléphone: ${intervention.telephone_techn}`);
-            doc.font('Helvetica').text(`Specialité: ${intervention.specialite}`);
+        //technicien
+        doc.fontSize(15).font('Helvetica-Bold').text('Technicien Concerné :', { underline: true });
+        doc.font('Helvetica').text(`Numéro de technicien: ${intervention.matricule_techn}`);
+        doc.font('Helvetica').text(`Nom: ${intervention.nom} ${intervention.prenom}`);
+        doc.font('Helvetica').text(`E-mail: ${intervention.email_techn}`);
+        doc.font('Helvetica').text(`Téléphone: ${intervention.telephone_techn}`);
+        doc.font('Helvetica').text(`Specialité: ${intervention.specialite}`);
 
-            //doc.fontSize(14).font('Helvetica').text('----------------------------------------------------------------------------------------------------');
+        //doc.fontSize(14).font('Helvetica').text('----------------------------------------------------------------------------------------------------');
 
-            doc.moveDown(1);
+        doc.moveDown(1);
 
-            // Informations sur l'interv.
-            doc.fontSize(14).font('Helvetica');
-            doc.font('Helvetica-Bold').text(`L'intervention N° ${intervention.id_intervention}`, { underline: true });
-            doc.font('Helvetica').text(`Date de début de l'intervention: ${intervention.date_debut?.toLocaleDateString?.() || intervention.date_debut}`);
-            doc.font('Helvetica').text(`Heure de début de l'intervention: ${intervention.heure_debut}`);
-            doc.font('Helvetica').text(`Date de Fin de l'intervention: ${intervention.date_fin?.toLocaleDateString?.() || intervention.date_fin}`);
-            doc.font('Helvetica').text(`Heure de Fin de l'intervention: ${intervention.heure_fin}`);
-            doc.font('Helvetica').text(`L'intervention: ${intervention.status_intervention}`);
-            doc.font('Helvetica').text(`Commentaire: ${intervention.commentaire}`);
+        // Informations sur l'interv.
+        doc.fontSize(14).font('Helvetica');
+        doc.font('Helvetica-Bold').text(`L'intervention N° ${intervention.id_intervention}`, { underline: true });
+        doc.font('Helvetica').text(`Date de début de l'intervention: ${intervention.date_debut?.toLocaleDateString?.() || intervention.date_debut}`);
+        doc.font('Helvetica').text(`Heure de début de l'intervention: ${intervention.heure_debut}`);
+        doc.font('Helvetica').text(`Date de Fin de l'intervention: ${intervention.date_fin?.toLocaleDateString?.() || intervention.date_fin}`);
+        doc.font('Helvetica').text(`Heure de Fin de l'intervention: ${intervention.heure_fin}`);
+        doc.font('Helvetica').text(`L'intervention: ${intervention.status_intervention}`);
+        doc.font('Helvetica').text(`Commentaire: ${intervention.commentaire}`);
 
-            doc.moveDown(3); // saut de 2 lignes
+        doc.moveDown(3); // saut de 2 lignes
 
-            const y = doc.y + 20; // position verticale actuelle + un petit espace
+        const y = doc.y + 20; // position verticale actuelle + un petit espace
 
-            doc.fontSize(12);
-            doc.text('Signature Chef d\'atelier', 50, y); // côté gauche
-            doc.text('Signature responsable maintenance', 400, y);   // côté droit
+        doc.fontSize(12);
+        doc.text('Signature Chef d\'atelier', 50, y); // côté gauche
+        doc.text('Signature responsable maintenance', 400, y);   // côté droit
 
-            doc.end();
+        doc.end();
 
-        });
+    });
 
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
+} catch (error) {
+    return res.status(500).json({ error: error.message });
+}
 }
 
 exports.search = async (req, res) => {
@@ -161,18 +163,6 @@ exports.search = async (req, res) => {
         if (req.query.urgence_panne) {
             conditions.push(`o.urgence_panne ILIKE $${paramIndex}`);
             values.push(`%${req.query.urgence_panne}%`);
-            paramIndex++;
-        }
-
-        if (req.query.travaux) {
-            conditions.push(`o.travaux ILIKE $${paramIndex}`);
-            values.push(`%${req.query.travaux}%`);
-            paramIndex++;
-        }
-
-        if (req.query.material_requis) {
-            conditions.push(`o.material_requis ILIKE $${paramIndex}`);
-            values.push(`%${req.query.material_requis}%`);
             paramIndex++;
         }
 
@@ -227,8 +217,6 @@ exports.search = async (req, res) => {
 
         let sql = `SELECT i.id_intervention,
     o.urgence_panne,
-    o.travaux,
-    o.material_requis,
     o.planning,
     o.date_ordre,
     o.status,
@@ -240,10 +228,14 @@ exports.search = async (req, res) => {
     i.date_fin,
     i.heure_fin,
     i.status_intervention,
-    i.commentaire
+    i.commentaire,
+    v.numparc
     FROM acc.intervention AS i
     JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
     JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
+    JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+    JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule
     `;
 
         if (conditions.length > 0) {
@@ -262,8 +254,7 @@ exports.search = async (req, res) => {
 exports.list = async (req, res) => {
     sql = `SELECT i.id_intervention,
     o.urgence_panne,
-    o.travaux,
-    o.material_requis,
+    t.nom_travail,
     o.planning,
     o.date_ordre,
     tech.nom,
@@ -280,6 +271,7 @@ exports.list = async (req, res) => {
     v.numparc
     FROM acc.intervention AS i
     JOIN acc.ordre_travail AS o ON i.id_ordre = o.id_ordre
+    JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
     JOIN acc.technicien AS tech ON i.id_technicien = tech.id_technicien
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
     JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
@@ -315,15 +307,15 @@ exports.create = async (req, res) => {
             return res.status(400).json({ error: "Missing order or technician" });
         }
 
-        const { travaux } = ordre;
+        const { nom_travail } = ordre;
         const { matricule_techn } = technicien;
 
-        const ordreResult = await db.query("SELECT id_ordre FROM acc.ordre_travail WHERE travaux = $1", [travaux]);
+        const ordreResult = await db.query(`SELECT o.id_ordre,t.nom_travail FROM acc.ordre_travail AS o
+            JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux WHERE nom_travail = $1`, [nom_travail]);
         if (ordreResult.rows.length === 0) {
-            return res.status(400).json({ error: "atelier not found!" });
+            return res.status(400).json({ error: "order not found!" });
         }
         const id_ordre = ordreResult.rows[0].id_ordre;
-
 
         const technicienResult = await db.query("SELECT id_technicien FROM acc.technicien WHERE matricule_techn = $1", [matricule_techn]);
         if (technicienResult.rows.length === 0) {
@@ -367,12 +359,13 @@ exports.update = async (req, res) => {
             return res.status(400).json({ error: "Missing order or technician" });
         }
 
-        const { travaux } = ordre;
+        const { nom_travail } = ordre;
         const { matricule_techn } = technicien;
 
-        const ordreResult = await db.query("SELECT id_ordre FROM acc.ordre_travail WHERE travaux = $1", [travaux]);
+        const ordreResult = await db.query(`SELECT o.id_ordre,t.nom_travail FROM acc.ordre_travail AS o
+            JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux WHERE nom_travail = $1`, [nom_travail]);
         if (ordreResult.rows.length === 0) {
-            return res.status(400).json({ error: "atelier not found!" });
+            return res.status(400).json({ error: "order not found!" });
         }
         const id_ordre = ordreResult.rows[0].id_ordre;
 
@@ -391,8 +384,7 @@ exports.update = async (req, res) => {
 
 
         const sql = `UPDATE acc.intervention SET id_ordre = $1, id_technicien = $2, date_debut = $3, heure_debut = $4, date_fin = $5, heure_fin = $6, status_intervention = $7, commentaire = $8
-        WHERE id_intervention = $9
-    RETURNING * `;
+        WHERE id_intervention = $9 RETURNING * `;
 
         db.query(sql, [id_ordre, id_technicien, formattedDateDebut, formattedHeureDebut, formattedDateFin, formattedHeureFin, status_intervention, commentaire, id_intervention], (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
@@ -426,14 +418,26 @@ exports.delete = async (req, res) => {
 }
 
 exports.getOrdreByTravaux = async (req, res) => {
-    const travaux = req.params.travaux;
-    const sql = "SELECT  travaux, urgence_panne, material_requis, planning, date_ordre FROM acc.ordre_travail WHERE travaux=$1";
-    //idvehicule,
-    db.query(sql, [travaux], (err, result) => {
+    const nom_travail = req.params.nom_travail;
+
+    const sql = `
+        SELECT 
+            t.nom_travail,
+            o.urgence_panne,
+            o.planning,
+            o.date_ordre
+        FROM acc.ordre_travail o
+        JOIN acc.travaux t ON o.id_travaux = t.id_travaux
+        WHERE t.nom_travail = $1
+    `;
+
+    db.query(sql, [nom_travail], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        if (result.rows.length === 0) return res.status(404).json({ error: "Ordre not found for this travail" });
         return res.status(200).json(result.rows[0]);
     });
 }
+
 
 exports.getTechnicienByMatricule = async (req, res) => {
     const matricule_techn = req.params.matricule_techn;
@@ -444,3 +448,4 @@ exports.getTechnicienByMatricule = async (req, res) => {
         return res.status(200).json(result.rows[0]);
     });
 }
+

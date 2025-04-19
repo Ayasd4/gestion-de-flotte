@@ -1,10 +1,15 @@
-.search-container {
-    margin: 20px auto;
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
+.search-form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
   }
+  
+  .search-form .form-group {
+    flex: 1 1 calc(100% / 3 - 20px); /* 3 colonnes par ligne */
+    min-width: 250px;
+  }
+  
   
   .search-header {
     background-color: #007bff;
@@ -18,6 +23,8 @@
     background-color: white;
     width: 100%;
     padding: 20px;
+    margin-left: 200px;
+    margin-bottom: -60px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -50,7 +57,7 @@
 
   .buton{
     display: flex;
-    justify-content: center; /* Centrer les boutons horizontalement */
+    margin-left: 300px;
     margin-bottom: 100px;
     gap: 20px; /* Ajouter de l'espace entre les boutons */
   }

@@ -1,0 +1,37 @@
+<div class="container">
+    <h2 mat-dialog-title>{{ vidange.id_vd ? 'Update' : 'Add' }} Oil change</h2>
+    <mat-dialog-content>
+        <form #vidangeForm="ngForm">
+            <mat-form-field>
+                <mat-label>Park Number</mat-label>
+                <mat-select [(ngModel)]="vidange.vehicule.numparc" name="numparc" required>
+                    <mat-option *ngFor="let num of numparcList" [value]="num">
+                        {{ num }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Date Oil change</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="vidange.date_vidange" name="date_vidange" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field>
+                <mat-label>Index km</mat-label><!--mileage-->
+                <input matInput [(ngModel)]="vidange.km_vidange" name="km_vidange" id="km_vidange" required>
+            </mat-form-field>
+
+            <div class="buton">
+                <mat-dialog-actions>
+                    <button mat-button (click)="dialogRef.close()">Close</button>
+                    <button type="submit" mat-button color="primary" (click)="saveVidange(vidangeForm)">Save</button>
+
+                </mat-dialog-actions>
+            </div>
+
+        </form>
+    </mat-dialog-content>
+</div>

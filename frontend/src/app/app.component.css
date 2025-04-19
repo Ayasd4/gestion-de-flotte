@@ -1,9 +1,18 @@
-/*.main-container {
+/*Navbar fermé */
+.main-container {
   background-color: rgba(228, 226, 224, 0.897);
   transition: margin-left 0.3s ease-in-out;
-  margin-left: 60px;} /* Navbar fermé */
+  /*margin-left: 60px;*/
+
+}
 
 
-/*.main-container.collapsed {
-  margin-left: 250px; ;}/* Navbar ouvert */
+
+/*Navbar ouvert */
+.main-container.collapsed {
+  transition: margin-left 0.3s ease-in-out;
+  width: 90%;
+  margin-left: 200px;
+  
+}
 

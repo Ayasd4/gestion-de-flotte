@@ -36,12 +36,16 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return this.httpClient.post<AuthResponse>(`${this.baseUrl}/login`, { email, password }).pipe(
+      
       tap((response) => {
         if (response && response.token && response.user) {
+          
+
           console.log('User conected:', response.user); // Vérifiez ici si le rôle est présent dans l'objet `user`
           localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
+          localStorage.setItem('user', JSON.stringify(response.user));          
           this.isLoggedInSubject.next(true); // Met à jour l'état
+          window.location.reload();
         } else {
           throw new Error("Invalid response from server");
         }

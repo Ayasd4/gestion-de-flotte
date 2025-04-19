@@ -170,3 +170,29 @@ exports.getVehicleTotal = async (req, res) => {
         });
     });
 };
+
+
+//
+exports.getKilometrageByNumparc = async (req, res) => {
+    const { numparc } = req.params;
+
+    try {
+        const sql = `
+            SELECT k.calcul
+            FROM acc.kilometrage k
+            JOIN acc.vehicule v ON v.idvehicule = k."vehiculeId"
+            WHERE v.numparc = $1
+            LIMIT 1
+        `;
+
+        const { rows } = await db.query(sql, [numparc]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Aucun kilométrage trouvé pour ce véhicule." });
+        }
+
+        res.json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

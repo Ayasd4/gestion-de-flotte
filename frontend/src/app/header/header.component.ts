@@ -11,6 +11,12 @@ interface HeaderNavToggle {
   screenwidth: number;
   collapsed: boolean;
 }
+interface NavItem {
+  routeLink: string;
+  icon: string;
+  label: string;
+}
+
 @Component({
   selector: 'app-header',
   standalone: true,//ajouter
@@ -29,7 +35,7 @@ interface HeaderNavToggle {
       transition(':leave', [
         style({ opacity: 1 }),
         animate('350ms',
-          style({ opacity: 0 })
+          style({ opacity: 0 })//0
         )
       ])
     ]),
@@ -48,7 +54,6 @@ interface HeaderNavToggle {
 
 export class HeaderComponent implements OnInit {
 
-
   @Output() onToggleHeaderNav: EventEmitter<HeaderNavToggle> = new EventEmitter();
 
   //role: string | null = null;
@@ -56,6 +61,7 @@ export class HeaderComponent implements OnInit {
   collapsed = false;
   screenwidth = 0;
   navData = navbarData;
+  isLoggedIn: boolean = false;
 
   constructor(private tokenService: TokenService, private authService: AuthService, private router: Router) { }
 
@@ -63,25 +69,21 @@ export class HeaderComponent implements OnInit {
 
   onResize(event: any) {
     this.screenwidth = window.innerWidth;
+    this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
+
+    /*this.screenwidth = window.innerWidth;
     if (this.screenwidth <= 768) {
-      this.collapsed = false;
+      this.collapsed = false;//false
       this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
-    }
+    }*/
   }
 
   ngOnInit(): void {
     this.screenwidth = window.innerWidth;
+    this.collapsed = true; //
 
     // Écoute les changements de l'utilisateur pour mettre à jour le header dynamiquement
-    /* this.authService.user$.subscribe(user => {
-       if (user && user.roles) {
-         this.role = user.roles;
-         this.navData = this.getUserNavData();
-       } else {
-         this.role = null;
-         this.navData = [];
-       }
-     });*/
+
 
     const user = this.authService.getUser();
     console.log('Utilisateur retourné par getUser():', user);
@@ -97,14 +99,17 @@ export class HeaderComponent implements OnInit {
     // Filtrer le menu selon le rôle
     this.navData = this.getUserNavData();
     console.log('navData après filtrage:', this.navData);
+    //this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth }); //
+    this.isLoggedIn = !!localStorage.getItem('token');
+
   }
 
   getUserNavData() {
-    const navItems = [];
-
+    const navItems: NavItem[] = [];
 
     // Vérifie les rôles et ajoute les sections correspondantes
     if (this.role.includes('admin')) {
+
       return [
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
@@ -118,17 +123,29 @@ export class HeaderComponent implements OnInit {
         //{ routeLink: 'ordre', icon: 'fal fa-clipboard-list', label: 'orders'},
         { routeLink: 'demande', icon: ' fal fa-file-alt', label: 'demande d’avarie' },
         {
+          routeLink: 'etat',
+          icon: 'fal fa-calendar-check',
+          label: 'etat vidange'
+        },
+        /*{
+          routeLink: 'vidange',
+          icon: 'fal fa-oil-can',
+          label: 'vidange'
+        },*/
+        {
           routeLink: 'consomation',
           icon: 'fal fa-gas-pump', //fal fa-oil-can //fal fa-tags
           label: 'consomation'
         },
         { routeLink: 'kilometrage', icon: 'fal fa-tachometer-alt', label: 'Kilométrage' }
       ];
+
     }
 
     if (this.role.includes('chef de direction technique')) {
 
       return [
+
         { routeLink: 'dashboard', icon: 'fal fa-home', label: 'Dashboard' },
         { routeLink: 'vehicule', icon: 'fal fa-bus', label: 'Véhicule' },
         { routeLink: 'chauffeur', icon: 'fal fa-user-tie', label: 'chauffeur' },
@@ -136,6 +153,7 @@ export class HeaderComponent implements OnInit {
         { routeLink: 'technicien', icon: 'fal fa-user-hard-hat ', label: 'technicien' },
 
       ];
+
     }
 
     if (this.role.includes('chef service maintenance')) {
@@ -157,41 +175,56 @@ export class HeaderComponent implements OnInit {
       return [{ routeLink: 'demande', icon: 'fal fa-file-alt', label: 'demandes d’avarie' }];
     }
 
+    if (this.role.includes('Chef service maîtrise de l\'énergie')) {
+      return [
+        {
+          routeLink: 'etat',
+          icon: 'fal fa-calendar-check',
+          label: 'etat vidange'
+        },
+        /*{
+          routeLink: 'vidange',
+          icon: 'fal fa-oil-can',// fa-tint
+          label: 'vidange'
+        }*/
+      ]
+    }
+
     if (this.role.includes('Agent de saisie maîtrise de l\'énergie')) {
       return [
         {
           routeLink: 'consomation',
           icon: 'fal fa-gas-pump', //fal fa-oil-can //fal fa-tags
           label: 'consomation'
-          
+
         },
-        
-    {
-      routeLink: 'kilometrage',
-      icon: 'fal fa-tachometer-alt', //fal fa-road//fal fa-cog:parametre
-      label: 'kilometrage'
-  }
+
+        {
+          routeLink: 'kilometrage',
+          icon: 'fal fa-tachometer-alt', //fal fa-road//fal fa-cog:parametre
+          label: 'kilometrage'
+        }
       ]
     }
 
     return [];
   }
 
-
-
   toggleCollapse(): void {
     this.collapsed = !this.collapsed;
     this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
+
   }
 
   closeHeader(): void {
-    this.collapsed = false;
+    this.collapsed = false; //false
     this.onToggleHeaderNav.emit({ collapsed: this.collapsed, screenwidth: this.screenwidth });
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
+
   }
 
   navigateToTask(task: string) {

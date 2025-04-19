@@ -398,7 +398,7 @@ exports.delete = async (req, res) => {
 
     db.query(sql, [id_demande], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        return res.status(200).json({ message: "demand deleted successfully" });
+        return res.status(200).json({ message: "request deleted successfully" });
     });
 }
 

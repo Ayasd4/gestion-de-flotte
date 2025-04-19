@@ -1,3 +1,5 @@
+import { Travaux } from "../ordre/travaux"
+
 export interface Intervention {
     id_intervention: number,
     ordre: {
@@ -8,9 +10,8 @@ export interface Intervention {
                 vehicule: { numparc: number }
             },
         }
-        travaux: string,
+        nom_travail: string,
         urgence_panne: string,
-        material_requis: string,
         planning: string,
         date_ordre: string,
     },

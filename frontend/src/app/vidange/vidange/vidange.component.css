@@ -1,0 +1,118 @@
+.card {
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    overflow: hidden;
+  }
+  
+  .card-head {
+    background-color: #3f51b5;
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  
+  .card-body {
+    padding: 16px;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-elevation-z8 {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  }
+  
+  .mat-header-cell {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  
+  .mat-cell {
+    padding: 8px 16px;
+  }
+  
+  button.mat-flat-button {
+    margin: 0 4px;
+  }
+  
+  mat-paginator {
+    margin-top: 16px;
+  }
+  
+  .btn-primary {
+    background-color: #3f51b5;
+    color: white;
+  }
+
+
+/* Style de la recherche */
+.search-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-bottom: 1px;
+}
+
+.goBack{
+  margin-right: 850px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.boutton {
+    display: flex;
+    gap: 5px; /* Espace entre les boutons */
+  }
+  
+  .boutton button {
+    flex: 1;
+    min-width: 8px;
+    font-weight: 450;
+    font-size: 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    color: white;
+  }
+  
+  /* Hover pour le bouton 'edit' */
+  .boutton button[color="primary"]:hover {
+    background-color: #1976d2; /* plus foncé */
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.4);
+  }
+  
+  /* Hover pour le bouton 'delete' */
+  .boutton button[color="warn"]:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+  }
+
+
+    
+  .card-head button {
+    background-color: #1976d2;
+    margin-left: auto;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    width: 150px;
+    height: 40px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+
+  .card-head button:hover {
+    background-color: #1565c0;
+    transform: scale(1.05);
+  }

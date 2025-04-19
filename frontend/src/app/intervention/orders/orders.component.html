@@ -2,22 +2,15 @@
     <div class="card-head">
         <div class="title"> List Orders</div>
     </div>
-    
-    <div class="search-container">
-        
-        <form (ngSubmit)="searchOrdre()" #searchForm="ngForm" class="search-form">
-            <div class="search-header">
-                Search Filters
-            </div>
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="date_diagnostic">Diagnostic Date</label>
-                        <input type="date" class="form-control" name="date_diagnostic" id="date_diagnostic"
-                            [(ngModel)]="searchParams.date_diagnostic">
-                    </div>
-                </div>
 
+    <div class="search-header">
+        Search Filters
+    </div>
+    <div class="search-container">
+
+        <form (ngSubmit)="searchOrdre()" #searchForm="ngForm" class="search-form">
+
+            <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="id_atelier">Workshops</label>
@@ -43,6 +36,8 @@
                         </select>
                     </div>
                 </div>
+            </div>
+            <div class="row">
 
                 <div class="col-md-3">
                     <div class="form-group">
@@ -82,18 +77,6 @@
                 <td mat-cell *matCellDef="let Ordre"> {{Ordre.numparc}} </td>
             </ng-container>
 
-            <ng-container matColumnDef="diagnostic">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Diagnostic </th>
-                <td mat-cell *matCellDef="let Ordre">
-                    
-                    <div style="display: flex; flex-direction: column;">
-                        <span><strong>Description:</strong> {{Ordre.description_panne}}</span>
-                        <span><strong>Causes:</strong> {{Ordre.causes_panne}}</span>
-                        <span><strong>Actions:</strong> {{Ordre.actions}}</span>
-                    </div>
-                </td>
-            </ng-container>
-
             <ng-container matColumnDef="urgence_panne">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Emergency Breakdown </th>
                 <td mat-cell *matCellDef="let Ordre" [ngClass]="getEmergencyClass(Ordre.urgence_panne)">
@@ -107,7 +90,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Works </th>
                 <td mat-cell *matCellDef="let Ordre">
                     <div style="display: flex; flex-direction: column;">
-                        {{Ordre.travaux}}
+                        {{Ordre.nom_travail}}
                     </div>
                 </td>
             </ng-container>
@@ -155,24 +138,26 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
                 <td mat-cell *matCellDef="let ordre">
-
-                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="editStatus(ordre)"
-                        color="primary" matTooltip="edit"
-                        aria-label="Button that displays a tooltip when focused or hovered over">
-                        <mat-icon>edit</mat-icon>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
                     </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="editStatus(ordre)">
+                            <mat-icon>edit</mat-icon>
+                            <span>edit status</span>
+                        </button>
 
-                    <button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="interventionOrdre(ordre)"
-                        color="black" matTooltip="intervention"
-                        aria-label="Button that displays a tooltip when focused or hovered over"><!--routerLink="/intervention" routerLinkActive="active"-->
-                        <mat-icon>build</mat-icon>
-                    </button>
-
-                    <!--<button style="height: 27px;margin-left: 20px;" mat-icon-button
-                        (click)="deleteOrder(ordre.id_ordre)" color="warn" matTooltip="delete"
-                        aria-label="Button that displays a tooltip when focused or hovered over">
-                        <mat-icon>delete</mat-icon>
-                    </button>-->
+                        <button mat-menu-item (click)="interventionOrdre(ordre)">
+                            <mat-icon>build</mat-icon>
+                            <span>create intervention</span>
+                        </button>
+                    </mat-menu>
+                    <!--<div class="boutton">
+                        <button  mat-flat-button (click)="editStatus(ordre)" color="primary">edit</button>
+                        <button mat-flat-button
+                            (click)="interventionOrdre(ordre)" color="black">intervention
+                        </button>
+                    </div>-->
 
                 </td>
             </ng-container>

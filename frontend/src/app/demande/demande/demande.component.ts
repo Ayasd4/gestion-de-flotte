@@ -126,7 +126,7 @@ export class DemandeComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {
-      console.log('Error while retrieving demand: ', error);
+      console.log('Error while retrieving request: ', error);
     });
 
     this.loadVehicules();

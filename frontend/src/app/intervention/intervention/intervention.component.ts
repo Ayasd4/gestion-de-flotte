@@ -18,6 +18,7 @@ import { Ordre } from 'src/app/ordre/ordre';
 import { OrdreService } from 'src/app/ordre/ordre.service';
 import { Technicien } from 'src/app/technicien/technicien';
 import { TechnicienService } from 'src/app/technicien/technicien.service';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-intervention',
@@ -35,12 +36,13 @@ import { TechnicienService } from 'src/app/technicien/technicien.service';
     MatSortModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ]
 })
 export class InterventionComponent implements OnInit {
 
-  displayedColumns: string[] = ['id_intervention', 'Vehicle', 'ordre', 'technicien', 'date_debut', 'date_fin', 'status', 'commentaire', 'actions'];
+  displayedColumns: string[] = ['id_intervention', 'Vehicle', 'technicien', 'date_debut', 'date_fin', 'status', 'commentaire', 'actions'];
   dataSource = new MatTableDataSource<Intervention>();
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -68,8 +70,8 @@ export class InterventionComponent implements OnInit {
         },
       },
       urgence_panne: '',
-      travaux: '',
-      material_requis: '',
+      nom_travail: '',
+      //travaux: {id_travaux: 0,nom_travail: '', type_atelier: ''},
       planning: '',
       date_ordre: '',
     },

@@ -1,6 +1,6 @@
 .header{
     background: #202020;/*03754f/ 202020*/
-    transition: all .5s ease;/*0.5s*/
+    transition: all 0.5s ease;/*0.5s*/
     position: fixed;
     z-index: 3;
     top: 0;
@@ -9,7 +9,7 @@
     height: 100vh;
     box-shadow: none;
 
-    /*box-shadow: 0.063rem 0 1.25rem 0 #ecf1f1;*/
+    /*box-shadow: 0.063rem 0 0.25rem 0 #ecf1f1;*/
 
     .logo-container{
         display: flex;
@@ -18,7 +18,7 @@
         width: 100%;
 
         .logo{
-            background: #000;/*fff*/
+            background: #fff;/*fff*/
             text-align: center;
             width: 3rem;
             min-height: 3rem;
@@ -55,7 +55,7 @@
 }
 
 .header-collapsed{
-    width: 16rem; /*16.5625rem*/
+    width: 14rem; /*16.5625rem*/
 }
 
 .header-nav{

@@ -16,6 +16,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MY_DATE_FORMATS } from 'src/app/maintenance/add-diagnostic/add-diagnostic.component';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { InfosService } from 'src/app/ordre/infos.service';
+import { OrdreService } from 'src/app/ordre/ordre.service';
 
 @Component({
   selector: 'app-add-intervention',
@@ -62,9 +64,9 @@ export class AddInterventionComponent implements OnInit {
           vehicule: { numparc: 0 }
         },
       },
-      travaux: '',
+      nom_travail: '',
+      //travaux: { id_travaux: 0, nom_travail: '', type_atelier: '' },
       urgence_panne: '',
-      material_requis: '',
       planning: '',
       date_ordre: '',
     },
@@ -85,6 +87,7 @@ export class AddInterventionComponent implements OnInit {
   }
   ordreList: any;
   technicienList: any;
+  travauxList: any;
 
   constructor(private interventionService: InterventionService,
     public dialogRef: MatDialogRef<AddInterventionComponent>,
@@ -92,14 +95,15 @@ export class AddInterventionComponent implements OnInit {
     private router: Router,
     private ngxService: NgxUiLoaderService,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private infosService: InfosService,
+    private ordreService: OrdreService
   ) {
-    if (data?.id_ordre) {
+    /*if (data?.id_ordre) {
       this.intervention.ordre.id_ordre = data.id_ordre;
-    }
+    }*/
     //ordre
-    this.intervention.ordre.travaux = data.travaux;
+    this.intervention.ordre.nom_travail = data.nom_travail;
     this.intervention.ordre.urgence_panne = data.urgence_panne;
-    this.intervention.ordre.material_requis = data.material_requis;
     this.intervention.ordre.planning = data.planning;
     this.intervention.ordre.date_ordre = data.date_ordre;
 
@@ -109,6 +113,11 @@ export class AddInterventionComponent implements OnInit {
     this.intervention.technicien.prenom = data.prenom;
     this.intervention.technicien.email_techn = data.email_techn;
     this.intervention.technicien.specialite = data.specialite;
+
+    //travaux
+    //this.intervention.ordre.travaux.nom_travail = data.nom_travail;
+    //this.intervention.ordre.travaux.type_atelier = data.type_atelier;
+
   }
 
   getOrdre() {
@@ -135,20 +144,34 @@ export class AddInterventionComponent implements OnInit {
     });
   }
 
+  getTravaux() {
+    this.infosService.fetchAllTravaux().subscribe({
+      next: (data) => {
+        console.log("List of works received", data);
+
+        this.travauxList = data.map((item: any) => item.nom_travail);
+      },
+      error: (err) => {
+        console.error('Error loading works', err);
+      }
+    });
+  }
+
   //infos
   getOrdreInfo() {
-    const travaux = this.intervention.ordre.travaux;
-    console.log("Order sent to the backend:", travaux); // Vérification
+    //const nom_travail = this.intervention.ordre.travaux.nom_travail;
+    const nom_travail = this.intervention.ordre.nom_travail;
 
-    if (travaux) {
-      this.interventionService.getOrdreByTravaux(travaux).subscribe({
+    console.log("Order sent to the backend:", nom_travail); // Vérification
+
+    if (nom_travail) {
+      this.interventionService.getOrdreByTravaux(nom_travail).subscribe({
         next: (data) => {
           console.log('Order data retrieved:', data);
 
           if (data) {
             //this.intervention.ordre.travaux = data.travaux;
             this.intervention.ordre.urgence_panne = data.urgence_panne;
-            this.intervention.ordre.material_requis = data.material_requis;
             this.intervention.ordre.planning = data.planning;
             this.intervention.ordre.date_ordre = data.date_ordre;
 
@@ -187,6 +210,7 @@ export class AddInterventionComponent implements OnInit {
     }
   }
 
+
   getOrdreById() {
 
     if (!this.intervention.ordre || !this.intervention.ordre.id_ordre) {
@@ -214,32 +238,42 @@ export class AddInterventionComponent implements OnInit {
     });
   }
 
+  getTravauxInfo() {
+    const nom_travail = this.intervention.ordre.nom_travail;
+    console.log("Works sent to the backend:", nom_travail); // Vérification
+
+    if (nom_travail) {
+      this.ordreService.getTravauxByNom(nom_travail).subscribe({
+        next: (data) => {
+          console.log('Works data retrieved:', data);
+
+          if (data) {
+
+            this.intervention.ordre.urgence_panne = data.urgence_panne;
+            this.intervention.ordre.planning = data.planning;
+            this.intervention.ordre.date_ordre = data.date_ordre;
+          }
+        },
+        error: (err) => {
+          console.error('Error retrieving works information', err);
+        }
+      });
+    }
+  }
+
   ngOnInit(): void {
     if (this.data && this.data.id_intervention) {
       this.intervention = { ...this.intervention, ...this.data };
 
       // Vérifier si les sous-objets existent sinon les initialiser
-      this.intervention.ordre = this.intervention.ordre || { travaux: '', urgence_panne: '', material_requis: '', planning: '', date_ordre: '' };
+      this.intervention.ordre = this.intervention.ordre || { nom_travail: '',urgence_panne: '', planning: '', date_ordre: '' };
       this.intervention.technicien = this.intervention.technicien || { nom: '', prenom: '', matricule_techn: this.matricule_techn, email_techn: '', specialite: '' };
-
-      /*if (this.data.technicien?.matricule_techn) {
-        this.intervention.technicien.matricule_techn = this.data.ordre.technicien.matricule_techn;
-        this.intervention.technicien.nom = this.data.intervention.technicien.nom;
-        this.intervention.technicien.prenom = this.data.intervention.technicien.prenom;
-        this.intervention.technicien.email_techn = this.data.intervention.technicien.email_techn;
-        this.intervention.technicien.specialite = this.data.intervention.technicien.specialite;
-      }*/
-
-      /*if (this.data.ordre?.technicien?.nom || this.data.ordre?.technicien?.prenom || this.data.ordre?.technicien?.matricule_techn || this.data.ordre?.technicien?.email_techn || this.data.ordre?.technicien?.specialite) {
-        this.intervention.ordre.technicien.nom = this.data.intervention.technicien.nom;
-        this.intervention.ordre.technicien.prenom = this.data.intervention.technicien.prenom;
-        this.intervention.ordre.technicien.matricule_techn = this.data.intervention.technicien.matricule_techn;
-        this.intervention.ordre.technicien.email_techn = this.data.intervention.technicien.email_techn;
-        this.intervention.ordre.technicien.specialite = this.data.intervention.technicien.specialite;
-      }*/
+      //this.intervention.ordre.travaux = this.intervention.ordre.travaux || { nom_travail: '', type_atelier: '' };
 
       // Récupérer l'ordre et les informations du technicien uniquement en mode update
-      if (this.intervention.ordre?.id_ordre) {
+      //      if (this.intervention.ordre?.id_ordre) {
+
+      if (this.intervention.ordre?.nom_travail) {
         this.getOrdreInfo();  // Appel pour récupérer les informations de l'ordre
       }
 
@@ -251,13 +285,14 @@ export class AddInterventionComponent implements OnInit {
     }
     this.getOrdre();
     this.getTechnicien();
+    this.getTravaux();
 
     // Vérification avant d'appeler getOrdreById()
-    if (this.intervention.ordre && this.intervention.ordre.id_ordre) {
+    /*if (this.intervention.ordre && this.intervention.ordre.id_ordre) {
       this.getOrdreById();
     } else {
       console.warn("No Order ID provided, skipping getOrdreById()");
-    }
+    }*/
   }
 
   //lorsqu'un utilisateur clique sur un bouton "Annuler" dans une boîte de dialogue pour la fermer sans valider une action.

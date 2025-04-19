@@ -20,4 +20,6 @@ router.delete('/:id', kilometrageController.delete);
 // Get total kilometrage for a specific vehicle
 router.get('/vehicle/:vehiculeId', kilometrageController.getVehicleTotal);
 
+router.get('/vehicule/:numparc', kilometrageController.getKilometrageByNumparc);
+
 module.exports = router;
