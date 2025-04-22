@@ -26,6 +26,7 @@ import { VehiculeService } from 'src/app/vehicule/vehicule.service';
 import { DemandeService } from 'src/app/demande/demande.service';
 import { Chauffeur } from 'src/app/chauffeur/chauffeur';
 import { Vehicule } from 'src/app/vehicule/vehicule';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-maintenance',
@@ -49,7 +50,8 @@ import { Vehicule } from 'src/app/vehicule/vehicule';
     MatListModule,
     MatCardModule,
     MatDividerModule,
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    MatMenuModule
 
   ],
 

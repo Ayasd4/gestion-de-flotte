@@ -23,6 +23,10 @@ import { AtelierService } from 'src/app/atelier/atelier.service';
 import { DiagnosticService } from 'src/app/maintenance/diagnostic/diagnostic.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { Travaux } from '../travaux';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { Vehicule } from 'src/app/vehicule/vehicule';
+import { VehiculeService } from 'src/app/vehicule/vehicule.service';
 
 @Component({
   selector: 'app-ordre',
@@ -58,11 +62,13 @@ export class OrdreComponent implements OnInit {
     private snackBar: MatSnackBar,
     private diagnosticService: DiagnosticService,
     private technicienService: TechnicienService,
-    private atelierService: AtelierService
+    private atelierService: AtelierService,
+    private vehiculeService: VehiculeService
   ) { }
 
-  @ViewChild(MatSort) sort: any;
-  @ViewChild(MatPaginator) paginator: any;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
 
   ordre: Ordre = {
     id_ordre: 0,
@@ -81,7 +87,7 @@ export class OrdreComponent implements OnInit {
       heure_diagnostic: ''
     },
     urgence_panne: '',
-    travaux: {id_travaux: 0,nom_travail: '', type_atelier: ''},
+    travaux: { id_travaux: 0, nom_travail: '', type_atelier: '' },
     planning: '',
     date_ordre: '',
     status: '',
@@ -111,8 +117,27 @@ export class OrdreComponent implements OnInit {
   techniciens: Technicien[] = [];
   ateliers: Atelier[] = [];
   ordres: Ordre[] = [];
-  travaux: Travaux[]= [];
+  travaux: Travaux[] = [];
+  vehicules: Vehicule[] = [];
   filtredOrdres: Ordre[] = [];
+  selectedAtelierForPDF: Atelier | null = null;
+
+  exportToPdf() {
+    this.ordreService.generateRapport(this.searchParams).subscribe({
+      next: (pdfBlob) => {
+        const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rapport_ordre_travail.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Erreur de génération du PDF :', err);
+      }
+    });
+  }
 
   getEmergencyClass(urgence_panne: string): string {
     switch (urgence_panne) {
@@ -167,6 +192,7 @@ export class OrdreComponent implements OnInit {
     this.loadTechnicien();
     this.loadAtelier();
     this.loadTravaux();
+    this.loadVehicule();
 
   }
 
@@ -229,14 +255,25 @@ export class OrdreComponent implements OnInit {
     );
   }
 
+  loadVehicule(): void {
+    this.vehiculeService.fetchAllVehicules().subscribe(
+      (data) => {
+        this.vehicules = data;
+      },
+      (error) => {
+        console.error('Error fetching vehicles:', error);
+      }
+    );
+  }
+
   searchParams: any = {
-    date_diagnostic: '',
+    /*date_diagnostic: '',
     date_ordre: '',
     status: '',
     nom_atelier: '',
     nom: '',
     prenom: '',
-    matricule_techn: 0,
+    matricule_techn: 0,*/
 
   }
 
@@ -375,3 +412,85 @@ export class OrdreComponent implements OnInit {
   }
 
 }
+
+
+
+
+
+
+
+
+
+/*
+ // Update displayed columns based on selected agency
+  get currentDisplayedColumns(): string[] {
+    if (this.selectedAtelierForPDF) {
+      // Remove 'agence' column when an agency is selected
+      return this.displayedColumns.filter(col => col !== 'atelier');
+    }
+    return this.displayedColumns;
+  }
+
+  // Export current filtered data to PDF
+  /*exportToPdf(): void {
+    // Show loading indicator or message
+    // Use the same search parameters that are currently applied
+    this.ordreService.generateRapport(this.searchParams)
+      .subscribe({
+        next: (blob: Blob) => {
+          // Create a URL for the blob
+          const url = window.URL.createObjectURL(blob);
+
+          // Create a link element
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'ordre.pdf';
+
+          // Append to the document body, click it, and remove it
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          // Release the URL object
+          window.URL.revokeObjectURL(url);
+          const displayedData = this.dataSource.filteredData;
+          
+        },
+        error: (error) => {
+          console.error('Error downloading report:', error);
+          // Show error message to user
+          alert('Failed to download PDF report. Please try again.');
+        }
+      });
+  }
+
+      filters = {
+        id_ordre: 0,
+        id_diagnostic: 0,
+        id_travaux: 0,
+        id_atelier: 0,
+        id_technicien: 0,
+        numparc: this.numparc,
+        nom_atelier: '',
+        matricule_techn: this.matricule_techn,
+        date_ordre: '',
+        status: ''
+      };
+
+      /*generateRapport() {
+    this.ordreService.generateRapport(this.ordre).subscribe({
+      next: (pdfBlob) => {
+        const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rapport_ordre_travail.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: err => {
+        console.error('Error generating report', err);
+        alert('An error occurred while downloading the report.');
+      }
+    });
+  }*/

@@ -6,8 +6,7 @@
 }
 
 .search-form .form-group {
-  flex: 1 1 calc(100% / 3 - 20px);
-  /* 3 colonnes par ligne */
+  flex: 1 1 calc(100% / 3 - 20px);/* 3 colonnes par ligne */
   min-width: 250px;
 }
 

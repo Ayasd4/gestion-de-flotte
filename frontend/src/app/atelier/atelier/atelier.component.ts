@@ -27,7 +27,6 @@ import { AddAtelierComponent } from '../add-atelier/add-atelier.component';
   standalone: true,
   imports: [
     CommonModule,
-    CommonModule,
     FormsModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -40,7 +39,8 @@ import { AddAtelierComponent } from '../add-atelier/add-atelier.component';
     MatSnackBarModule,
     MatTooltipModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    
   ],
 })
 export class AtelierComponent implements OnInit {
@@ -93,6 +93,7 @@ export class AtelierComponent implements OnInit {
         ...ateliers,
       }));
       this.dataSource.data = this.ateliers; */
+  
 
   loadAteliers(): void {
     this.atelierService.fetchAllAtelier().subscribe((data) => {
@@ -101,11 +102,12 @@ export class AtelierComponent implements OnInit {
 
       // Ne pas inclure les ateliers supprimés dans la liste des ateliers visibles
       const visibleAteliers = data.filter(atelier => !hiddenIds.includes(atelier.id_atelier));
-  
+
       this.ateliers = visibleAteliers;
       this.dataSource = new MatTableDataSource<Atelier>(this.ateliers);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+    
     }, (error) => {
       console.log('Error while retrieving Workshops: ', error);
     });

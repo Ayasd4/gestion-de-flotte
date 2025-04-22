@@ -101,6 +101,14 @@ export class AddAtelierComponent implements OnInit {
         },
         (error: any) => {
           console.error('Error while creation Workshop :', error);
+          this.ngxService.stop();
+
+          if (error.status === 400 && error.error.message === 'This Workshop already exists.') {
+            this.snackBar.open('This workshop already exists!', 'Close', { duration: 9000 });
+          } else {
+            this.snackBar.open('An error occurred while adding.', 'Close', { duration: 9000 });
+          }
+
         }
       );
     }

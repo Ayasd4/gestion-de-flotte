@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { Intervention } from '../intervention';
 import { InterventionService } from '../intervention.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -96,7 +96,9 @@ export class AddInterventionComponent implements OnInit {
     private ngxService: NgxUiLoaderService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private infosService: InfosService,
-    private ordreService: OrdreService
+    private ordreService: OrdreService,
+    private cd: ChangeDetectorRef,
+
   ) {
     /*if (data?.id_ordre) {
       this.intervention.ordre.id_ordre = data.id_ordre;
@@ -174,7 +176,7 @@ export class AddInterventionComponent implements OnInit {
             this.intervention.ordre.urgence_panne = data.urgence_panne;
             this.intervention.ordre.planning = data.planning;
             this.intervention.ordre.date_ordre = data.date_ordre;
-
+            this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
           }
         },
@@ -200,6 +202,7 @@ export class AddInterventionComponent implements OnInit {
             this.intervention.technicien.prenom = data.prenom;
             this.intervention.technicien.email_techn = data.email_techn;
             this.intervention.technicien.specialite = data.specialite;
+            this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
           }
         },
@@ -252,6 +255,8 @@ export class AddInterventionComponent implements OnInit {
             this.intervention.ordre.urgence_panne = data.urgence_panne;
             this.intervention.ordre.planning = data.planning;
             this.intervention.ordre.date_ordre = data.date_ordre;
+            //this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
+
           }
         },
         error: (err) => {
@@ -266,7 +271,7 @@ export class AddInterventionComponent implements OnInit {
       this.intervention = { ...this.intervention, ...this.data };
 
       // Vérifier si les sous-objets existent sinon les initialiser
-      this.intervention.ordre = this.intervention.ordre || { nom_travail: '',urgence_panne: '', planning: '', date_ordre: '' };
+      this.intervention.ordre = this.intervention.ordre || { nom_travail: '', urgence_panne: '', planning: '', date_ordre: '' };
       this.intervention.technicien = this.intervention.technicien || { nom: '', prenom: '', matricule_techn: this.matricule_techn, email_techn: '', specialite: '' };
       //this.intervention.ordre.travaux = this.intervention.ordre.travaux || { nom_travail: '', type_atelier: '' };
 

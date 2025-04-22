@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const ordreController = require("../controllers/ordre");
 
+router.get('/generateRapport', async (req, res) => {
+    await ordreController.generateRapport(req, res);
+});
+
 router.get('/generatePdf/:id_ordre', async (req, res)=>{
     await ordreController.generatePdf(req, res);
 })

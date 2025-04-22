@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Ordre } from './ordre';
-import { Travaux } from './travaux';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { Ordre } from "./ordre";
+import { Travaux } from "./travaux";
 
 @Injectable({
   providedIn: 'root'
@@ -77,4 +77,31 @@ export class OrdreService {
     return this.httpClient.get<Blob>(`${this.baseUrl}/generatePdf/${id_ordre}`, { responseType: 'blob' as 'json' }); //pour recevoir le fichier
   }
 
+  generateRapport(params: any): Observable<Blob> {
+    
+    // Build query string from parameters
+    const queryParams = Object.keys(params)
+      .filter(key => params[key] !== null && params[key] !== undefined)
+      .map(key => `${key}=${params[key]}`)
+      .join('&');
+    
+    return this.httpClient.get(`${this.baseUrl}/generateRapport?${queryParams}`, {
+      responseType: 'blob'
+    });
+  }
+
+    /*generateRapport(filters: any) {
+      let params = new HttpParams();
+      for (let key in filters) {
+        if (filters[key]) {
+          params = params.set(key, filters[key]);
+        }
+      }
+  
+      return this.httpClient.get(`${this.baseUrl}/generateRapport`, {
+        params,
+        responseType: 'blob' // Important pour récupérer un fichier
+      });
+    }*/
+  
 }

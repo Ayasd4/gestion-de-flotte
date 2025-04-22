@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { DateAdapter, NativeDateAdapter, MAT_DATE_FORMATS, MatOptionModule, MatNativeDateModule } from '@angular/material/core';
@@ -48,7 +48,7 @@ export class AddOrdreComponent implements OnInit {
 
   capacite: any = undefined;
   matricule_techn: any = undefined;
-  numparc: any= undefined;
+  numparc: any = undefined;
   Disponibles: string[] = ['urgente', 'moyenne', 'faible'];
 
   ordre: Ordre = {
@@ -69,8 +69,8 @@ export class AddOrdreComponent implements OnInit {
     },
     urgence_panne: '',
     travaux: {
-      id_travaux: 0, 
-      nom_travail: '', 
+      id_travaux: 0,
+      nom_travail: '',
       type_atelier: ''
     },
 
@@ -108,7 +108,10 @@ export class AddOrdreComponent implements OnInit {
     public dialogRef: MatDialogRef<AddDemandeComponent>,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { 
+    private cd: ChangeDetectorRef,
+
+  ) {
+
     //diagnostic 
     this.ordre.diagnostic.description_panne = data.description_panne;
     this.ordre.diagnostic.causes_panne = data.causes_panne;
@@ -130,9 +133,9 @@ export class AddOrdreComponent implements OnInit {
     this.ordre.technicien.email_techn = data.email_techn;
     this.ordre.technicien.specialite = data.specialite;
 
-     //works
-     this.ordre.travaux.nom_travail = data.nom_travail;
-     this.ordre.travaux.type_atelier = data.type_atelier;
+    //works
+    this.ordre.travaux.nom_travail = data.nom_travail;
+    this.ordre.travaux.type_atelier = data.type_atelier;
 
   }
 
@@ -177,7 +180,7 @@ export class AddOrdreComponent implements OnInit {
     this.infosService.fetchAllTravaux().subscribe({
       next: (data) => {
         console.log("List of works received", data);
-        
+
         this.travauxList = data.map((item: any) => item.nom_travail);
       },
       error: (err) => {
@@ -202,6 +205,7 @@ export class AddOrdreComponent implements OnInit {
             this.ordre.diagnostic.actions = data.actions;
             this.ordre.diagnostic.date_diagnostic = data.date_diagnostic;
             this.ordre.diagnostic.heure_diagnostic = data.heure_diagnostic;
+            this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
           }
         },
@@ -226,6 +230,7 @@ export class AddOrdreComponent implements OnInit {
             this.ordre.atelier.telephone = data.telephone;
             this.ordre.atelier.email = data.email;
             this.ordre.atelier.capacite = data.capacite;
+            this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
           }
         },
@@ -252,6 +257,7 @@ export class AddOrdreComponent implements OnInit {
             this.ordre.technicien.telephone_techn = data.telephone_techn;
             this.ordre.technicien.email_techn = data.email_techn;
             this.ordre.technicien.specialite = data.specialite;
+            this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
           }
         },
@@ -286,13 +292,13 @@ export class AddOrdreComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      this.ordre = { ...this.ordre,...this.data };
+      this.ordre = { ...this.ordre, ...this.data };
 
       // Vérifier si les sous-objets existent sinon les initialiser
       this.ordre.diagnostic = this.ordre.diagnostic || { description_panne: '', causes_panne: '', actions: '', date_diagnostic: '', heure_diagnostic: '' };
       this.ordre.atelier = this.ordre.atelier || { nom_atelier: '', telephone: '', email: '', capacite: this.capacite, statut: '' };
       this.ordre.technicien = this.ordre.technicien || { nom: '', prenom: '', matricule_techn: this.matricule_techn, cin: '', telephone_techn: '', email_techn: '', specialite: '', date_embauche: '' };
-      this.ordre.travaux = this.ordre.travaux || { nom_travail: '', type_atelier: ''};
+      this.ordre.travaux = this.ordre.travaux || { nom_travail: '', type_atelier: '' };
 
       console.log(this.data);
     }

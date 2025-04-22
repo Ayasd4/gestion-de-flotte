@@ -112,10 +112,13 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Vehicule </th>
                 <td mat-cell *matCellDef="let Demande">
                     <div style="display: flex; flex-direction: column;">
+                        <span> {{Demande.numparc}}</span>
+                    </div>
+                    <!--<div style="display: flex; flex-direction: column;">
                         <span><strong>Parc Number:</strong> {{Demande.numparc}}</span>
                         <span><strong>Vehicle:</strong> {{Demande.immatricule}}</span>
                         <span><strong>Model:</strong> {{Demande.modele}}</span>
-                    </div>
+                    </div>-->
                 </td>
             </ng-container>
 
@@ -123,34 +126,43 @@
             <ng-container matColumnDef="driver">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Driver </th>
                 <td mat-cell *matCellDef="let Demande">
-                    <div style="display: flex; flex-direction: column;">
+                    <div style="display: flex; flex-direction: column;"> {{Demande.matricule_chauf}} {{Demande.nom}}
+                        {{Demande.prenom}}
+                    </div>
+                    <!--<div style="display: flex; flex-direction: column;">
                         <span><strong>Name:</strong> {{Demande.matricule_chauf}}: {{Demande.nom}}
                             {{Demande.prenom}}</span>
                         <span><strong>Information:</strong> {{Demande.email}} {{Demande.cin}}
                             {{Demande.telephone}}</span>
 
 
-                    </div>
+                    </div>-->
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
                 <td mat-cell *matCellDef="let demande">
-                    <button mat-icon-button (click)="updateStatus(demande)" color="primary" matTooltip="edit"
-                        aria-label="Button that displays a tooltip when focused or hovered over">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button color="green" mat-icon-button (click)="diagnosticDemande(demande)" matTooltip="Diagnostic"
-                        aria-label="Button that displays a tooltip when focused or hovered over">
-                        <mat-icon>assignment_turned_in</mat-icon><!--bar_chart-->
+                    <!--<div class="boutton">
+                        <button mat-flat-button (click)="updateStatus(demande)" color="primary">edit</button>
+                        <button color="black" mat-flat-button (click)="diagnosticDemande(demande)">diagnostic</button>
+                    </div>-->
+
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
                     </button>
 
-                    <!--<button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="deleteDemande(demande.id_demande)"
-                        color="warn" matTooltip="delete"
-                        aria-label="Button that displays a tooltip when focused or hovered over">
-                        <mat-icon>delete</mat-icon>
-                    </button>-->
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="updateStatus(demande)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit Status</span>
+                        </button>
+                        <button mat-menu-item (click)="diagnosticDemande(demande)">
+                            <mat-icon>assignment_turned_in</mat-icon>
+                            <span>Create Diagnostic</span>
+                        </button>
+
+                    </mat-menu>
                 </td>
             </ng-container>
 
@@ -175,7 +187,21 @@
 
 
 
+<!-- bouton avec icon
+<button mat-icon-button (click)="updateStatus(demande)" color="primary" matTooltip="edit"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button color="green" mat-icon-button (click)="diagnosticDemande(demande)" matTooltip="Diagnostic"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>assignment_turned_in</mat-icon>
+                    </button>-->
 
+<!--<button style="height: 27px;margin-left: 20px;" mat-icon-button (click)="deleteDemande(demande.id_demande)"
+                        color="warn" matTooltip="delete"
+                        aria-label="Button that displays a tooltip when focused or hovered over">
+                        <mat-icon>delete</mat-icon>
+                    </button>-->
 
 
 

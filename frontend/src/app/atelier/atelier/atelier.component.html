@@ -15,29 +15,37 @@
 
     <div class="card-body">
         <!-- Vérification que dataSource.data est un tableau -->
-        <ul *ngIf="dataSource.data.length > 0" class="workshop-list">
-            <li *ngFor="let atelier of dataSource.data" class="workshop-item">
-                <div class="workshop-details">
-                    <strong>Workshop ID:</strong> {{ atelier.id_atelier }}<br>
-                    <strong>Name:</strong> {{ atelier.nom_atelier }}<br>
-                    <strong>Phone:</strong> {{ atelier.telephone }}<br>
-                    <strong>E-mail:</strong> {{ atelier.email }}<br>
-                    <strong>Capacity:</strong> {{ atelier.capacite }}<br>
-                    <div  [ngClass]="getStatutClass(atelier.statut)">
-                        <strong>Status:</strong> {{ atelier.statut }}<br>
-                    </div>
-                </div>
-                <div class="actions">
-                    <button mat-icon-button (click)="updateAtelier(atelier)" color="primary" matTooltip="Edit">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="deleteAtelier(atelier.id_atelier)" color="warn" matTooltip="Delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-            </li>
-        </ul>
+        <!--<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">-->
 
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <table matSort>
+            <ul *ngIf="dataSource.data.length > 0" class="workshop-list">
+                <li *ngFor="let atelier of dataSource.data" class="workshop-item">
+                    <div class="workshop-details">
+                        <strong>Workshop ID:</strong> {{ atelier.id_atelier }}<br>
+                        <strong>Name:</strong> {{ atelier.nom_atelier }}<br>
+                        <strong>Phone:</strong> {{ atelier.telephone }}<br>
+                        <strong>E-mail:</strong> {{ atelier.email }}<br>
+                        <strong>Capacity:</strong> {{ atelier.capacite }}<br>
+                        <div [ngClass]="getStatutClass(atelier.statut)">
+                            <strong>Status:</strong> {{ atelier.statut }}<br>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button mat-icon-button (click)="updateAtelier(atelier)" color="primary" matTooltip="Edit">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="deleteAtelier(atelier.id_atelier)" color="warn"
+                            matTooltip="Delete">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </table>
+        <!--<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>-->
+
+        <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page">
+        </mat-paginator>
+
     </div>
 </div>

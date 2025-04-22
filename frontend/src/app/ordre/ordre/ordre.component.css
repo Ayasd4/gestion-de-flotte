@@ -1,3 +1,32 @@
+.pdf-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.pdf-button button {
+  background-color: #d32f2f; /* Rouge profond pour "warn" */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.pdf-button button:hover {
+  background-color: #b71c1c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pdf-button button:active {
+  transform: scale(0.98);
+}
+
+
 .search-form .row {
     display: flex;
     flex-wrap: wrap;
@@ -6,7 +35,7 @@
   }
   
   .search-form .form-group {
-    flex: 1 1 calc(100% / 2 - 20px); /* 3 colonnes par ligne */
+    flex: 1 1 calc(100% / 3 - 20px); /* 3 colonnes par ligne */
     min-width: 250px;
   }
   
@@ -23,8 +52,8 @@
     background-color: white;
     width: 100%;
     padding: 20px;
-    margin-left: 300px;
-    margin-bottom: -60px;
+    margin-left: 150px;
+    margin-bottom: -80px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -57,8 +86,8 @@
   
   .buton{
     display: flex;
-    margin-left: 170px;
-   /* justify-content: center; /* Centrer les boutons horizontalement */
+    margin-left: 300px;
+    /* justify-content: center; /* Centrer les boutons horizontalement */
     margin-bottom: 100px;
     gap: 20px; /* Ajouter de l'espace entre les boutons */
   }

@@ -66,9 +66,11 @@ exports.create = async (req, res) => {
           SELECT km_vidange 
           FROM acc.vidanges 
           WHERE id_vehicule = $1 
-          ORDER BY id_vd DESC LIMIT 1
+          ORDER BY id_vd DESC 
+          LIMIT 1
         `;
         const vidangeResult = await db.query(vidangeQuery, [id_vehicule]);
+
         //vidangeResult.rows.length > 0 ? si le vehicule a fait un vidange 
         //vidangeResult.rows[0].km_vidange : 0 si le vehicule n'a pas fait un vidange donc =0 
         const kmDerniereVidange = vidangeResult.rows.length > 0 ? vidangeResult.rows[0].km_vidange : 0;
@@ -174,6 +176,8 @@ exports.delete = async (req, res) => {
         return res.status(200).json({ message: "Oil change deleted successfully!"});
     });
 }
+
+
 
 /*exports.getNumparc = async (req, res)=>{
     const sql = "SELECT numparc FROM acc.vehicule";

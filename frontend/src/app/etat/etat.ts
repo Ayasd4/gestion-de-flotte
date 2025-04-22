@@ -7,6 +7,7 @@ export interface Etat {
     kilometrage: {
         id: number,
         vehiculeId: number;
+        //numparc: number,
         calcul: number
     },
     km_derniere_vd: {

@@ -1,3 +1,4 @@
+
 /* Conteneur principal */
 .dashboard {
   padding: 30px;
@@ -72,17 +73,7 @@ table {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
 
-th {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
-  text-transform: uppercase;
-}
 
 /* Boutons d'action dans le tableau */
 .action-buttons {
@@ -231,7 +222,7 @@ th, td {
 
 th {
   background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
+  color: #000;
   text-transform: uppercase;
   font-size: 14px;
   letter-spacing: 1px;
@@ -347,4 +338,12 @@ button[type="submit"] {
       padding: 10px;
       font-size: 14px;
   }
+}
+
+/* Style de la recherche */
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding-bottom: 1px;
 }

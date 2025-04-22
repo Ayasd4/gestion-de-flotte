@@ -129,10 +129,10 @@ export class AddEtatComponent implements OnInit {
     });
   }
 
-  getKilometrageByNumparc(){
+  getKilometrageByNumparc() {
     const numparc = this.etat.vehicule.numparc;
     this.etatService.fetchKilometrageByNumparc(numparc).subscribe({
-      next: (data) =>{
+      next: (data) => {
         console.log('kilométrage récupérer:', this.etat.kilometrage);
 
         if (data) {
@@ -177,10 +177,10 @@ export class AddEtatComponent implements OnInit {
       return;
     }
 
-    if (!this.etat.vehicule.numparc || !this.etat.kilometrage.calcul) {
+    /*if (!this.etat.vehicule.numparc || !this.etat.kilometrage.calcul) {
       this.snackBar.open('Vehicle or km are required!', 'Close', { duration: 9000 });
       return;
-    }
+    }*/
 
     const etatToSend = {
       ...this.etat,
@@ -189,6 +189,7 @@ export class AddEtatComponent implements OnInit {
     };
 
     console.log('Données envoyées:', etatToSend);
+
 
     if (this.etat.id_vidange) {
       this.etatService.updateEtat(etatToSend).subscribe(() => {
@@ -220,7 +221,12 @@ export class AddEtatComponent implements OnInit {
 
         error: (error) => {
           console.error("Error while creating planning :", error);
-          this.snackBar.open('Error while creating planninge!', 'Close', { duration: 9000 });
+
+          if (error.status === 400 && error.error?.error === "Matching mileage not found!") {
+            this.snackBar.open('Matching mileage not found for this vehicle!', 'Close', { duration: 9000 });
+          } else {
+            this.snackBar.open('Error while creating planning!', 'close', { duration: 9000 });
+          }
         }
       });
     }

@@ -1,5 +1,5 @@
 const db = require("../db/db");
-const jsPDF = require('jspdf');
+const { jsPDF } = require('jspdf');
 const { autoTable } = require('jspdf-autotable');
 
 // Get all fuel consumption records
@@ -87,6 +87,7 @@ exports.delete = async (req, res) => {
     });
 };
 
+
 // Search fuel consumption records by various parameters
 exports.search = async (req, res) => {
     let conditions = [];
@@ -156,6 +157,7 @@ exports.search = async (req, res) => {
         return res.status(200).json(result.rows);
     });
 };
+
 
 // Export fuel consumption records to PDF
 exports.exportToPdf = async (req, res) => {

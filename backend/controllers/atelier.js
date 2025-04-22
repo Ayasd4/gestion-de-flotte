@@ -29,12 +29,12 @@ exports.create = async (req, res) =>{
     const {nom_atelier, telephone, email, capacite, statut} = req.body;
 
     // Vérification d'existence
-    /*const checkSql = "SELECT * FROM acc.atelier WHERE nom_atelier = $1";
+    const checkSql = "SELECT * FROM acc.atelier WHERE nom_atelier = $1";
     const checkResult = await db.query(checkSql, [nom_atelier]);
 
     if (checkResult.rows.length > 0) {
         return res.status(400).json({ message: 'This Workshop already exists.' });
-    }*/
+    }
 
     sql = "INSERT INTO acc.atelier(nom_atelier, telephone, email, capacite, statut) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 

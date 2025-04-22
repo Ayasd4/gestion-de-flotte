@@ -147,3 +147,7 @@ mat-paginator {
     color: #f44336;
     font-weight: bold;
 }
+
+table{
+    width: 100%;
+}

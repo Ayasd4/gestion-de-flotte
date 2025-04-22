@@ -3,6 +3,7 @@
         <div class="title"> List Orders</div>
         <button (click)="openDialog()">Add Order</button>
     </div>
+
     <!--<div class="card-head">
         <div class="search-container">
             <mat-form-field style="width: 180px;margin-left: 15px;">
@@ -12,14 +13,24 @@
             </mat-form-field>
         </div>
     </div>-->
+
     <div class="search-header">
         Search Filters
     </div>
+
     <div class="search-container">
 
         <form (ngSubmit)="searchOrdre()" #searchForm="ngForm" class="search-form">
 
             <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="numparc">Vehicle</label>
+                        <input type="number" class="form-control" name="numparc" id="numparc"
+                            [(ngModel)]="searchParams.numparc">
+                    </div>
+                </div>
+
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="id_atelier">Workshops</label>
@@ -75,6 +86,9 @@
     </div>
 
     <div class="card-body">
+        <div class="pdf-button">
+            <button color="warn" (click)="exportToPdf()">Generate report</button>
+        </div>
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
 
             <ng-container matColumnDef="id_ordre">

@@ -174,6 +174,7 @@ export class AddDemandeComponent implements OnInit {
             this.demande.vehicule.numparc = data.numparc;
             this.demande.vehicule.immatricule = data.immatricule;
             this.demande.vehicule.modele = data.modele;
+            this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
           }
         },
@@ -198,6 +199,7 @@ export class AddDemandeComponent implements OnInit {
           this.demande.chauffeur.cin = data.cin;
           this.demande.chauffeur.telephone = data.telephone;
           this.demande.chauffeur.email = data.email;
+          this.cd.markForCheck(); // pour que l'UI se mette à jour avec OnPush
 
         }
       },

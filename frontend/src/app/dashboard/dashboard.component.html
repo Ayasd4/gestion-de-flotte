@@ -1,6 +1,18 @@
 <div class="card">
     <h1>dashboard</h1>
-    <div class="card-head" ></div>
+    <div class="card-head"></div>
     <div class="card-body">
+
+        <mat-grid-list cols="2" rowHeight="2:1">
+            <mat-grid-tile>1</mat-grid-tile>
+            <mat-grid-tile>2</mat-grid-tile>
+            <mat-grid-tile>3</mat-grid-tile>
+            <mat-grid-tile>4</mat-grid-tile>
+        </mat-grid-list>
+
+        <div style="display: block;">
+            <canvas baseChart [data]="chartData" chartType="bar">
+            </canvas>
+        </div>
     </div>
 </div>

@@ -3,6 +3,193 @@ const moment = require("moment");
 //const { content } = require("pdfkit/js/page");
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const { jsPDF } = require('jspdf');
+const { autoTable } = require('jspdf-autotable');
+const path = require('path');
+
+
+exports.generateRapport = async (req, res) => {
+    try {
+        let conditions = [];
+        let values = [];
+        let paramIndex = 1;
+
+        if (req.query.id_diagnostic) {
+            conditions.push(`o.id_diagnostic = $${paramIndex}`);
+            values.push(req.query.id_diagnostic);
+            paramIndex++;
+        }
+
+        if (req.query.id_atelier) {
+            conditions.push(`o.id_atelier = $${paramIndex}`);
+            values.push(req.query.id_atelier);
+            paramIndex++;
+        }
+
+        if (req.query.id_technicien) {
+            conditions.push(`o.id_technicien = $${paramIndex}`);
+            values.push(req.query.id_technicien);
+            paramIndex++;
+        }
+
+        if (req.query.numparc) {
+            conditions.push(`v.numparc = $${paramIndex}`);
+            values.push(req.query.numparc);
+            paramIndex++;
+        }
+
+        if (req.query.nom_atelier) {
+            conditions.push(`a.nom_atelier ILIKE $${paramIndex}`);
+            values.push(`%${req.query.nom_atelier}%`);
+            paramIndex++;
+        }
+
+        //technicien
+        if (req.query.matricule_techn) {
+            conditions.push(`(tech.matricule_techn || ' ' || tech.nom || ' ' || tech.prenom) ILIKE $${paramIndex}`);
+            values.push(`%${req.query.matricule_techn}%`);
+            paramIndex++;
+        }
+
+        if (req.query.date_ordre) {
+            conditions.push(`o.date_ordre::DATE = $${paramIndex}`);
+            values.push(`%${req.query.date_ordre}%`);
+            paramIndex++;
+        }
+
+        if (req.query.status) {
+            conditions.push(`o.status ILIKE $${paramIndex}`);
+            values.push(req.query.status);
+            paramIndex++;
+        }
+
+        // Construction de la requête SQL
+        let sql = `
+            SELECT o.id_ordre,
+                diag.id_diagnostic,
+                diag.description_panne,
+                diag.causes_panne,
+                diag.actions,
+                diag.date_diagnostic,
+                diag.heure_diagnostic,
+                o.urgence_panne,
+                t.nom_travail,
+                o.planning,
+                o.date_ordre,
+                o.status,
+                a.nom_atelier,
+                a.telephone,
+                a.email,
+                a.capacite,
+                a.statut,
+                tech.nom,
+                tech.prenom,
+                tech.matricule_techn,
+                tech.telephone_techn,
+                tech.email_techn,
+                tech.specialite,
+                v.numparc
+            FROM acc.ordre_travail AS o
+            JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+            LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
+            JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
+            JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
+            JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+            JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule
+        `;
+
+        if (conditions.length > 0) {
+            sql += " WHERE " + conditions.join(" AND ");
+        }
+
+        // Exécution de la requête
+        db.query(sql, values, async (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            const records = result.rows;
+
+            // Génération du PDF
+            const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "A4" });
+
+            const logoPath = path.join(__dirname, '../assets/srtj.png');
+            if (fs.existsSync(logoPath)) {
+                const imageData = fs.readFileSync(logoPath);
+                const base64Image = `data:image/png;base64,${imageData.toString('base64')}`;
+                doc.addImage(base64Image, 'PNG', 35, 30, 70, 50);
+            }
+
+            // En-tête et autres informations
+            doc.setFontSize(14).setFont('helvetica', 'bold').text('S.R.T JENDOUBA', 420, 50, { align: 'left' });
+            doc.setFontSize(12).setFont('helvetica').text('Division Technique', 420, 70, { align: 'left' });
+            doc.setFontSize(12).setFont('helvetica').text('Service Maintenance', 420, 85, { align: 'left' });
+
+            doc.setFontSize(18).text('Ordre de travail - SRT Jendouba', 300, 130, { align: 'center', underline: true });
+            doc.setFontSize(11).text(`Généré le : ${new Date().toLocaleDateString()}`, 300, 150, { align: 'center' });
+
+            // Affichage des filtres appliqués
+            let yPos = 150;
+            if (req.query.numparc || req.query.nom_atelier || req.query.matricule_techn || req.query.status || req.query.date_ordre) {
+                let dateRange = '';
+                if (req.query.numparc) {
+                    dateRange = `From ${req.query.numparc}`;
+
+                } else if (req.query.nom_atelier) {
+                    dateRange = `From ${req.query.nom_atelier}`;
+
+                } else if (req.query.matricule_techn) {
+                    dateRange = `From ${req.query.matricule_techn}`;
+
+                } else if (req.query.status) {
+                    dateRange = `From ${req.query.status}`;
+                }
+                else {
+                    dateRange = `Until ${req.query.date_ordre}`;
+                }
+                //doc.text(`Date Range: ${dateRange}`, 14, yPos);
+                yPos += 8;
+            }
+
+            // Tableau des résultats
+            const tableColumn = ['ID', 'Vehicle', 'Emergency Breakdown', 'Works', 'Planning', 'Order Date', 'Status', 'Workshops', 'Technician'];
+
+            const tableRows = records.map(record => [
+                record.id_ordre,
+                record.numparc,
+                record.urgence_panne,
+                record.nom_travail,
+                record.planning,
+                new Date(record.date_ordre).toLocaleDateString(),
+                record.status,
+                record.nom_atelier,
+                record.matricule_techn
+            ]);
+
+            autoTable(doc, {
+                startY: yPos + 20,
+                head: [tableColumn],
+                body: tableRows,
+                theme: 'striped',
+                headStyles: { fillColor: [22, 160, 133] },
+                styles: { fontSize: 9 }
+            });
+
+            doc.setFontSize(12).setFont('helvetica').text('Signature chef service', 420, 750, { align: 'left' });
+            doc.setFontSize(12).setFont('helvetica').text('........................................', 420, 770, { align: 'left' });
+
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="rapport_ordre_travail.pdf"');
+
+            // Envoi du fichier PDF
+            const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
+            res.send(pdfBuffer);
+        });
+
+    } catch (error) {
+        console.error('Erreur lors de la génération du rapport :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la génération du rapport.' });
+    }
+}
 
 exports.generatePdf = async (req, res) => {
     try {
@@ -36,7 +223,7 @@ exports.generatePdf = async (req, res) => {
     v.numparc
     FROM acc.ordre_travail AS o
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
-LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
+    LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
     JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
     JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
     JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
@@ -172,6 +359,12 @@ exports.search = async (req, res) => {
             paramIndex++;
         }
 
+        if (req.query.numparc) {
+            conditions.push(`v.numparc = $${paramIndex}`);
+            values.push(req.query.numparc);
+            paramIndex++;
+        }
+
         //diag
         if (req.query.date_diagnostic) {
             conditions.push(`diag.date_diagnostic::text ILIKE $${paramIndex}`);
@@ -220,19 +413,35 @@ exports.search = async (req, res) => {
 
         let sql = `SELECT o.id_ordre,
     diag.id_diagnostic,
+    diag.description_panne,
+    diag.causes_panne,
+    diag.actions,
     diag.date_diagnostic,
+    diag.heure_diagnostic,
     o.urgence_panne,
+    t.nom_travail,
     o.planning,
     o.date_ordre,
     o.status,
     a.nom_atelier,
+    a.telephone,
+    a.email,
+    a.capacite,
+    a.statut,
     tech.nom,
     tech.prenom,
-    tech.matricule_techn
+    tech.matricule_techn,
+    tech.telephone_techn,
+    tech.email_techn,
+    tech.specialite,
+    v.numparc
     FROM acc.ordre_travail AS o
     JOIN acc.diagnostic AS diag ON o.id_diagnostic = diag.id_diagnostic
+    LEFT JOIN acc.travaux AS t ON o.id_travaux = t.id_travaux
     JOIN acc.atelier AS a ON o.id_atelier = a.id_atelier
-    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien`;
+    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien
+    JOIN acc.demandes AS d ON diag.id_demande = d.id_demande
+    JOIN acc.vehicule AS v ON d.id_vehicule = v.idvehicule`;
 
 
         if (conditions.length > 0) {

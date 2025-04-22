@@ -9,7 +9,11 @@ exports.login = async (req, res) => {
         const { rows } = await pool.query(sql, [email, password]);
         if (rows.length > 0) {
             return res.status(200).json(rows[0]);
-        } else {
+
+            
+        } 
+        
+        else {
             return res.status(401).json({ message: "Invalid email or password" });
         }
     } catch (err) {
@@ -17,6 +21,9 @@ exports.login = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
+
+
 
 /*Check if user exists with role 'Agent de saisie maîtrise de l'énergie'
 exports.checkAMEUser = async (req, res) => {

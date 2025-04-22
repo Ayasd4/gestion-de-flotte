@@ -19,9 +19,18 @@ interface HeaderNavToggle{
 export class AppComponent {
   title = 'frontend';
 
-  isHeaderNavCollapsed= false;
+  isHeaderNavCollapsed= true;
   screenwidth= 0;
 
+  onResize() {
+    this.screenwidth = window.innerWidth;
+    if (this.screenwidth <= 768) {
+      this.isHeaderNavCollapsed = true; // Pour les petits écrans
+    } else {
+      this.isHeaderNavCollapsed = false; // Pour les grands écrans
+    }
+  }
+  
   onToggleHeaderNav(data: HeaderNavToggle): void{
     this.screenwidth = data.screenwidth;
     this.isHeaderNavCollapsed = data.collapsed;

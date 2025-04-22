@@ -207,6 +207,33 @@ mat-form-field {
   width: 250px !important;
 }
 
+.boutton button {
+  flex: 1;
+  min-width: 8px;
+  font-weight: 450;
+  font-size: 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  color: white;
+}
+
+/* Hover pour le bouton 'delete' */
+.boutton button[color="black"]{
+  background-color: #000;
+  color: white;
+}
+/* Hover pour le bouton 'edit' */
+.boutton button[color="primary"]:hover {
+  background-color: #1976d2; /* plus foncé */
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.4);
+}
+
+/* Hover pour le bouton 'delete' */
+.boutton button[color="black"]:hover {
+  background-color: #494343;
+  box-shadow: 0 2px 6px rgba(48, 36, 36, 0.4);
+}
+
 .statut-en-attente {
   /*background-color: #ffeb3b;*/
   color: #ffeb3b;
