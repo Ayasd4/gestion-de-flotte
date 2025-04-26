@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const vidangeController = require("../controllers/vidange");
+router.get('/generateRapport', async (req, res) => {
+    await ordreController.generateRapport(req, res);
+});
 
 router.get('/', async (req, res) => {
     if (Object.keys(req.query).length > 0) {

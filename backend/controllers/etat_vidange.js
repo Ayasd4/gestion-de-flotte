@@ -1,5 +1,162 @@
 const db = require('../db/db');
 const moment = require('moment');
+const { jsPDF } = require('jspdf');
+const { autoTable } = require('jspdf-autotable');
+const path = require('path');
+const fs = require('fs');
+
+exports.generateRapport = async (req, res) => {
+    try {
+        let conditions = [];
+        let values = [];
+        let paramIndex = 1;
+
+        if (req.query.id_diagnostic) {
+            conditions.push(`e.id_kilometrage = $${paramIndex}`);
+            values.push(req.query.id_kilometrage);
+            paramIndex++;
+        }
+
+        if (req.query.id_atelier) {
+            conditions.push(`e.km_derniere_vd = $${paramIndex}`);
+            values.push(req.query.km_derniere_vd);
+            paramIndex++;
+        }
+
+        if (req.query.numparc) {
+            conditions.push(`v.numparc = $${paramIndex}`);
+            values.push(req.query.numparc);
+            paramIndex++;
+        }
+
+        if (req.query.calcul) {
+            conditions.push(`k.calcul = $${paramIndex}`);
+            values.push(req.query.calcul);
+            paramIndex++;
+        }
+
+        if (req.query.km_vidange) {
+            conditions.push(`vd.km_vidange = $${paramIndex}`);
+            values.push(req.query.km_vidange);
+            paramIndex++;
+        }
+        // hedhi
+        if (req.query.km_prochaine_vd) {
+            conditions.push(`e.km_prochaine_vd = $${paramIndex}`);
+            values.push(req.query.km_prochaine_vd);
+            paramIndex++;
+        }
+        if (req.query.reste_km) {
+            conditions.push(`e.reste_km = $${paramIndex}`);
+            values.push(req.query.reste_km);
+            paramIndex++;
+        }
+
+        if (req.query.date) {
+            conditions.push(`e.date::DATE = $${paramIndex}`);
+            values.push(`%${req.query.date}%`);
+            paramIndex++;
+        }
+
+        //construction de la requéte 
+        let sql = ` SELECT e.id_vidange,
+        v.numparc,
+        k."vehiculeId",
+        k.calcul,
+        COALESCE(vd.km_vidange, '0') AS km_vidange,
+        e.km_prochaine_vd,
+        e.reste_km,
+        e.date
+        FROM acc.etat_vidange AS e
+        JOIN acc.vehicule AS v ON e.id_vehicule = v.idvehicule
+        JOIN acc.kilometrage AS k ON e.id_kilometrage = k.id
+        LEFT JOIN acc.vidanges AS vd ON e.km_derniere_vd = vd.km_vidange AND e.id_vehicule = vd.id_vehicule
+        `;
+
+        if (conditions.length > 0) {
+            sql += " WHERE " + conditions.join(" AND ");
+        }
+
+        // Exécution de la requête
+        db.query(sql, values, async (err, result) => {
+            if (err) return res.status(500).json({ error: err.message });
+            const records = result.rows;
+            // GéN2RALISATION RAPPORTING
+            const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "A4" });
+            const logoPath = path.join(__dirname, '../assets/srtj.png');
+            if (fs.existsSync(logoPath)) {
+                const imageData = fs.readFileSync(logoPath);
+                const base64Image = `data:image/png;base64,${imageData.toString('base64')}`;
+                doc.addImage(base64Image, 'PNG', 35, 30, 70, 50);
+            }
+            doc.setFontSize(18).text('Etat de vidange- SRT Jendouba', 300, 130, { align: 'center', underline: true });
+            doc.setFontSize(11).text(`Généré le : ${new Date().toLocaleDateString()}`, 300, 150, { align: 'center' });
+
+            // Affichage des filtres appliqués
+            let yPos = 150;
+            if (req.query.numparc || req.query.calcul || req.query.km_vidange || req.query.km_prochaine_vd || req.query.reste_km || req.query.date) {
+                let dateRange = '';
+                if (req.query.numparc) {
+                    dateRange = `From ${req.query.numparc}`;
+                }
+                else if (req.query.calcul) {
+                    dateRange = `From ${req.query.calcul}`;
+
+                } else if (req.query.km_vidange) {
+                    dateRange = `From ${req.query.km_vidange}`
+
+                } else if (req.query.km_prochaine_vd) {
+                    dateRange = `From ${req.query.km_prochaine_vd}`;
+
+                } else if (req.query.reste_km) {
+                    dateRange = `From ${req.query.reste_km}`;
+
+                } else {
+                    dateRange = `Until ${req.query.date}`;
+                }
+                yPos += 8;
+            }
+            //table reslt
+            const tableColumn = ['ID', 'Vehicle', 'index km', 'Date', 'Last Oil change', 'Next Oil change ', 'Remaining Km'];
+            const tableRows = records.map(record => [
+                record.id_vidange,
+                record.numparc,
+                 record.calcul,
+                new Date(record.date).toLocaleDateString(),
+                record.km_vidange,
+                record.km_prochaine_vd,
+                record.reste_km,
+
+                new Date(record.date).toLocaleDateString(),
+            ]);
+
+
+            autoTable(doc, {
+                startY: yPos + 20,
+                head: [tableColumn],
+                body: tableRows,
+                theme: 'striped',
+                headStyles: { fillColor: [22, 160, 133] },
+                styles: { fontSize: 9 }
+            });
+            doc.setFontSize(10).setFont('helvetica').text('Signature chef service maitrise de l\'énergie', 350, 750, { align: 'left' });
+            doc.setFontSize(12).setFont('helvetica').text('.........................................................', 350, 770, { align: 'left' });
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="rapport_Etat vidange.pdf"');
+
+            // Envoi du fichier PDF
+            const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
+            res.send(pdfBuffer);
+        });
+
+    } catch (error) {
+        console.error('Erreur lors de la génération du rapport :', error);
+        res.status(500).json({ error: 'Erreur serveur lors de la génération du rapport.' });
+    }
+}
+
+
+
 
 exports.list = async (req, res) => {
     const sql = ` SELECT e.id_vidange,
@@ -15,13 +172,12 @@ exports.list = async (req, res) => {
         JOIN acc.kilometrage AS k ON e.id_kilometrage = k.id
         LEFT JOIN acc.vidanges AS vd ON e.km_derniere_vd = vd.km_vidange AND e.id_vehicule = vd.id_vehicule
         `;
+
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         return res.status(200).json(result.rows);
     });
 };
-//JOIN acc.vidanges AS vd ON e.id_vidange = vd.id_vd
-/*utiliser COALESCE pour forcer l’affichage de 0 au lieu de null grâce à COALESCE(vd.km_vidange, '0'). */
 
 exports.show = async (req, res) => {
     const id_vidange = Number(req.params.id_vidange);
@@ -173,7 +329,7 @@ exports.delete = async (req, res) => {
     db.query(sql, [id_vidange], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
 
-        return res.status(200).json({ message: "Oil change deleted successfully!"});
+        return res.status(200).json({ message: "Oil change deleted successfully!" });
     });
 }
 

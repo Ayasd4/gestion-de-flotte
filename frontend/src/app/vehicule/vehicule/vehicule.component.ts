@@ -1,21 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { VehiculeService } from '../vehicule.service';
-import { Vehicule } from '../vehicule';
-import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { MatTableModule, MatTableDataSource } from "@angular/material/table";
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { RouterModule } from '@angular/router';
-import { AddVehiculeComponent } from '../add-vehicule/add-vehicule.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatMenuModule } from '@angular/material/menu';
+import { AddVehiculeComponent } from '../add-vehicule/add-vehicule.component';
+import { Vehicule } from '../vehicule';
+import { VehiculeService } from '../vehicule.service';
 
 @Component({
   selector: 'app-vehicule',
@@ -32,8 +30,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSortModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    MatTooltipModule,
-    MatMenuModule
+    MatTooltipModule
   ],
   templateUrl: './vehicule.component.html',
   styleUrls: ['./vehicule.component.css']
@@ -78,7 +75,7 @@ export class VehiculeComponent implements OnInit {
       const visibleVehicules = data.filter(vehicule => !hiddenIds.includes(vehicule.idvehicule));
 
       this.vehicules = visibleVehicules;
-      this.dataSource = new MatTableDataSource<Vehicule>(this.vehicules);
+      this.dataSource = new MatTableDataSource<Vehicule>(data);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, (error) => {

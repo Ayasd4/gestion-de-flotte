@@ -31,4 +31,19 @@ export class EtatService {
   fetchKilometrageByNumparc(numparc: number): Observable<any> {
     return this.httpClient.get(`${this.apiUrl}/vehicule/${numparc}`);
   }
+  generateRapport(params: any): Observable<Blob> {
+    
+    // Build query string from parameters
+    const queryParams = Object.keys(params)
+      .filter(key => params[key] !== null && params[key] !== undefined)
+      .map(key => `${key}=${params[key]}`)
+      .join('&');
+    
+    return this.httpClient.get(`${this.baseUrl}/generateRapport?${queryParams}`, {
+      responseType: 'blob'
+    });
+  }
+
 }
+
+

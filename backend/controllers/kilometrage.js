@@ -40,39 +40,6 @@ exports.show = async (req, res) => {
     });
 };
 
-// Create new kilometrage record
-/* exports.create = async (req, res) => {
-    const { vehiculeId, date, driverId, calcul } = req.body;
-    
-    // First check if there's an existing record for this vehicle
-    const checkSql = "SELECT SUM(calcul) as total_km FROM acc.kilometrage WHERE \"vehiculeId\" = $1";
-    
-    db.query(checkSql, [vehiculeId], (err, checkResult) => {
-        if (err) return res.status(500).json({error: err.message});
-        
-        // Get the old total or default to 0 if no previous records
-        const oldTotal = checkResult.rows[0]?.total_km || 0;
-        
-        // Calculate new value by adding old total to new value
-        const newCalcul = parseInt(oldTotal) + parseInt(calcul);
-    const { vehiculeId, date, driverId, calcul } = req.body;
-        
-        // Insert the new record with the calculated value
-        const insertSql = "INSERT INTO acc.kilometrage(\"vehiculeId\", date, \"driverId\", calcul) VALUES ($1, $2, $3, $4) RETURNING *";
-        
-        db.query(insertSql, [vehiculeId, date, driverId, calcul], (insertErr, insertResult) => {
-            if (insertErr) return res.status(500).json({error: insertErr.message});
-            return res.status(201).json({ 
-                message: "Kilometrage record created", 
-                kilometrage: insertResult.rows[0],
-                oldTotal: oldTotal,
-                newTotal: newCalcul
-            });
-        });
-    });
-};
- */
-
 exports.create = async (req, res) => {
     const { vehiculeId, date, driverId, calcul } = req.body;
 

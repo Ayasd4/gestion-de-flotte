@@ -313,17 +313,7 @@ export class OrdreComponent implements OnInit {
     }
   }
 
-  /*searchOrder(input: any) {
-    this.filtredOrdres = this.ordres.filter(item => item.urgence_panne?.toLowerCase().includes(input.toLowerCase())
-      || item.travaux?.toLowerCase().includes(input.toLowerCase())
-      || item.material_requis?.toLowerCase().includes(input.toLowerCase())
-      || item.planning?.toLowerCase().includes(input.toLowerCase())
-      || item.date_ordre?.toLowerCase().includes(input.toLowerCase())
-      || item.status?.toLowerCase().includes(input.toLowerCase())
-    )
-    this.dataSource = new MatTableDataSource<Ordre>(this.filtredOrdres);
 
-  }*/
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddOrdreComponent, {
@@ -373,15 +363,7 @@ export class OrdreComponent implements OnInit {
 
   deleteOrder(id_ordre: Number) {
 
-    /*this.ordreService.deleteOrder(id_ordre).subscribe(() => {
-      this.ordres = this.ordres.filter(item => item.id_ordre !== id_ordre);
-      this.snackBar.open('Order deleted successfully!', 'Close', { duration: 6000 });
-      window.location.reload();
-    }, (error) => {
-      console.error("Error while deleting Request:", error);
 
-    }
-    );*/
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
       const hiddenIds = JSON.parse(localStorage.getItem('hiddenOrdres') || '[]');

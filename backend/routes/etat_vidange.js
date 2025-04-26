@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const etatVdController = require("../controllers/etat_vidange");
 
+router.get('/generateRapport', async (req, res) => {
+    await etatVdController.generateRapport(req, res);
+});
+
 router.get('/', async (req, res) => {
     await etatVdController.list(req, res);
 });

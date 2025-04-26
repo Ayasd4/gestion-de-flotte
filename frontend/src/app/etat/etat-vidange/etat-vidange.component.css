@@ -106,5 +106,26 @@
   /* Hover pour le bouton 'delete' */
   .boutton button[color="warn"]:hover {
     background-color: #d32f2f;
-    box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
+    box-shadow: 0 2px 6px rgba(225, 64, 64, 0.4);
   }
+
+  .export-button {
+    margin-top: 20px;
+    background-color: #d32f2f; /* Vert pour le PDF */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    display: block;
+    margin-left: auto;
+  }
+  
+  .export-button:hover {
+    background-color: #d4252b;
+    transform: scale(1.05);
+  }
+  

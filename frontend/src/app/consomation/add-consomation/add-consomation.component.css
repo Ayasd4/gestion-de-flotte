@@ -1,44 +1,105 @@
 .dialog-container {
-    padding: 15px;
-  }
-  
-  .form-group label {
-    font-weight: 500;
-    margin-bottom: 5px;
-  }
-  
-  .form-control {
-    border-radius: 4px;
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-  }
-  
-  .form-control:focus {
-    border-color: #3f51b5;
-    box-shadow: 0 0 0 0.2rem rgba(63, 81, 181, 0.25);
-  }
-  
-  .btn-primary {
-    background-color: #3f51b5;
-    border-color: #3f51b5;
-  }
-  
-  .btn-primary:hover {
-    background-color: #303f9f;
-    border-color: #303f9f;
-  }
-  
-  .btn-secondary {
-    background-color: #757575;
-    border-color: #757575;
-  }
-  
-  .btn-secondary:hover {
-    background-color: #616161;
-    border-color: #616161;
-  }
-  
-  .mat-dialog-actions {
-    padding: 8px 0;
-    margin-bottom: 0;
-  }
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.dialog-content {
+  padding-bottom: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.form-field {
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field.full-width {
+  flex: 1 1 100%;
+}
+
+.form-field label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-control {
+  border-radius: 4px;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.25);
+  outline: none;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background-color: #3f51b5;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(63, 81, 181, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #303f9f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(48, 63, 159, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(48, 63, 159, 0.2);
+}
+
+.btn-secondary {
+  background-color: #757575;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(117, 117, 117, 0.2);
+}
+
+.btn-secondary:hover {
+  background-color: #616161;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(97, 97, 97, 0.3);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(97, 97, 97, 0.2);
+}

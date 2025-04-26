@@ -1,12 +1,12 @@
 const db = require("../db/db");
-const { jsPDF } = require('jspdf');
+const jsPDF = require('jspdf');
 const { autoTable } = require('jspdf-autotable');
 
 // Get all fuel consumption records
 exports.list = async (req, res) => {
     const sql = `
         SELECT c.*, 
-            v.immatricule AS vehicule_immatricule,
+           
             v.numparc AS vehicule_numparc,
             ch.nom AS chauffeur_nom, 
             ch.prenom AS chauffeur_prenom,
@@ -29,7 +29,7 @@ exports.show = async (req, res) => {
     const valueId = Number(req.params.idConsomation);
     const sql = `
         SELECT c.*, 
-            v.immatricule AS vehicule_immatricule,
+      
             v.numparc AS vehicule_numparc,
             ch.nom AS chauffeur_nom, 
             ch.prenom AS chauffeur_prenom,
@@ -49,10 +49,10 @@ exports.show = async (req, res) => {
 
 // Create new fuel consumption record
 exports.create = async (req, res) => {
-    const { numPark, QteCarb, indexkilo, dateDebut, dateFin, idChaff, idVehicule, idAgence } = req.body;
-    const sql = "INSERT INTO acc.\"consomationCarb\"(\"numPark\", \"QteCarb\", indexkilo, \"dateDebut\", \"dateFin\", \"idChaff\", \"idVehicule\", \"idAgence\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *";
+    const { numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence } = req.body;
+    const sql = "INSERT INTO acc.\"consomationCarb\"(\"numPark\", \"QteCarb\", indexkilo, \"dateDebut\", \"idChaff\", \"idVehicule\", \"idAgence\") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
     
-    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut, dateFin, idChaff, idVehicule, idAgence], (err, result) => {
+    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence], (err, result) => {
         if (err) return res.status(500).json({error: err.message});
         return res.status(201).json({ message: "Fuel consumption record created", consomation: result.rows[0] });
     });
@@ -61,10 +61,10 @@ exports.create = async (req, res) => {
 // Update fuel consumption record
 exports.update = async (req, res) => {
     const valueId = Number(req.params.idConsomation);
-    const { numPark, QteCarb, indexkilo, dateDebut, dateFin, idChaff, idVehicule, idAgence } = req.body;
-    const sql = "UPDATE acc.\"consomationCarb\" SET \"numPark\"=$1, \"QteCarb\"=$2, indexkilo=$3, \"dateDebut\"=$4, \"dateFin\"=$5, \"idChaff\"=$6, \"idVehicule\"=$7, \"idAgence\"=$8 WHERE \"idConsomation\"=$9 RETURNING *";
+    const { numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence } = req.body;
+    const sql = "UPDATE acc.\"consomationCarb\" SET \"numPark\"=$1, \"QteCarb\"=$2, indexkilo=$3, \"dateDebut\"=$4, \"idChaff\"=$5, \"idVehicule\"=$6, \"idAgence\"=$7 WHERE \"idConsomation\"=$8 RETURNING *";
     
-    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut, dateFin, idChaff, idVehicule, idAgence, valueId], (err, result) => {
+    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence, valueId], (err, result) => {
         if (err) return res.status(500).json({error: err.message});
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "Fuel consumption record not found" });
@@ -86,7 +86,6 @@ exports.delete = async (req, res) => {
         return res.status(200).json({ message: "Fuel consumption record deleted", deletedId: result.rows[0]?.idConsomation });
     });
 };
-
 
 // Search fuel consumption records by various parameters
 exports.search = async (req, res) => {
@@ -120,7 +119,7 @@ exports.search = async (req, res) => {
     }
     
     if (req.query.startDate && req.query.endDate) {
-        conditions.push(`c.\"dateDebut\" >= $${paramIndex} AND c.\"dateFin\" <= $${paramIndex+1}`);
+        conditions.push(`c.\"dateDebut\" >= $${paramIndex} `);
         values.push(req.query.startDate);
         values.push(req.query.endDate);
         paramIndex += 2;
@@ -128,15 +127,12 @@ exports.search = async (req, res) => {
         conditions.push(`c.\"dateDebut\" >= $${paramIndex}`);
         values.push(req.query.startDate);
         paramIndex++;
-    } else if (req.query.endDate) {
-        conditions.push(`c.\"dateFin\" <= $${paramIndex}`);
-        values.push(req.query.endDate);
-        paramIndex++;
+    
     }
     
     let sql = `
         SELECT c.*, 
-            v.immatricule AS vehicule_immatricule,
+         
             v.numparc AS vehicule_numparc,
             ch.nom AS chauffeur_nom, 
             ch.prenom AS chauffeur_prenom,
@@ -157,7 +153,6 @@ exports.search = async (req, res) => {
         return res.status(200).json(result.rows);
     });
 };
-
 
 // Export fuel consumption records to PDF
 exports.exportToPdf = async (req, res) => {
@@ -201,15 +196,12 @@ exports.exportToPdf = async (req, res) => {
             conditions.push(`c.\"dateDebut\" >= $${paramIndex}`);
             values.push(req.query.startDate);
             paramIndex++;
-        } else if (req.query.endDate) {
-            conditions.push(`c.\"dateFin\" <= $${paramIndex}`);
-            values.push(req.query.endDate);
-            paramIndex++;
+        
         }
         
         let sql = `
             SELECT c.*, 
-                v.immatricule AS vehicule_immatricule,
+            
                 v.numparc AS vehicule_numparc,
                 ch.nom AS chauffeur_nom, 
                 ch.prenom AS chauffeur_prenom,
@@ -257,7 +249,7 @@ exports.exportToPdf = async (req, res) => {
             
             // Prepare data for table
             const tableColumn = [
-                'ID', 'Park #', 'Fuel Qty', 'Kilometers', 'Start Date', 'End Date', 
+                'ID', 'Park #', 'Fuel Qty', 'Kilometers', 'Start Date', 
                 'Vehicle', 'Driver', 'Agency'
             ];
             
@@ -267,8 +259,6 @@ exports.exportToPdf = async (req, res) => {
                 record.QteCarb,
                 record.indexkilo,
                 new Date(record.dateDebut).toLocaleDateString(),
-                new Date(record.dateFin).toLocaleDateString(),
-                record.vehicule_immatricule,
                 `${record.chauffeur_nom} ${record.chauffeur_prenom}`,
                 record.agence_nom
             ]);

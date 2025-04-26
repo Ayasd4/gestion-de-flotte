@@ -1,20 +1,20 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
-import { Consomation } from '../consomation';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { Consomation } from '../consomation';
 
-import { AgenceService, Agence } from '../../agence/agence.service';
 import { Chauffeur } from 'src/app/chauffeur/chauffeur';
 import { ChauffeurService } from 'src/app/chauffeur/chauffeur.service';
 import { Vehicule } from 'src/app/vehicule/vehicule';
 import { VehiculeService } from 'src/app/vehicule/vehicule.service';
+import { Agence, AgenceService } from '../../agence/agence.service';
 
 @Component({
   selector: 'app-add-consomation',
@@ -39,7 +39,6 @@ export class AddConsomationComponent implements OnInit {
     QteCarb: 0,
     indexkilo: 0,
     dateDebut: '',
-    dateFin: '',
     idChaff: 0,
     idVehicule: 0,
     idAgence: 0
@@ -75,9 +74,7 @@ export class AddConsomationComponent implements OnInit {
       if (this.consomation.dateDebut) {
         this.consomation.dateDebut = this.formatDateForInput(this.consomation.dateDebut);
       }
-      if (this.consomation.dateFin) {
-        this.consomation.dateFin = this.formatDateForInput(this.consomation.dateFin);
-      }
+    
     }
   }
 

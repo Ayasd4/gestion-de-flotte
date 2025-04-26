@@ -90,18 +90,4 @@ export class OrdreService {
     });
   }
 
-    /*generateRapport(filters: any) {
-      let params = new HttpParams();
-      for (let key in filters) {
-        if (filters[key]) {
-          params = params.set(key, filters[key]);
-        }
-      }
-  
-      return this.httpClient.get(`${this.baseUrl}/generateRapport`, {
-        params,
-        responseType: 'blob' // Important pour récupérer un fichier
-      });
-    }*/
-  
 }

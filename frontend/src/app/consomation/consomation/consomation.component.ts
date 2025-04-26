@@ -5,19 +5,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { AddConsomationComponent } from '../add-consomation/add-consomation.component';
-import { Consomation } from '../consomation';
-import { ConsomationService } from '../consomation.service';
+import { Agence, AgenceService } from 'src/app/agence/agence.service';
 import { Chauffeur } from 'src/app/chauffeur/chauffeur';
 import { ChauffeurService } from 'src/app/chauffeur/chauffeur.service';
 import { Vehicule } from 'src/app/vehicule/vehicule';
 import { VehiculeService } from 'src/app/vehicule/vehicule.service';
-import { Agence, AgenceService } from 'src/app/agence/agence.service';
+import { AddConsomationComponent } from '../add-consomation/add-consomation.component';
+import { Consomation } from '../consomation';
+import { ConsomationService } from '../consomation.service';
 
 @Component({
   selector: 'app-consomation',
@@ -33,6 +34,7 @@ import { Agence, AgenceService } from 'src/app/agence/agence.service';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
+    MatSnackBarModule,
     DatePipe
   ]
 })
@@ -43,6 +45,7 @@ export class ConsomationComponent implements OnInit, AfterViewInit {
     private chauffeurService: ChauffeurService,
     private agenceService: AgenceService,
     private dialog: MatDialog,
+    private snackbar:MatSnackBar,
     private router: Router
   ) {}
   filisble: boolean = false; 
@@ -52,32 +55,7 @@ export class ConsomationComponent implements OnInit, AfterViewInit {
     this.loadVehicules();
     this.loadChauffeurs();
     this.loadAgences();
-    /*// Retrieve the current user data from localStorage
-    const currentUser = localStorage.getItem('currentUser');
-    
-    // If the currentUser is found and it's a valid JSON, parse it
-    if (currentUser) {
-      const user = JSON.parse(currentUser);
-      const currentUserRole = user?.roles;
-
-      // Check if the role is 'Agent de saisie maîtrise de l’énergie'
-      if (currentUserRole === 'Agent de saisie maîtrise de l’énergie') {
-        // Set 'filisble' to true
-        this.filisble = true;
-
-        // Load your data if the role matches
-        this.loadConsomations();
-        this.loadVehicules();
-        this.loadChauffeurs();
-        this.loadAgences();
-      } else {
-        // If the role does not match, redirect to '/dashboard'
-        this.router.navigate(['/login']);
-      }
-    } else {
-      // If no currentUser found in localStorage, redirect to login page or dashboard
-      this.router.navigate(['/login']);
-    }*/
+   
   }
 
   
@@ -204,6 +182,7 @@ export class ConsomationComponent implements OnInit, AfterViewInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(AddConsomationComponent, {
       width: '800px',
+      height:'600px',
       data: {}
     });
 
@@ -211,9 +190,13 @@ export class ConsomationComponent implements OnInit, AfterViewInit {
       if (result) {
         this.consomationService.createConsomation(result).subscribe(
           () => {
+            this.snackbar.open('Request created successfully!','close',{ duration:9000});
+
             this.loadConsomations();
           },
           (error) => {
+            this.snackbar.open('Error creating consomation!','close',{ duration:9000});
+
             console.error('Error creating consomation:', error);
           }
         );
@@ -232,10 +215,12 @@ export class ConsomationComponent implements OnInit, AfterViewInit {
       if (result) {
         this.consomationService.updateConsomation(result).subscribe(
           () => {
+            this.snackbar.open('Request updated successfully!','close',{ duration:9000});
             //this.loadConsomations();
             window.location.reload();
           },
           (error) => {
+            this.snackbar.open('Error updating consomation!','close',{ duration:9000});
             console.error('Error updating consomation:', error);
           }
         );
@@ -248,9 +233,11 @@ export class ConsomationComponent implements OnInit, AfterViewInit {
     if (confirm('Are you sure you want to delete this record?')) {
       this.consomationService.deleteConsomation(idConsomation).subscribe(
         () => {
+          this.snackbar.open('consomation deleted successfully!','close',{ duration:9000});
           this.loadConsomations();
         },
         (error) => {
+          this.snackbar.open('Error deleting consomation!','close',{ duration:9000});
           console.error('Error deleting consomation:', error);
         }
       );

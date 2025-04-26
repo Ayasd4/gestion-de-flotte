@@ -12,16 +12,14 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
+import { Vehicule } from 'src/app/vehicule/vehicule';
+import { VehiculeService } from 'src/app/vehicule/vehicule.service';
+import { Vidange } from 'src/app/vidange/vidange';
+import { VidangeService } from 'src/app/vidange/vidange.service';
+import { AddEtatComponent } from '../add-etat/add-etat.component';
 import { Etat } from '../etat';
 import { EtatService } from '../etat.service';
-import { KilometrageService } from 'src/app/kilometrage/kilometrage.service';
-import { NumparcService } from 'src/app/services/numparc.service';
-import { VehiculeService } from 'src/app/vehicule/vehicule.service';
-import { VidangeService } from 'src/app/vidange/vidange.service';
-import { Vehicule } from 'src/app/vehicule/vehicule';
-import { Vidange } from 'src/app/vidange/vidange';
-import { AddEtatComponent } from '../add-etat/add-etat.component';
-import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-etat-vidange',
@@ -47,6 +45,7 @@ export class EtatVidangeComponent implements OnInit {
 
   displayedColumns: string[] = ['id_vidange', 'id_vehicule', 'id_kilometrage', 'date', 'km_derniere_vd', 'km_prochaine_vd', 'reste_km', 'actions'];
   dataSource = new MatTableDataSource<Etat>();
+ // searchParams: any = {};
   numparc: any = undefined;
   km_vidange: any = undefined;
   vehiculeId: any = undefined;
@@ -88,6 +87,24 @@ export class EtatVidangeComponent implements OnInit {
   vidanges: Vidange[] = [];
   etats: Etat[] = [];
   filtredEtats: Etat[] = [];
+
+
+  exportToPdf() {
+    this.etatService.generateRapport(this.filterValue).subscribe({
+      next: (pdfBlob) => {
+        const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rapport Etat_vidange.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Erreur de génération du PDF :', err);
+      }
+    });
+  }
 
 
   ngOnInit(): void {
@@ -138,6 +155,7 @@ export class EtatVidangeComponent implements OnInit {
     });
   }
 
+  filterValue: any ={};
   searchEtats(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
