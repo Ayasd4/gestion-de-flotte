@@ -18,6 +18,11 @@ export class OrdreService {
     return this.httpClient.get<Ordre[]>(`${this.baseUrl}`);
   }
 
+  fetchOrdreById(id_ordre: number){
+    return this.httpClient.get<Ordre[]>(`${this.baseUrl}/${id_ordre}`)
+
+  }
+
   fetchTravaux(): Observable<Travaux[]> {
     return this.httpClient.get<Travaux[]>(`${this.apiUrl}`);
   }

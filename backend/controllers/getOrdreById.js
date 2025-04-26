@@ -16,7 +16,7 @@ exports.getOrdreById = async (req, res) => {
     WHERE id_ordre=$1
     `;*/
 
-    sql = `SELECT o.urgence_panne,
+    /**sql = `SELECT o.urgence_panne,
     o.travaux,
     o.material_requis,
     o.planning,
@@ -28,6 +28,20 @@ exports.getOrdreById = async (req, res) => {
     tech.specialite
     FROM acc.ordre_travail AS o
     JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien    
+    WHERE id_ordre=$1
+    `; */
+
+    sql = `SELECT o.id_ordre,
+    o.urgence_panne,
+    o.planning,
+    o.date_ordre,
+    tech.nom,
+    tech.prenom,
+    tech.matricule_techn,
+    tech.email_techn,
+    tech.specialite
+    FROM acc.ordre_travail AS o
+    JOIN acc.technicien AS tech ON o.id_technicien = tech.id_technicien 
     WHERE id_ordre=$1
     `;
 

@@ -1,3 +1,21 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Empêche le scroll du body si besoin */
+  }
+  
+  .example-viewport {
+    height: 100vh; /* Hauteur de la fenêtre visible */
+    width: 100%;
+    overflow: auto;
+    display: block;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  
+
+  
 .search-form .row {
     display: flex;
     flex-wrap: wrap;
@@ -140,10 +158,7 @@ table {
 }
 
 /* Style de la recherche */
-.search-container {
-    display: flex;
-    justify-content: flex-end;
-}
+
 
 mat-form-field {
     width: 250px !important;
@@ -200,11 +215,6 @@ mat-form-field {
     padding-top: 10px;
 }*/
 
-/* Style de la recherche */
-.search-container {
-    display: flex;
-    justify-content: flex-end;
-}
 
 mat-form-field {
     width: 250px !important;

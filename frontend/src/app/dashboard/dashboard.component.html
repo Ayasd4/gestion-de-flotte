@@ -1,7 +1,26 @@
 <div class="card">
-    <h1>dashboard</h1>
+    <div class="title">Dashboard</div>
     <div class="card-head"></div>
     <div class="card-body">
+        <div class="top-section">
+            <app-top-widgets></app-top-widgets>
+        </div><br>
+        <div class="middle-section">
+            <div class="widget left">
+                <app-vehicule-stat></app-vehicule-stat>
+            </div>
+            <div class="widget right">
+                <app-disponibilite></app-disponibilite>
+            </div>
+        </div>
+        <div class="bottom-section">
+            <div class="widget left">
+                <app-ordre-stat></app-ordre-stat>
+            </div>
+            <div class="widget right">
+                <app-consommation-stat></app-consommation-stat>
+            </div>
 
+        </div>
     </div>
 </div>

@@ -52,6 +52,12 @@ import { KilometrageComponent } from './kilometrage/kilometrage/kilometrage.comp
 import { AddKilometrageComponent } from './kilometrage/add-kilometrage/add-kilometrage.component';
 import { KilometrageModule } from './kilometrage/kilometrage.module';
 import { AddVidangeComponent } from './vidange/add-vidange/add-vidange.component';
+import { TopWidgetsComponent } from './dashboard/top-widgets/top-widgets.component';
+import { DisponibiliteComponent } from './dashboard/disponibilite/disponibilite.component';
+import { OrdreStatComponent } from './dashboard/ordre-stat/ordre-stat.component';
+import { ConsommationStatComponent } from './dashboard/consommation-stat/consommation-stat.component';
+import { VehiculeStatComponent } from './dashboard/vehicule-stat/vehicule-stat.component';
+import { ChartModule } from 'angular-highcharts';
 
 @NgModule({
   declarations: [
@@ -81,7 +87,12 @@ import { AddVidangeComponent } from './vidange/add-vidange/add-vidange.component
     AddConsomationComponent,
     KilometrageComponent,
     AddKilometrageComponent,
-    AddVidangeComponent
+    AddVidangeComponent,
+    TopWidgetsComponent,
+    DisponibiliteComponent,
+    OrdreStatComponent,
+    ConsommationStatComponent,
+    VehiculeStatComponent
     
   ],
   imports: [
@@ -111,8 +122,8 @@ import { AddVidangeComponent } from './vidange/add-vidange/add-vidange.component
     MatCardModule,
     ChauffeurModule,
     ConsomationModule,
-    KilometrageModule
-
+    KilometrageModule,
+    ChartModule
     //MatTimepickerModule,
 
   ],

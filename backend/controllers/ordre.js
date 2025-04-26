@@ -563,7 +563,7 @@ exports.create = async (req, res) => {
 
 
         const formattedDateOrdre = moment(date_ordre, 'YYYY-MM-DD').format("YYYY-MM-DD");
-        const status = "En attente";
+        const status = "fermé";
 
         const sql = `INSERT INTO acc.ordre_travail(id_diagnostic, urgence_panne, id_travaux, planning, date_ordre, status, id_atelier, id_technicien) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 

@@ -254,26 +254,21 @@ mat-form-field {
 }*/
 
 .urgence_panne-urgent {
-    color: #f44336;
-    font-weight: bold;
+  color: #cf3226;
+  font-weight: bold;
 }
 
-.status-planifier{
-    color: #f44336;
-    font-weight: bold;
+.status-ouvert {
+  color: #4caf50;
+  font-weight: bold;
 }
 
-.status-terminer{
-    color: #4caf50;
-    font-weight: bold;
+.status-en-cours {
+  color: blue;
+  font-weight: bold;
 }
 
-.status-en-cours{
-    color: blue;
-    font-weight: bold;
-}
-
-.status-en-attente{
-    color: #ffeb3b;
-    font-weight: bold;
+.status-ferme {
+  color: #ff3b3b;
+  font-weight: bold;
 }

@@ -154,14 +154,12 @@ export class OrdreComponent implements OnInit {
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'Planifier':
-        return 'status-planifier';
-      case 'Terminer':
-        return 'status-terminer';
+      case 'Ouvert':
+        return 'status-ouvert';
       case 'En cours':
         return 'status-en-cours';
-      case 'En attente':
-        return 'status-en-attente';
+      case 'Fermé':
+        return 'status-ferme';
       default:
         return '';
     }
@@ -209,7 +207,6 @@ export class OrdreComponent implements OnInit {
       }
     );
   }*/
-
 
   loadDiagnostic(): void {
     this.diagnosticService.fetchAllDiagnostic().subscribe(
@@ -266,16 +263,7 @@ export class OrdreComponent implements OnInit {
     );
   }
 
-  searchParams: any = {
-    /*date_diagnostic: '',
-    date_ordre: '',
-    status: '',
-    nom_atelier: '',
-    nom: '',
-    prenom: '',
-    matricule_techn: 0,*/
-
-  }
+  searchParams: any = {}
 
   searchOrdre(): void {
     const filteredParams = Object.fromEntries(
@@ -322,7 +310,6 @@ export class OrdreComponent implements OnInit {
       || item.status?.toLowerCase().includes(input.toLowerCase())
     )
     this.dataSource = new MatTableDataSource<Ordre>(this.filtredOrdres);
-
   }*/
 
   openDialog(): void {
