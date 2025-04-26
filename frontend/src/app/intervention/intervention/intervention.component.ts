@@ -69,11 +69,32 @@ export class InterventionComponent implements OnInit {
           vehicule: { numparc: 0 }
         },
       },
-      urgence_panne: '',
       nom_travail: '',
+      urgence_panne: '',
       //travaux: {id_travaux: 0,nom_travail: '', type_atelier: ''},
       planning: '',
       date_ordre: '',
+      status: '',
+      atelier: {
+        id_atelier: 0,
+        nom_atelier: '',
+        telephone: '',
+        email: '',
+        capacite: this.capacite,
+        statut: ''
+      },
+      technicien: {
+        id_technicien: 0,
+        nom: '',
+        prenom: '',
+        matricule_techn: this.matricule_techn,
+        cin: '',
+        telephone_techn: '',
+        email_techn: '',
+        specialite: '',
+        date_embauche: '',
+        image: ''
+      }
     },
     technicien: {
       id_technicien: 0,

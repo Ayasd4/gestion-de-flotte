@@ -56,7 +56,6 @@ export const navbarData= [
     },
     
     //fa-hard-hat ⛑️ 
-
     {
         routeLink: 'technicien',
         icon: 'fal fa-user-hard-hat',

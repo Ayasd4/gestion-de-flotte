@@ -38,6 +38,9 @@ const consomationCarbRouter = require('./routes/consomationCarb');
 const kilometrageRouter = require('./routes/kilometrage');
 const vidangeRouter = require('./routes/vidanges');
 const etatVdRouter = require('./routes/etat_vidange');
+const dashboardRouter = require('./routes/dashboard');
+const dispoRouter = require('./routes/disponibilite');
+const ordreStatRouter = require('./routes/ordreStat');
 
 
 // Créer le serveur Node.js
@@ -82,6 +85,10 @@ app.use('/consomation', consomationCarbRouter);
 app.use('/kilometrage', kilometrageRouter);
 app.use('/vidanges', vidangeRouter);
 app.use('/etatVidange', etatVdRouter);
+app.use('/dashboard', dashboardRouter);
+app.use('/disponibilite', dispoRouter);
+app.use('/ordreStat', ordreStatRouter);
+
 
 
 app.listen(port, (err) => {

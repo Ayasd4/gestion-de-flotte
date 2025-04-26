@@ -37,7 +37,7 @@ import { OrdreService } from 'src/app/ordre/ordre.service';
 })
 export class UpdateOrdersComponent implements OnInit {
 
-  statutsDisponibles: string[] = ['En attente', 'En cours', 'Planifier', 'Terminer'];
+  statutsDisponibles: string[] = ['Ouvert', 'En cours', 'Fermé'];
 
   cout_estime: any = undefined;
   capacite: any = undefined;
@@ -97,14 +97,12 @@ export class UpdateOrdersComponent implements OnInit {
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'Planifier':
-        return 'status-planifier';
-      case 'Terminer':
-        return 'status-terminer';
+      case 'Ouvert':
+        return 'status-ouvert';
       case 'En cours':
         return 'status-en-cours';
-      case 'En attente':
-        return 'status-en-attente';
+      case 'Fermé':
+        return 'status-ferme';
       default:
         return '';
     }

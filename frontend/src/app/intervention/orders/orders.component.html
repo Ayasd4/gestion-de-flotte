@@ -65,6 +65,7 @@
         </form>
     </div>
     <div class="card-body">
+
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort *ngIf="dataSource.data.length > 0">
 
             <ng-container matColumnDef="id_ordre">
@@ -142,6 +143,11 @@
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
+                        
+                        <!--<button mat-menu-item (click)="consultOrder(ordre)">
+                            <mat-icon>visibility</mat-icon>
+                            <span>Consult</span>
+                        </button>-->
                         <button mat-menu-item (click)="editStatus(ordre)">
                             <mat-icon>edit</mat-icon>
                             <span>edit status</span>
@@ -165,6 +171,7 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let ordres; columns: displayedColumns;"></tr>
         </table>
+
 
         <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
             aria-label="Select page of periodic elements">

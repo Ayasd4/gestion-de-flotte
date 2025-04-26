@@ -25,7 +25,10 @@ import { Atelier } from 'src/app/atelier/atelier';
 import { Diagnostic } from 'src/app/maintenance/diagnostic/diagnostic';
 import { Technicien } from 'src/app/technicien/technicien';
 import { Travaux } from 'src/app/ordre/travaux';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { InterventionComponent } from '../intervention/intervention.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ConsulterComponent } from '../consulter/consulter.component';
 
 @Component({
   selector: 'app-orders',
@@ -44,11 +47,11 @@ import { MatMenuModule } from '@angular/material/menu';
     MatPaginatorModule,
     MatTooltipModule,
     MatSnackBarModule,
-    MatMenuModule
-  ]
+    MatMenuModule,
+  ],
+  
 })
 export class OrdersComponent implements AfterViewInit {
-
 
   displayedColumns: string[] = ['id_ordre', 'Vehicle', 'urgence_panne', 'travaux', 'planning', 'date_ordre', 'status', 'atelier', 'technicien', 'actions'];
   dataSource = new MatTableDataSource<Ordre>();
@@ -61,7 +64,6 @@ export class OrdersComponent implements AfterViewInit {
     private interventionService: InterventionService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private router: Router,
     private diagnosticService: DiagnosticService,
     private technicienService: TechnicienService,
     private atelierService: AtelierService
@@ -122,8 +124,8 @@ export class OrdersComponent implements AfterViewInit {
 
   getEmergencyClass(urgence_panne: string): string {
     switch (urgence_panne) {
-      case 'critique':
-        return 'urgence_panne-critique';
+      case 'urgente':
+        return 'urgence_panne-urgent';
       case 'moyenne':
         return 'urgence_panne-moyenne';
       case 'faible':
@@ -131,22 +133,16 @@ export class OrdersComponent implements AfterViewInit {
       default:
         return '';
     }
-    this.loadDiagnostic();
-    this.loadTechnicien();
-    this.loadAtelier();
-    this.loadOrdre();
   }
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'Planifier':
-        return 'status-planifier';
-      case 'Terminer':
-        return 'status-terminer';
+      case 'Ouvert':
+        return 'status-ouvert';
       case 'En cours':
         return 'status-en-cours';
-      case 'En attente':
-        return 'status-en-attente';
+      case 'Fermé':
+        return 'status-ferme';
       default:
         return '';
     }
@@ -279,11 +275,23 @@ export class OrdersComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  //@ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
+
+
+  consultOrder(ordre: Ordre) {
+    //this.menuTrigger.closeMenu();
+     this.dialog.open(ConsulterComponent, {
+      width: '800px',
+      height: '700px',
+      data: { ordre }, // on passe l'ordre sélectionné
+      //autoFocus: true
+    });
+  }
 
   editStatus(ordre: Ordre) {
     const dialogRef = this.dialog.open(UpdateOrdersComponent, {
       width: '400px',
-      data: { ...ordre }, //passer les données de demande
+      data: { ...ordre }, //passer les données d'ordre
     });
 
     dialogRef.afterClosed().subscribe(result => {

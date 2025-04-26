@@ -1,4 +1,6 @@
+import { Atelier } from "../atelier/atelier"
 import { Travaux } from "../ordre/travaux"
+import { Technicien } from "../technicien/technicien"
 
 export interface Intervention {
     id_intervention: number,
@@ -14,6 +16,9 @@ export interface Intervention {
         urgence_panne: string,
         planning: string,
         date_ordre: string,
+        status: string,
+        atelier: Atelier,
+        technicien: Technicien,
     },
     //technicien: Technicien,
     technicien: {

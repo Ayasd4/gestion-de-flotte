@@ -35,7 +35,11 @@
               "raf",
               "rgbcolor",
               "html2canvas",
-              "moment"
+              "moment",
+              "highcharts",
+  "highcharts/highcharts-gantt",
+  "highcharts/highmaps",
+  "highcharts/highstock"
             ]
           },
           "configurations": {

@@ -154,14 +154,12 @@ export class OrdreComponent implements OnInit {
 
   getStatusClass(status: string): string {
     switch (status) {
-      case 'Planifier':
-        return 'status-planifier';
-      case 'Terminer':
-        return 'status-terminer';
+      case 'Ouvert':
+        return 'status-ouvert';
       case 'En cours':
         return 'status-en-cours';
-      case 'En attente':
-        return 'status-en-attente';
+      case 'Fermé':
+        return 'status-ferme';
       default:
         return '';
     }
@@ -209,7 +207,6 @@ export class OrdreComponent implements OnInit {
       }
     );
   }*/
-
 
   loadDiagnostic(): void {
     this.diagnosticService.fetchAllDiagnostic().subscribe(
@@ -266,16 +263,7 @@ export class OrdreComponent implements OnInit {
     );
   }
 
-  searchParams: any = {
-    /*date_diagnostic: '',
-    date_ordre: '',
-    status: '',
-    nom_atelier: '',
-    nom: '',
-    prenom: '',
-    matricule_techn: 0,*/
-
-  }
+  searchParams: any = {}
 
   searchOrdre(): void {
     const filteredParams = Object.fromEntries(
@@ -313,7 +301,16 @@ export class OrdreComponent implements OnInit {
     }
   }
 
-
+  /*searchOrder(input: any) {
+    this.filtredOrdres = this.ordres.filter(item => item.urgence_panne?.toLowerCase().includes(input.toLowerCase())
+      || item.travaux?.toLowerCase().includes(input.toLowerCase())
+      || item.material_requis?.toLowerCase().includes(input.toLowerCase())
+      || item.planning?.toLowerCase().includes(input.toLowerCase())
+      || item.date_ordre?.toLowerCase().includes(input.toLowerCase())
+      || item.status?.toLowerCase().includes(input.toLowerCase())
+    )
+    this.dataSource = new MatTableDataSource<Ordre>(this.filtredOrdres);
+  }*/
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddOrdreComponent, {
@@ -363,7 +360,15 @@ export class OrdreComponent implements OnInit {
 
   deleteOrder(id_ordre: Number) {
 
+    /*this.ordreService.deleteOrder(id_ordre).subscribe(() => {
+      this.ordres = this.ordres.filter(item => item.id_ordre !== id_ordre);
+      this.snackBar.open('Order deleted successfully!', 'Close', { duration: 6000 });
+      window.location.reload();
+    }, (error) => {
+      console.error("Error while deleting Request:", error);
 
+    }
+    );*/
     const isConfirmed = window.confirm("Are you sure you want to delete?");
     if (isConfirmed) {
       const hiddenIds = JSON.parse(localStorage.getItem('hiddenOrdres') || '[]');

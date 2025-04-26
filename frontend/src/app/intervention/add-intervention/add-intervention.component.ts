@@ -50,6 +50,7 @@ import { OrdreService } from 'src/app/ordre/ordre.service';
 })
 export class AddInterventionComponent implements OnInit {
   matricule_techn: any = undefined;
+  capacite: any= undefined;
   selected = "En attente";
 
   statutsDisponibles: string[] = ['En cours', 'Planifier', 'Terminer', 'Annuler'];
@@ -69,6 +70,27 @@ export class AddInterventionComponent implements OnInit {
       urgence_panne: '',
       planning: '',
       date_ordre: '',
+      status: '',
+      atelier: {
+        id_atelier: 0,
+        nom_atelier: '',
+        telephone: '',
+        email: '',
+        capacite: this.capacite,
+        statut: ''
+      },
+      technicien: {
+        id_technicien: 0,
+        nom: '',
+        prenom: '',
+        matricule_techn: this.matricule_techn,
+        cin: '',
+        telephone_techn: '',
+        email_techn: '',
+        specialite: '',
+        date_embauche: '',
+        image: ''
+      }
     },
     technicien: {
       id_technicien: 0,
@@ -215,7 +237,7 @@ export class AddInterventionComponent implements OnInit {
 
 
   getOrdreById() {
-
+    
     if (!this.intervention.ordre || !this.intervention.ordre.id_ordre) {
       console.warn("Order or id_order is undefined. Skipping API call.");
       return;
