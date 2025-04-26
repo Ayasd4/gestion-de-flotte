@@ -51,7 +51,6 @@ export const MY_DATE_FORMATS = {
     MatDatepickerModule,
     MatNativeDateModule,
     MatStepperModule,
-    MatSnackBarModule,
 
     //MatTimepickerModule
 
@@ -294,13 +293,13 @@ export class AddDemandeComponent implements OnInit {
             this.demande.chauffeur.id_chauf = response.chauffeur.id_chauf;
           }
           console.log("Request created successfully:", response);
-          this.snackBar.open('Request created successfully!', 'Close', { duration: 5000 });
+          this.snackBar.open('Request created successfully!', 'Close', { duration: 9000 });
           this.dialogRef.close();
           window.location.reload();
         },
         error: (error) => {
           console.error("Error while creating Request :", error);
-          this.snackBar.open('Error while creating Request!', 'Close', { duration: 5000 });
+          this.snackBar.open('Error while creating Request!', 'Close', { duration: 9000 });
         }
       });
     }

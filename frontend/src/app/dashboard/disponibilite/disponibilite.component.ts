@@ -47,47 +47,6 @@ export class DisponibiliteComponent implements OnInit {
       });
   }
 
-  /*ngOnInit(): void {
-    this.DispoVehiculeService();
-    this.DispoVehiculeMaint();
-    this.DispoVehiculePanne();
-  }
-
-  DispoVehiculeService(){
-    this.dashboardService.getDispoService().subscribe({
-      next: (response) => {
-        this.dispoService = response.total;
-      },
-      error: (error) => {
-        console.error('Error while count vehicles in service:', error);
-      }
-    })
-  }
-
-  DispoVehiculeMaint(){
-    this.dashboardService.getDispoMaint().subscribe({
-      next: (response) => {
-        this.dispoMaint = response.total;
-      },
-      error: (error) => {
-        console.error('Error while count vehicles under maintenance:', error);
-      }
-    })
-  }
-
-  DispoVehiculePanne(){
-    this.dashboardService.getDispoPanne().subscribe({
-      next: (response) => {
-        this.dispoPanne = response.total;
-      },
-      error: (error) => {
-        console.error('Error while count broken down vehicles:', error);
-      }
-    })
-  }
-
-*/
-
   createChart() {
     this.chart = new Chart({
       chart: {
