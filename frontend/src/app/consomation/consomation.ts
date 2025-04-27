@@ -4,6 +4,7 @@ export interface Consomation {
     QteCarb: number;
     indexkilo: number;
     dateDebut: string;
+    calcul?: number;
     idChaff: number;
     idVehicule: number;
     idAgence: number;

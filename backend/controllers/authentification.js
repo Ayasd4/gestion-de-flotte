@@ -262,15 +262,6 @@ exports.changePassword = async (req, res) => {
 
 
 
-/*exports.update = async (req, res) => {
-  const user = req.body;
-  const sql = "update acc.utilisateur set nom = $1, prenom = $2, telephone = $3, email = $4, password = $5 WHERE id = $6 RETURNING id, nom, prenom, telephone, email";
-  db.query(sql, [], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    return res.status(200).json(result.rows);  // Retourne les utilisateurs correspondant au rôle
-  });
-};
-*/
 
 
 

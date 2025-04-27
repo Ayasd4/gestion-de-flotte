@@ -1,12 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const consomationCarbController = require("../controllers/consomationCarb");
-// Authentication middleware has been removed
-
-// Apply authentication middleware to all routes
-// Authentication middleware has been removed
-// Apply authorization middleware to all routes (allow 'admin' or 'me' roles)
-// Authorization middleware has been removed
 
 // Get all fuel consumption records
 router.get('/', async (req, res) => {

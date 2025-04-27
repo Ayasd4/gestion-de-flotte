@@ -46,32 +46,49 @@ exports.show = async (req, res) => {
         return res.status(200).json(result.rows);
     });
 };
-
+// ajouter colone calcul
 // Create new fuel consumption record
 exports.create = async (req, res) => {
     const { numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence } = req.body;
-    const sql = "INSERT INTO acc.\"consomationCarb\"(\"numPark\", \"QteCarb\", indexkilo, \"dateDebut\", \"idChaff\", \"idVehicule\", \"idAgence\") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *";
+
+    const qte=parseFloat(QteCarb)
+    const index=parseFloat(indexkilo);
+
+    const calcul_cons = ((qte/index)*100).toFixed(2);
     
-    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence], (err, result) => {
+    const sql = "INSERT INTO acc.\"consomationCarb\"(\"numPark\", \"QteCarb\", indexkilo, \"dateDebut\", \"idChaff\", \"idVehicule\", \"idAgence\",calcul) VALUES ($1, $2, $3, $4, $5, $6, $7,$8) RETURNING *";
+
+    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence,calcul_cons], (err, result) => {
         if (err) return res.status(500).json({error: err.message});
         return res.status(201).json({ message: "Fuel consumption record created", consomation: result.rows[0] });
     });
 };
-
+// Update fuel consumption record
 // Update fuel consumption record
 exports.update = async (req, res) => {
     const valueId = Number(req.params.idConsomation);
-    const { numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence } = req.body;
-    const sql = "UPDATE acc.\"consomationCarb\" SET \"numPark\"=$1, \"QteCarb\"=$2, indexkilo=$3, \"dateDebut\"=$4, \"idChaff\"=$5, \"idVehicule\"=$6, \"idAgence\"=$7 WHERE \"idConsomation\"=$8 RETURNING *";
+    const { numPark, QteCarb, indexkilo, dateDebut, idChaff, idVehicule, idAgence } = req.body;
     
-    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut,  idChaff, idVehicule, idAgence, valueId], (err, result) => {
-        if (err) return res.status(500).json({error: err.message});
+    const qte = parseFloat(QteCarb);
+    const index = parseFloat(indexkilo);
+    const calcul_cons = ((qte / index) * 100).toFixed(2);
+
+    const sql = `
+        UPDATE acc."consomationCarb" 
+        SET "numPark"=$1, "QteCarb"=$2, indexkilo=$3, "dateDebut"=$4, "idChaff"=$5, "idVehicule"=$6, "idAgence"=$7, "calcul"=$8 
+        WHERE "idConsomation"=$9 
+        RETURNING *
+    `;
+    
+    db.query(sql, [numPark, QteCarb, indexkilo, dateDebut, idChaff, idVehicule, idAgence, calcul_cons, valueId], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "Fuel consumption record not found" });
         }
         return res.status(200).json({ message: "Fuel consumption record updated", consomation: result.rows[0] });
     });
 };
+
 
 // Delete fuel consumption record
 exports.delete = async (req, res) => {
