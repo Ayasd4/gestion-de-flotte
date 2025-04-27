@@ -41,6 +41,7 @@ const etatVdRouter = require('./routes/etat_vidange');
 const dashboardRouter = require('./routes/dashboard');
 const dispoRouter = require('./routes/disponibilite');
 const ordreStatRouter = require('./routes/ordreStat');
+const conStatRouter = require('./routes/conStatistique');
 
 
 // Créer le serveur Node.js
@@ -88,8 +89,7 @@ app.use('/etatVidange', etatVdRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/disponibilite', dispoRouter);
 app.use('/ordreStat', ordreStatRouter);
-
-
+app.use('/conStat', conStatRouter);
 
 app.listen(port, (err) => {
     if (err) throw err;

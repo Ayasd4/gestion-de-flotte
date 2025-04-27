@@ -5,8 +5,7 @@ const { autoTable } = require('jspdf-autotable');
 // Get all fuel consumption records
 exports.list = async (req, res) => {
     const sql = `
-        SELECT c.*, 
-           
+        SELECT c.*,         
             v.numparc AS vehicule_numparc,
             ch.nom AS chauffeur_nom, 
             ch.prenom AS chauffeur_prenom,
@@ -68,6 +67,8 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
     const valueId = Number(req.params.idConsomation);
     const { numPark, QteCarb, indexkilo, dateDebut, idChaff, idVehicule, idAgence } = req.body;
+
+    //const {idVehicule} = req.body;
     
     const qte = parseFloat(QteCarb);
     const index = parseFloat(indexkilo);

@@ -4,6 +4,6 @@ const router = express.Router();
 const conStatistique = require('../controllers/conStatistique');
 
 // Route pour récupérer la consommation par véhicule et mois
-router.get('/total-consomation-by-vehicule-and-month', conStatistique.totalConsomationByVehiculeAndMonth);
+router.get('/:numparc', conStatistique.totalConsomationByVehiculeAndMonth);
 
 module.exports = router;

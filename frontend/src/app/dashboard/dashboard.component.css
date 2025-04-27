@@ -66,8 +66,8 @@
         box-shadow: 5px 5px 5px #939393;
 
         &.left {
-            width: 890px;
-
+            width: 450px;
+        
             @media only screen and (max-width: 1600px) {
                 width: 790px;
             }
@@ -96,19 +96,22 @@
     justify-content: space-between;
 
     .widget {
+        width: 1000px;
         height: 350px;
         background-color: #fff;
         border-radius: 5px;
         margin: 10px;
         box-shadow: 5px 5px 5px #939393;
 
-        &.left {
+        /*&.left {
             width: 450px;
-        }
+        }*/
         
         &.right {
-            width: 890px;
-        
+            width: 1000px;
+            margin-right: 20px;
+            margin-left: 10px;
+
             @media only screen and (max-width: 1600px) {
                 width: 790px;
             }
