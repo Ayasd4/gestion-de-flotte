@@ -38,7 +38,6 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DisponibiliteComponent } from "./dashboard/disponibilite/disponibilite.component";
 import { OrdreStatComponent } from "./dashboard/ordre-stat/ordre-stat.component";
 import { TopWidgetsComponent } from "./dashboard/top-widgets/top-widgets.component";
-import { VehiculeStatComponent } from "./dashboard/vehicule-stat/vehicule-stat.component";
 import { DemandeComponent } from "./demande/demande/demande.component";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { HeaderComponent } from "./header/header.component";
@@ -95,7 +94,6 @@ import { StatComponent } from './stat/stat.component';
     DisponibiliteComponent,
     OrdreStatComponent,
     ConsommationStatComponent,
-    VehiculeStatComponent,
     StatComponent,
  
   ],

@@ -45,7 +45,7 @@ export class AuthService {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));          
           this.isLoggedInSubject.next(true); // Met à jour l'état
-          //window.location.reload();
+          window.location.reload();
         } else {
           throw new Error("Invalid response from server");
         }

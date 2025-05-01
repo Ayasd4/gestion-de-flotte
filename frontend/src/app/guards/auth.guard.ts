@@ -36,8 +36,6 @@ export const authGuard: CanActivateFn = (route, state) => {
  if (!authService.isLoggedIn() || !user || !user.roles) {// || !user.role
     router.navigate(['/login']); // Rediriger si l'utilisateur n'est pas connecté
     return false;
-  }else{
-    router.navigate(['/']);
   }
 
   // Vérifier si la route a une restriction de rôle
@@ -45,7 +43,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   console.log('Rôles requis:', requiredRoles); // Vérifiez ici les rôles requis pour la route
 
   //if (requiredRoles && user.roles !== requiredRoles) {
-  if (requiredRoles && !requiredRoles.includes(user.roles)) {
+  //if (requiredRoles && !requiredRoles.includes(user.roles)) {
+  if (requiredRoles && user.roles !== requiredRoles) {
     router.navigate(['/login']); // Rediriger si l'utilisateur n'a pas le bon rôle
     return false;
   }

@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DashboardService } from './dashboard.service';
 import { DisponibiliteComponent } from './disponibilite/disponibilite.component';
-import { VehiculeStatComponent } from './vehicule-stat/vehicule-stat.component';
 import { OrdreStatComponent } from './ordre-stat/ordre-stat.component';
 import { ConsommationStatComponent } from './consommation-stat/consommation-stat.component';
 
@@ -21,7 +20,6 @@ import { ConsommationStatComponent } from './consommation-stat/consommation-stat
     MatIconModule,
     TopWidgetsComponent,
     DisponibiliteComponent,
-    VehiculeStatComponent,
     OrdreStatComponent,
     ConsommationStatComponent
   ]

@@ -1,18 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatOptionModule } from '@angular/material/core';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ChartModule } from 'angular-highcharts';
-import * as Highcharts from 'highcharts';
-import { HighchartsChartModule } from 'highcharts-angular';
-import { NumparcService } from 'src/app/services/numparc.service';
-import { Vehicule } from 'src/app/vehicule/vehicule';
-import { VehiculeService } from 'src/app/vehicule/vehicule.service';
-import { DashboardService } from '../dashboard.service';
+import { CommonModule } from "@angular/common";
+import { Component, OnInit } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatOptionModule } from "@angular/material/core";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { MatSnackBarModule, MatSnackBar } from "@angular/material/snack-bar";
+import { ChartModule } from "angular-highcharts";
+import Highcharts from "highcharts";
+import { HighchartsChartModule } from "highcharts-angular";
+import { NumparcService } from "src/app/services/numparc.service";
+import { Vehicule } from "src/app/vehicule/vehicule";
+import { VehiculeService } from "src/app/vehicule/vehicule.service";
+import { DashboardService } from "../dashboard.service";
 
 @Component({
 
