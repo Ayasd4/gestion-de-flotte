@@ -41,8 +41,7 @@ const etatVdRouter = require('./routes/etat_vidange');
 const dashboardRouter = require('./routes/dashboard');
 const dispoRouter = require('./routes/disponibilite');
 const ordreStatRouter = require('./routes/ordreStat');
-const conStatRouter = require('./routes/conStatistique');
-
+const conStatistiqueRoutes = require('./routes/conStatistique');
 
 // Créer le serveur Node.js
 app.use(bodyParser.json());
@@ -53,7 +52,7 @@ app.use(cookieParser());
 app.use(cors(
     {
         credentials: true,
-        origin: ["http://localhost:3100","http://localhost:8080", "http://localhost:4200"]
+        origin: ["http://localhost:3100","http://localhost:8080", "http://localhost:4200", "http://localhost:8100"]
     }
 ));
 
@@ -89,7 +88,8 @@ app.use('/etatVidange', etatVdRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/disponibilite', dispoRouter);
 app.use('/ordreStat', ordreStatRouter);
-app.use('/conStat', conStatRouter);
+app.use('/statistiques', conStatistiqueRoutes);
+
 
 app.listen(port, (err) => {
     if (err) throw err;

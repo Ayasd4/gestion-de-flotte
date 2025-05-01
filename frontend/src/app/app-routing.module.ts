@@ -21,6 +21,7 @@ import { KilometrageComponent } from './kilometrage/kilometrage/kilometrage.comp
 import { InterventionComponent } from './intervention/intervention/intervention.component';
 import { VidangeComponent } from './vidange/vidange/vidange.component';
 import { EtatVidangeComponent } from './etat/etat-vidange/etat-vidange.component';
+import { StatComponent } from './stat/stat.component';
 
 export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard], data: { roles: 'chef de direction technique' } },
@@ -36,6 +37,8 @@ export const routes: Routes = [
   { path: 'demande', component: DemandeComponent, canActivate: [authGuard], data: { roles: 'chef d’agence' } },
   { path: 'vidange', component: VidangeComponent, canActivate: [authGuard], data: { roles: ['Chef service maîtrise de l\'énergie'] } },
   { path: 'etat', component: EtatVidangeComponent, canActivate: [authGuard], data: { roles: ['Chef service maîtrise de l\'énergie'] } },
+  { path: 'stat', component: StatComponent, canActivate: [authGuard], data: { roles: ['Chef service maîtrise de l\'énergie'] } },
+
   { path: 'consomation', component: ConsomationComponent, canActivate: [authGuard], data: { roles: ['Agent de saisie maîtrise de l\'énergie'] } },
   { path: 'kilometrage', component: KilometrageComponent, canActivate: [authGuard], data: { roles: ['Agent de saisie maîtrise de l\'énergie'] } },
   { path: 'login', component: LoginComponent },
