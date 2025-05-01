@@ -49,6 +49,10 @@ export class ToolBarComponent implements OnInit{
     }
   }
 
+  /*forgotPassword(){
+    this.isLoggedIn = true;
+  }*/
+
   logout() {
     this.ngxService.start();
     console.log('user logged out');

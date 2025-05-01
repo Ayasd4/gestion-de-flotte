@@ -203,7 +203,14 @@ export class HeaderComponent implements OnInit {
           routeLink: 'kilometrage',
           icon: 'fal fa-tachometer-alt', //fal fa-road//fal fa-cog:parametre
           label: 'kilometrage'
-        }
+        },
+
+        /*{
+          routeLink: 'dashboard-admin',
+          icon: 'fal fa-tachometer-alt', //fal fa-road//fal fa-cog:parametre
+          label: 'kilometrage'
+        }*/
+
       ]
     }
 

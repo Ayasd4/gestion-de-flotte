@@ -38,13 +38,16 @@ export const routes: Routes = [
   { path: 'etat', component: EtatVidangeComponent, canActivate: [authGuard], data: { roles: ['Chef service maîtrise de l\'énergie'] } },
   { path: 'consomation', component: ConsomationComponent, canActivate: [authGuard], data: { roles: ['Agent de saisie maîtrise de l\'énergie'] } },
   { path: 'kilometrage', component: KilometrageComponent, canActivate: [authGuard], data: { roles: ['Agent de saisie maîtrise de l\'énergie'] } },
+  { path: 'login-admin', component: LoginAdminComponent, canActivate: [authGuard], data: { roles: [''] } },
+  
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '', redirectTo: 'login-admin', pathMatch: 'full' },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [authGuard] },
   { path: 'change-password', component: ChangePasswordComponent },
   { path: 'login-admin', component: LoginAdminComponent },
   { path: 'dashboardAdmin', component: DashboardAdminComponent },
+  { path: '**', redirectTo: 'login'},
 
 ];
 

@@ -56,6 +56,9 @@ export class LoginComponent {
     return this.loginForm.get('password');
   }
 
+  /*goToForgotPage(){
+    this.router.navigate(['/forgot-password']);
+  }*/
 
   login() {
 
@@ -70,8 +73,8 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: (response) => {
-        
-        
+
+
         console.log('Réponse de connexion:', response); // Inspecte la réponse
 
         if (response && response.token && response.user) {
@@ -83,18 +86,18 @@ export class LoginComponent {
           console.log("Token stocké dans localStorage:", localStorage.getItem('token'));
 
           this.authService.setLoggedIn(true);
-          
+
           this.ngxService.stop();
 
           // Redirection en fonction du rôle
-          const userRole= response.user.roles;
-          
+          const userRole = response.user.roles;
+
           if (userRole === 'chef de direction technique') {
             this.router.navigate(['/dashboard']);
             this.router.navigate(['/vehicule']);
             this.router.navigate(['/chauffeur']);
             this.router.navigate(['/atelier']);
-            
+
 
           } else if (userRole === 'chef service maintenance') {
             this.router.navigate(['/maintenance']);
@@ -106,7 +109,7 @@ export class LoginComponent {
           } else if (userRole === 'chef d’agence') {
             this.router.navigate(['/demande']);
 
-          } 
+          }
 
           else if (userRole === 'Chef service maîtrise de l\'énergie') {
             this.router.navigate(['/etat']);
@@ -116,12 +119,18 @@ export class LoginComponent {
           else if (userRole === 'Agent de saisie maîtrise de l\'énergie') {
             this.router.navigate(['/consomation']);
             this.router.navigate(['/kilometrage']);
-            
-          } 
-          
+
+          }
+          /*else if (userRole === '') {
+            this.router.navigate(['/forgot-password']);
+
+          }*/
+
           else {
             this.router.navigate(['/login']); // Rôle non reconnu
           }
+
+
         } else {
           this.errorMessage = 'Invalid credentials';
           console.error('Réponse non valide');

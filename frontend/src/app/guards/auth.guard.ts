@@ -9,13 +9,21 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   // Permettre l'accès à /forgot-password sans authentification
-  if (state.url === '/forgot-password') {
+  /*if (state.url === '/forgot-password') {
     return true;
   }
 
-  /*if (state.url === '/login-admin') {
+  if (state.url === '/login-admin') {
     return true;
   }*/
+
+ /*if(authService.isLoggedIn()){
+  return true;
+
+ }else{
+  router.navigate(['login']);
+  return false;
+ }*/
 
   const user = authService.getUser(); // récupérer l'utilisateur connecté
   console.log('Utilisateur connecté:', user);
@@ -25,9 +33,11 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }*/
 
-  if (!authService.isLoggedIn() || !user || !user.roles) {// || !user.role
+ if (!authService.isLoggedIn() || !user || !user.roles) {// || !user.role
     router.navigate(['/login']); // Rediriger si l'utilisateur n'est pas connecté
     return false;
+  }else{
+    router.navigate(['/']);
   }
 
   // Vérifier si la route a une restriction de rôle

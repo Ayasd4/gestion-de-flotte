@@ -99,6 +99,7 @@ exports.forgotPassword = async (req, res) => {
 
     db.query(sql, [email], async (err, result) => {
       if (err) { return res.status(500).json({ error: err.message }); }
+      
       if (result.rows.length === 0) {
         return res.status(200).json({ message: "Message sent successfully to your email" });
       }

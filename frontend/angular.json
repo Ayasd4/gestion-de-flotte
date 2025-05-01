@@ -37,9 +37,9 @@
               "html2canvas",
               "moment",
               "highcharts",
-  "highcharts/highcharts-gantt",
-  "highcharts/highmaps",
-  "highcharts/highstock"
+              "highcharts/highcharts-gantt",
+              "highcharts/highmaps",
+              "highcharts/highstock"
             ]
           },
           "configurations": {

@@ -42,11 +42,13 @@ export class ForgotPasswordComponent {
       this.authService.forgotPassword(email).subscribe({
         next: (response) => {
           this.ngxService.stop();
+          alert('Un email de réinitialisation a été envoyé.');
           this.message = response.message;
           this.errorMessage = '';
         },
         error: (error) => {
           this.ngxService.stop();
+          alert('Erreur lors de la réinitialisation du mot de passe.');
           this.errorMessage = error.error.message;
           this.message = '';
         }
