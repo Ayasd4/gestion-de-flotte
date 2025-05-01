@@ -3,9 +3,9 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
-import { MatNativeDateModule, DateAdapter, NativeDateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
+import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from "@angular/material/dialog";
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -19,6 +19,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
 import { ChartModule } from "angular-highcharts";
+import { HighchartsChartModule } from 'highcharts-angular';
 import { NgxUiLoaderModule } from "ngx-ui-loader";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -57,6 +58,8 @@ import { TechnicienComponent } from "./technicien/technicien/technicien.componen
 import { ToolBarComponent } from "./tool-bar/tool-bar.component";
 import { AddVehiculeComponent } from "./vehicule/add-vehicule/add-vehicule.component";
 import { AddVidangeComponent } from "./vidange/add-vidange/add-vidange.component";
+import { StatComponent } from './stat/stat.component';
+
 
 
 @NgModule({
@@ -92,8 +95,9 @@ import { AddVidangeComponent } from "./vidange/add-vidange/add-vidange.component
     DisponibiliteComponent,
     OrdreStatComponent,
     ConsommationStatComponent,
-    VehiculeStatComponent
-    
+    VehiculeStatComponent,
+    StatComponent,
+ 
   ],
   imports: [
     BrowserModule,
@@ -123,8 +127,8 @@ import { AddVidangeComponent } from "./vidange/add-vidange/add-vidange.component
     ChauffeurModule,
     ConsomationModule,
     KilometrageModule,
-    ChartModule
-    //MatTimepickerModule,
+    ChartModule,
+    HighchartsChartModule,
 
   ],
 

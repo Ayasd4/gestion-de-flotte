@@ -74,6 +74,12 @@ export const navbarData= [
         label: 'etat vidange'
     },
 
+    {
+        routeLink: 'stat',
+        icon: 'fal fa-chart-bar',
+        label: 'statistique'
+    },
+
    /* {
         routeLink: 'vidange',
         icon: 'fal fa-oil-can',

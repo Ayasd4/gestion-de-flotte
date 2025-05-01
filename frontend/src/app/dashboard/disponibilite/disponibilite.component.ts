@@ -103,41 +103,6 @@ export class DisponibiliteComponent implements OnInit {
     });
   }
 
-  /*createChart() {
-    this.chart = new Chart({
-      chart: {
-        type: 'pie',
-        height: 325
-      },
-      title: {
-        text: 'Disponibilité des véhicules'
-      },
-      series: [
-        {
-          type: 'pie',
-          data: [
-            {
-              name: 'En Service',
-              y: this.dispoService,
-              color: '#28a745',
-            },
-            {
-              name: 'En Maintenance',
-              y: this.dispoMaint,
-              color: '#ffc107',
-            },
-            {
-              name: 'En Panne',
-              y: this.dispoPanne,
-              color: '#dc3545',
-            }
-          ]
-        }
-      ],
-      credits: {
-        enabled: false
-      }
-    });
-  }*/
+  
 
 }

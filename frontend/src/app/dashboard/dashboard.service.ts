@@ -8,52 +8,57 @@ import { Observable } from 'rxjs';
 export class DashboardService {
 
   baseUrl: string = "http://localhost:3100/dashboard";
-
+  disponibiliteUrl: string = "http://localhost:3100/disponibilite";
+  ordreUrl: string = "http://localhost:3100/ordreStat";
   constructor(private httpClient: HttpClient) { }
 
-  getTotalVehicule(): Observable<any>{
+  getTotalVehicule(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/vehicules`);
   }
 
-  getTotalChauffeur(): Observable<any>{
+  getTotalChauffeur(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/chauffeur`);
   }
 
-  getTotalTechnicien(): Observable<any>{
+  getTotalTechnicien(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/technicien`);
   }
 
-  getTotalAtelier(): Observable<any>{
+  getTotalAtelier(): Observable<any> {
     return this.httpClient.get<any>(`${this.baseUrl}/atelier`);
   }
 
-  Url: string = "http://localhost:3100/disponibilite";
-
-  getDispoService(): Observable<any>{
-    return this.httpClient.get<any>(`${this.Url}/totalDispoService`);
+  getDispoService(): Observable<any> {
+    return this.httpClient.get<any>(`${this.disponibiliteUrl}/totalDispoService`);
   }
 
-  getDispoMaint(): Observable<any>{
-    return this.httpClient.get<any>(`${this.Url}/totalDispoMaint`);
+  getDispoMaint(): Observable<any> {
+    return this.httpClient.get<any>(`${this.disponibiliteUrl}/totalDispoMaint`);
   }
 
-  getDispoPanne(): Observable<any>{
-    return this.httpClient.get<any>(`${this.Url}/totalDispoPanne`);
+  getDispoPanne(): Observable<any> {
+    return this.httpClient.get<any>(`${this.disponibiliteUrl}/totalDispoPanne`);
   }
 
-  ordreUrl: string = "http://localhost:3100/ordreStat";
-
-  getDispoOuvert(): Observable<any>{
+  getDispoOuvert(): Observable<any> {
     return this.httpClient.get<any>(`${this.ordreUrl}/totalDispoOuvert`);
   }
 
-  getDispoEnCours(): Observable<any>{
+  getDispoEnCours(): Observable<any> {
     return this.httpClient.get<any>(`${this.ordreUrl}/totalDispoEnCours`);
   }
 
-  getDispoFerme(): Observable<any>{
+  getDispoFerme(): Observable<any> {
     return this.httpClient.get<any>(`${this.ordreUrl}/totalDispoFerme`);
   }
+
+  statistiquesUrl: string = "http://localhost:3100/statistiques";
+
+
+  // Consommation par véhicule et par mois
+  getTotalConsomationByVehiculeAndMonth(numparc: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.statistiquesUrl}/${numparc}`);
+}
 
   
 }

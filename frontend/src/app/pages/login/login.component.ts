@@ -114,6 +114,8 @@ export class LoginComponent {
           else if (userRole === 'Chef service maîtrise de l\'énergie') {
             this.router.navigate(['/etat']);
             this.router.navigate(['/vidange']);
+
+            this.router.navigate(['/stat']);
           }
 
           else if (userRole === 'Agent de saisie maîtrise de l\'énergie') {
